@@ -35,6 +35,12 @@ class Paquete:
                 #si el último ack es menor a WINDOW_SIZE 
                     #--> reenvío los paquetes desde el último que recibí (sin incluir, para no duplicar) hasta WINDOW_SIZE
 
+#Ideas
+#Dado que tenemos que determinar diferentes puertos para conectarnos para recibir el stream de bytes en diferentes procesos y asi hacerlo multithread 
+#dado que si recibo todo en un solo termina siendo cuello de botella y bloqueante, por ahi hacer un paquete que sea de handshake que espere recibir
+#en el ack de ese paquete otro que le indique a que puerto mandar la conexion posta y dejar un puerto para recibir y abrir conexion en esos puertos los cuales
+#dejo como disponibles
+
 #UDP
 #Puerto fuente, Puerto destino, longitud mensaje, checksum, mensaje
 
