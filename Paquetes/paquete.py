@@ -1,50 +1,63 @@
-from msilib import sequence
-from multiprocessing.reduction import ACKNOWLEDGE
+from asyncio.windows_events import NULL
+import time
+from Cliente import cliente
+from time import time as timer
 
-
-CHUNCKSIZE = 32 #en bytes quería poner un a cte, no puedo? =D
-SEQUENCE_NUMBER_MAX = 100
-WINDOW_SIZE = SEQUENCE_NUMBER_MAX/2
+CHUNCKSIZE = 35
+MAX_WAIT = 0.005
+MAX_TRIES = 3
 
 class Paquete:
-    sequenceNumber = 0    
-    acknowledgeNumber = 0
+    sequenceNumber = 0
+    ackNumber = 0
+    cliente = NULL
+    
+    def __init__(self,sequenceNumber,ackNumber):
+        self.sequenceNumber = sequenceNumber
+        self.ackNumber = ackNumber
+        self.cliente = cliente()
 
-    def deArchivoABinario(ruta):
-        listaPaquetes = []
-        sequenceNumber = 0
-        with open(ruta,"rb") as file: 
-            for chunck in iter(lambda: file.read(CHUNCKSIZE),b''): #leo de a 1 paquete #TE LEE TODO EL ARCHIVO
-                sequenceNumber += 1
-                acknowledgeNumber += 1
-                paquete = (chunck, sequenceNumber, acknowledgeNumber)
-                listaPaquetes.append(paquete)
-                ##mando por socket
-                if(sequenceNumber == WINDOW_SIZE or sequenceNumber == 2*WINDOW_SIZE) :
-                    #teneos que esperar a los ack
-                    #no es un for, después lo pensamos xd pero es algo para determinar cuántas veces intento reenviar
-                    for i in range (0, 3): #intento reenviar el paquete 2 veces. Por hipótesis, si no puedo enviar el window_size entero después de 3 intentos, cierro conexión
-                        #si el último ack es menor a WINDOW_SIZe -> perdí paquetes --> los tengo que reenviar, que están en mi lista
-                        for paquete in range(len(listaPaquetes)): #revisar, quiero enviar los paquetes de la lista listaPaquetes desde ack+1 a WINDOW_SIZE
-                            #reenviar por el socket
+    def esACK(self):
+        if (self.sequenceNumber == 0):
+            return True
+        return False
+
+    def leerArchivo(ruta):
+        file = open(ruta,"r")
+        if (file.is_file() == False):
+            print("El archivo no existe")
+            return #o qué devolvemos?
+        return file
+
+    #STOP AND WAIT
+    def stopAndWait(self,file):
+        if (file == NULL):
+            return
+
+        for chunck in iter(lambda: file.read(CHUNCKSIZE),b''): #leo de a 1 paquete #TE LEE TODO EL ARCHIVO
+            i = 0
+            salir = False
+            timeout_start = time.time()
+            timeout = MAX_WAIT
+        
+            #por hipótesis estamos dispuestos a enviar 3 veces el mismo paquete. Si ninguna de las tres es exitosa, hay un error en la conexión
+            while ((i < MAX_TRIES) and (salir == False)) :
+                llego = False
+                self.cliente.mandarPaquete(self.cliente, chunck)
+                while time.time() < timeout_start + timeout and llego == False:
+                    llego = self.cliente.chequearSiLlegoACK()
+                if (llego == True) :
+                    salir = True
+                i += 1  
                 
-                    #meto el paquete en una lista
-                    #mando el paquete por el socket
-                #ya mandé los 50 paquetes, tengo que verificar que los acks que recibo son hasta el que mandé
-                
-                #si el último ack es menor a WINDOW_SIZE 
-                    #--> reenvío los paquetes desde el último que recibí (sin incluir, para no duplicar) hasta WINDOW_SIZE
+            if (salir == False) :
+                #nunca recibi el ack, error!
+                return 0
 
-#Ideas
-#Dado que tenemos que determinar diferentes puertos para conectarnos para recibir el stream de bytes en diferentes procesos y asi hacerlo multithread 
-#dado que si recibo todo en un solo termina siendo cuello de botella y bloqueante, por ahi hacer un paquete que sea de handshake que espere recibir
-#en el ack de ese paquete otro que le indique a que puerto mandar la conexion posta y dejar un puerto para recibir y abrir conexion en esos puertos los cuales
-#dejo como disponibles
+        return 1 #despues revisamos qué devolver en cada caso de la función
 
-#UDP
-#Puerto fuente, Puerto destino, longitud mensaje, checksum, mensaje
-
-#TCP
-#Puerto fuente, Puerto destino, longitud mensaje, checksum, mensaje
-#Numero de secuencia, Numero de ack, HLEN, Reservado, Indicadores
-#Ventana, Puntero de Urgencia, opcional, relleno, datos
+    
+    
+    
+#GO BACK N
+#def goBackN():

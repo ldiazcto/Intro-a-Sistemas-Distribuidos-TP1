@@ -1,18 +1,27 @@
 from socket import *
-serverName = 'localhost'
-serverPort = 12000
-clientSocket = socket(AF_INET, SOCK_DGRAM)
-message = input("Input Lower case sentence:")
-clientSocket.sendto(message.encode(),(serverName,serverPort))
-modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
-print(modifiedMessage.decode())
-clientSocket.close()
+
+class Cliente:
+    
+    
+
+    def __init__(self):
+        self.serverName = 'localhost'
+        self.serverPort = 12000
+        self.clientSocket = socket(AF_INET,SOCK_DGRAM)
+
+    def mandarPaquete(self,paquete):
+        self.clientSocket.sendto(paquete.encode(),(self.serverName,self.serverPort))
+
+    def chequearSiLlegoACK():
+        paquete = socket.recvfrom(2048)
+        return paquete.esACK()
+
+    def cerrarSocket(self):
+        self.clientSocket.close()
 
 
-
-def cargarArchivos(listaLineas):
-    for linea in listaLineas:
-        clientSocket.sendto(linea.encode(),(serverName,serverPort))
-        modifiedMessage, serverAddress, ack = clientSocket.recvfrom(2048)
-        
-        
+#forma de pedir por terminal, ej
+    #message = input("Input Lower case sentence:")
+    
+    #mostramos lo reciido por el server
+    #print(modifiedMessage.decode())

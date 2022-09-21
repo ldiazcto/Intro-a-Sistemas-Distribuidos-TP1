@@ -45,7 +45,7 @@ def clientHandler(port, host): #No se bien si aca invocamos la funcion o se la d
         #if caso de fin cerrar conexion
         serverSocket.close()
             #Mandar mensaje o de alguna forma sacar direccion del diccionario
-        
+    
         #if caso primera conexion devuelvo ack confirmando
 
         #if caso queres descargar
@@ -56,7 +56,7 @@ def startServer(host,port):
     #lista de puertos disponibles y el diccionario que tenga el cliente, el thread y el puerto asociado
     serverSocket = socket(AF_INET, SOCK_DGRAM)
     diccionarioConexiones = {}
-    
+
     try:
         serverSocket.bind((host,port))
     except socket.error as e:
@@ -91,7 +91,7 @@ class mi_hilo():
     def __init__(self,):
         threading.Thread.__init__(self, args=(), kwargs=None)
         self.queue = Queue()
-        
+    
 
 
 
@@ -104,7 +104,7 @@ class MyThread(threading.Thread):
     def pasar_data(self, paquete):
         self.queue.append(paquete)
         self.hay_data = True
-    
+
     def run(self):
         while True:
             if self.hay_data:
