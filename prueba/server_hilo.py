@@ -12,7 +12,7 @@ class Server(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
         self.conexiones = {}
-        serverPort = 12000
+        serverPort = 12076
         self.serverSocket = socket(AF_INET, SOCK_DGRAM)
         self.serverSocket.bind(('',serverPort))
         self.serverSocket.setblocking(False)

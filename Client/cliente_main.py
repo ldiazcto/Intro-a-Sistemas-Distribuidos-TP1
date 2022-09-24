@@ -4,19 +4,17 @@ import sys
 
 def main():
 
-    cliente_prueba = cliente()
-    while True:
-        print ("Escriba mensaje")
-        mensaje = input()
-        cliente_prueba.mandarPaquete(mensaje)
-
+    cliente_prueba = cliente.__init__("local_host", 12076)
+    print("Se creo el cliente con exito")
+    cliente_prueba.subirArchivo("/Paquetes/hola.txt")
+    return 0
 """
-    ADDR = ""
-    PORT = 0
+    SERVER_ADDR = ""
+    SERVER_PORT = 12000
     FILEPATH = ""
     FILENAME = ""
 
-    opcionesCortas = "hvqH:p:s:n:d:" #se utilizan con -. DUDA: a los que le precede : van con un argumento extra, por ej >>python upload -H ADDR , esta bien eso??
+    opcionesCortas = "hvqH:p:s:n:d:" #se utilizan con -. 
     opcionesLargas = ["help","verbose","quiet","host=","port=","src=","name=","dst="] #se utilizan con --
 
     listaArgumentos = sys.argv[1:]
@@ -25,6 +23,7 @@ def main():
     except getopt.error as err:
         print(str(err))
         sys.exit(2)   #conexion muerta
+
 
     for opt,arg in opciones: #para entrar en las tuplas de opciones y analizar
         try:
@@ -37,28 +36,33 @@ def main():
                 if(opt in ('-q','--quiet')):
                     #decrementar la verbosidad de salida
                 if(opt in ('-H','--host)):
-                    ADDR = arg
-                    #direccion IP del servidos
+                    SERVER_ADDR = arg
+                    #direccion IP del servidor
                 if(opt in ('-p','--port')):
-                    PORT = arg
+                    SERVER_PORT = arg
                     #puerto del servidor
                 if(opt in ('-n','--name')):
                     FILENAME = arg
-                    #nombre del paquete   
+                    #nombre del paquete
+
+                #cliente se inicializa
+                client = cliente(SERVER_ADDR, SERVER_PORT)
                 if(sys.argv[0] == "upload"):
                     if(opt in ('-s','--src')):
-                            FILEPATH = arg
-                            #ruta de origen del paquete
+                        FILEPATH = arg
+                        #ruta de origen del paquete
+                        #cliente.subirArchivo(FILEPATH)
                 if(sys.argv[0] == "download"):
                     if(opt in ('-d','-dst')):
                         FILEPATH = arg
                         #ruta de destino del paquete
+                        #cliente.descargarArchivo(FILEPATH)
                 sys.exit(0)
         except sys.argv[0] != "upload" and sys.argv[0] != "download":
             print(" -- DEAD CONNECTION --")
             sys.exit(2)
-
-    return 0
     """
+    
 
-#main()
+
+main()

@@ -1,4 +1,4 @@
-from asyncio.windows_events import NULL
+#from asyncio.windows_events import NULL
 from time import time as timer
 
 NOT_ACK = -1
@@ -15,4 +15,4 @@ class Paquete:
 def obtenerACK(self):
     if (self.esACK()):
         return self.ackNumber
-    return NULL
+    return 0
