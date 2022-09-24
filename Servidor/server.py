@@ -75,7 +75,7 @@ def startServer(host,port):
 
 #--------------------------------------------------------------------------------------------------------------------------------------------
 
-
+""""
 def acceptConnection(ServerSocket):
     dictcionario_conexiones{}
     udp_socket.recvv_from(data,direccion)
@@ -84,7 +84,7 @@ def acceptConnection(ServerSocket):
         new_hilo.pasar_data(data)
     else:
         dict[direccion].pasar_data(data) 
-
+"""
 
 
 class mi_hilo():

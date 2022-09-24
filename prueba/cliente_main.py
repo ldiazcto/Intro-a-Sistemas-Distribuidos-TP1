@@ -53,6 +53,7 @@ def main():
                     if(opt in ('-d','-dst')):
                         FILEPATH = arg
                         #ruta de destino del paquete
+                sys.exit(0)
         except sys.argv[0] != "upload" and sys.argv[0] != "download":
             print(" -- DEAD CONNECTION --")
             sys.exit(2)
