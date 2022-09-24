@@ -6,8 +6,8 @@ class Enviador(ABC):
 
     def __init__(self, cliente):
         cliente = cliente
-        stopAndWait = stopAndWait()
-        goBackN = goBackN()
+        #stopAndWait = stopAndWait()
+        #goBackN = goBackN()
         
 
     def abrirArchivo(ruta):

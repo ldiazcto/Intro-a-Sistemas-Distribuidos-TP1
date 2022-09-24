@@ -9,6 +9,9 @@ MAX_TRIES = 3
 
 class StopAndWait(enviador.Enviador):
 
+    def __init__(self,cliente):
+        enviador.Enviador.__init__(self,cliente)
+
 #STOP AND WAIT
     def enviarPaquete(self,file):
         """if (file == NULL):

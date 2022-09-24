@@ -1,4 +1,4 @@
-from Sender.stopAndWait import stopAndWait
+from sender.stopAndWait import StopAndWait
 from socket import *
 #from Pck.paquete import *
 
@@ -24,7 +24,7 @@ class Cliente:
 
 
     def subirArchivo(self,ruta):
-        stopWait = stopAndWait.StopAndWait(self)
+        stopWait = StopAndWait(self)
         file = stopWait.abrirArchivo(ruta)
         stopWait.enviarPaquete(stopWait, file)
 

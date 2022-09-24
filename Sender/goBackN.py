@@ -1,7 +1,7 @@
 #from asyncio.windows_events import NULL
 from socket import *
 import time
-from Sender.enviador import Enviador
+import enviador
 
 MSJ_SIZE = 35
 MAX_WAIT = 0.005
@@ -11,7 +11,7 @@ MAX_VENTANA = 50
 ERROR = -1
 EXITO = 0
 
-class goBackN(Enviador):
+class goBackN(enviador.Enviador):
 
     
     def __init__(self):
