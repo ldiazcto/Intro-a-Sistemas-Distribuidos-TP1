@@ -4,7 +4,7 @@ import sys
 
 def main():
 
-    cliente_prueba = cliente.__init__("local_host", 12076)
+    cliente_prueba = cliente.Cliente("local_host", 12000)
     print("Se creo el cliente con exito")
     cliente_prueba.subirArchivo("/Paquetes/hola.txt")
     return 0

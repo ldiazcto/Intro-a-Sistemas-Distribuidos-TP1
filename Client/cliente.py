@@ -1,14 +1,13 @@
-import sys
-sys.path.append("..")
+from Sender.stopAndWait import stopAndWait
 from socket import *
 #from Pck.paquete import *
-from Sender.stopAndWait import stopAndWait
 
 
 NOT_ACK = -1
 
 class Cliente:
     
+
     def __init__(self, serverName, serverPort):
         self.serverName = serverName
         self.serverPort = serverPort
@@ -25,9 +24,9 @@ class Cliente:
 
 
     def subirArchivo(self,ruta):
-        enviador = stopAndWait.__init__(self)
-        file = enviador.abrirArchivo(ruta)
-        enviador.enviarPaquete(enviador, file)
+        stopWait = stopAndWait.StopAndWait(self)
+        file = stopWait.abrirArchivo(ruta)
+        stopWait.enviarPaquete(stopWait, file)
 
     def descargarArchivo(self,ruta):
         #pensarla
