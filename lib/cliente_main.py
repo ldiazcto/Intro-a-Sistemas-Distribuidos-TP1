@@ -6,7 +6,7 @@ def main():
 
     cliente_prueba = cliente.Cliente("local_host", 12010)
     print("Se creo el cliente con exito")
-    cliente_prueba.subirArchivo("/Paquetes/hola.txt")
+    cliente_prueba.subirArchivo("/lib/hola.txt")
     return 0
 """
     SERVER_ADDR = ""

@@ -1,7 +1,7 @@
-from sender.stopAndWait import StopAndWait
 from socket import *
-#from Pck.paquete import *
-
+#import paquete
+#import goBackN
+import stopAndWait
 
 NOT_ACK = -1
 
@@ -24,9 +24,9 @@ class Cliente:
 
 
     def subirArchivo(self,ruta):
-        stopWait = StopAndWait(self)
+        stopWait = stopAndWait.StopAndWait()
         file = stopWait.abrirArchivo(ruta)
-        stopWait.enviarPaquete(stopWait, file)
+        stopWait.enviarPaquete(file)
 
     def descargarArchivo(self,ruta):
         #pensarla

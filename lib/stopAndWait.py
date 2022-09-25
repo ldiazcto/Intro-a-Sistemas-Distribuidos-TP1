@@ -2,6 +2,7 @@
 from socket import *
 import time
 import enviador
+import sys
 
 CHUNCKSIZE = 5
 MAX_WAIT = 0.005
@@ -14,9 +15,9 @@ class StopAndWait(enviador.Enviador):
 
 #STOP AND WAIT
     def enviarPaquete(self,file):
-        """if (file == NULL):
+        """if (file == None):
             print("EL FILE ES NULL")
-            return 0
+            sys.exit(2)
         """
         for chunck in iter(lambda: file.read(CHUNCKSIZE),b''): #leo de a 1 paquete #TE LEE TODO EL ARCHIVO
             i = 0
@@ -26,7 +27,7 @@ class StopAndWait(enviador.Enviador):
             while ((i < MAX_TRIES) and (salir == False)) :
                 timeout_start = time.time()
                 llego = False
-                self.cliente.mandarPaquete(self.cliente, chunck)
+                self.cliente.mandarPaquete(chunck)
                 while time.time() < timeout_start + MAX_WAIT and llego == False:
                     #llego, ack = self.cliente.chequearSiLlegoACK()
                 #if (llego == True) :
