@@ -23,8 +23,8 @@ class Paquete:
     #3 bytes para ackNUmber
     #5 bytes para mensaje
     def pckEncode(self,mensaje):
-        sequence = (self.sequenceNUmber).to_bytes(3,byteorder="big")
-        ack = (self.ackNumber).to_bytes(3,byteorder="big")
+        sequence = (self.sequenceNUmber).to_bytes(2,byteorder="big")
+        ack = (self.ackNumber).to_bytes(2,byteorder="big")
         
         encoded += sequence
         encoded += ack
