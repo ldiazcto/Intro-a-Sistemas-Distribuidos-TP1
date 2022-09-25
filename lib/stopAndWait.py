@@ -2,7 +2,6 @@
 from socket import *
 import time
 import enviador
-import sys
 
 CHUNCKSIZE = 5
 MAX_WAIT = 0.005
@@ -10,16 +9,13 @@ MAX_TRIES = 3
 
 class StopAndWait(enviador.Enviador):
 
-    # def __init__(self,cliente):
-    #     enviador.Enviador.__init__(self,cliente), error pq no se puede instanciar una clase abstracta
-    #     super().__init__(parameters) <-------- Si quiero heredar el constructor de Enviador 
+    def __init__(self):
+        enviador.Enviador.__init__(self)
+        super().__init__()
 
 #STOP AND WAIT
     def enviarPaquete(self,file, cliente):
-        """if (file == None):
-            print("EL FILE ES NULL")
-            sys.exit(2)
-        """
+
         for chunck in iter(lambda: file.read(CHUNCKSIZE),b''): #leo de a 1 paquete #TE LEE TODO EL ARCHIVO
             i = 0
             salir = False

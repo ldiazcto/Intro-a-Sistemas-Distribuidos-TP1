@@ -1,7 +1,7 @@
 from socket import *
 #import paquete
 #import goBackN
-import stopAndWait
+import stopAndWait, goBackN
 
 NOT_ACK = -1
 
@@ -20,14 +20,16 @@ class Cliente:
         #paquete = paquete(sequenceNumberActual, NOT_ACK, mensaje)
         #sequenceNumberActual += 1
         #self.clientSocket.sendto(paquete.encode(),(self.serverName,self.serverPort))
-        self.clientSocket.sendto(mensaje.encode('utf-8'),(self.serverName,self.serverPort))
+        #self.clientSocket.sendto(mensaje.encode('utf-8'),(self.serverName,self.serverPort))
+        self.clientSocket.sendto(str(mensaje).encode('utf-8'),(self.serverName,self.serverPort))
 
 
-    def subirArchivo(self,ruta):
-        stopWait = stopAndWait.StopAndWait()  #el constructor de saw esperaba recibir de argumento a clien x eso era el error
-                                            #pero igual no quiero q se lo guarde y se lo mando en enviarPaquete (?)
-        file = stopWait.abrirArchivo(ruta)
-        stopWait.enviarPaquete(file, self)
+
+    def subirArchivo(self, ruta, enviador):
+        #stopWait = stopAndWait.StopAndWait()  
+        #goBackN = goBackN.goBackN()
+        file = enviador.abrirArchivo(ruta)
+        enviador.enviarPaquete(file, self)
 
     def descargarArchivo(self,ruta):
         #pensarla

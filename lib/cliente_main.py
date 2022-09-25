@@ -1,12 +1,14 @@
-import cliente
+import cliente, stopAndWait, goBackN #nombre del archivo
 import getopt
 import sys
 
 def main():
 
-    cliente_prueba = cliente.Cliente("localhost", 12010)
+    cliente_prueba = cliente.Cliente("localhost", 120)
+    #stopWait = stopAndWait.StopAndWait()
+    backN = goBackN.GoBackN() #llamo a la clase, y me ejecuta el constructor
     print("Se creo el cliente con exito")
-    cliente_prueba.subirArchivo("./lib/hola.txt")
+    cliente_prueba.subirArchivo("./lib/hola.txt",backN)
     return 0
 """
     SERVER_ADDR = ""
