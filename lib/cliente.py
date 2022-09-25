@@ -24,7 +24,8 @@ class Cliente:
 
 
     def subirArchivo(self,ruta):
-        stopWait = stopAndWait.StopAndWait()  #saw esperaba recibir de argumento a client x eso el error
+        stopWait = stopAndWait.StopAndWait()  #el constructor de saw esperaba recibir de argumento a clien x eso era el error
+                                            #pero igual no quiero q se lo guarde y se lo mando en enviarPaquete (?)
         file = stopWait.abrirArchivo(ruta)
         stopWait.enviarPaquete(file, self)
 

@@ -11,7 +11,8 @@ MAX_TRIES = 3
 class StopAndWait(enviador.Enviador):
 
     # def __init__(self,cliente):
-    #     enviador.Enviador.__init__(self,cliente)
+    #     enviador.Enviador.__init__(self,cliente), error pq no se puede instanciar una clase abstracta
+    #     super().__init__(parameters) <-------- Si quiero heredar el constructor de Enviador 
 
 #STOP AND WAIT
     def enviarPaquete(self,file, cliente):
