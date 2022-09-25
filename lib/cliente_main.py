@@ -5,10 +5,10 @@ import sys
 def main():
 
     cliente_prueba = cliente.Cliente("localhost", 120)
-    #stopWait = stopAndWait.StopAndWait()
-    backN = goBackN.GoBackN() #llamo a la clase, y me ejecuta el constructor
+    stopWait = stopAndWait.StopAndWait()
+    #backN = goBackN.GoBackN() #llamo a la clase, y me ejecuta el constructor
     print("Se creo el cliente con exito")
-    cliente_prueba.subirArchivo("./lib/hola.txt",backN)
+    cliente_prueba.subirArchivo("./lib/hola.txt",stopWait)
     return 0
 """
     SERVER_ADDR = ""
