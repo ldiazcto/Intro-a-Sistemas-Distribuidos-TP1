@@ -5,8 +5,8 @@ import sys
 
 class Enviador(ABC):
 
-    def __init__(self, cliente):
-        cliente = cliente
+    # def __init__(self, cliente):
+    #     cliente = cliente
         #stopAndWait = stopAndWait()
         #goBackN = goBackN()
         

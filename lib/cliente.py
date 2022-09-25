@@ -20,13 +20,13 @@ class Cliente:
         #paquete = paquete(sequenceNumberActual, NOT_ACK, mensaje)
         #sequenceNumberActual += 1
         #self.clientSocket.sendto(paquete.encode(),(self.serverName,self.serverPort))
-        self.clientSocket.sendto(mensaje,(self.serverName,self.serverPort))
+        self.clientSocket.sendto(mensaje.encode('utf-8'),(self.serverName,self.serverPort))
 
 
     def subirArchivo(self,ruta):
-        stopWait = stopAndWait.StopAndWait()
+        stopWait = stopAndWait.StopAndWait()  #saw esperaba recibir de argumento a client x eso el error
         file = stopWait.abrirArchivo(ruta)
-        stopWait.enviarPaquete(file)
+        stopWait.enviarPaquete(file, self)
 
     def descargarArchivo(self,ruta):
         #pensarla

@@ -10,11 +10,11 @@ MAX_TRIES = 3
 
 class StopAndWait(enviador.Enviador):
 
-    def __init__(self,cliente):
-        enviador.Enviador.__init__(self,cliente)
+    # def __init__(self,cliente):
+    #     enviador.Enviador.__init__(self,cliente)
 
 #STOP AND WAIT
-    def enviarPaquete(self,file):
+    def enviarPaquete(self,file, cliente):
         """if (file == None):
             print("EL FILE ES NULL")
             sys.exit(2)
@@ -27,7 +27,7 @@ class StopAndWait(enviador.Enviador):
             while ((i < MAX_TRIES) and (salir == False)) :
                 timeout_start = time.time()
                 llego = False
-                self.cliente.mandarPaquete(chunck)
+                cliente.mandarPaquete(chunck)
                 while time.time() < timeout_start + MAX_WAIT and llego == False:
                     #llego, ack = self.cliente.chequearSiLlegoACK()
                 #if (llego == True) :
