@@ -16,19 +16,18 @@ class GoBackN(enviador.Enviador):
         self.timers = []
 
 #Go back N
-    def enviarPaquete(self, file, cliente):
+    def enviarPaquete(self, file, entidad):
 
         mensaje = file.read(MSJ_SIZE)
         while len(mensaje) > 0 :
             
             if (len(self.paquetesEnVuelo) < MAX_VENTANA):
-                cliente.mandarPaquete(mensaje)
+                entidad.enviarPaquete(mensaje)
                 self.paquetesEnVuelo.append(mensaje)
                 self.timers.append(time.time()) #Ordenado de mas viejo a mas nuevo
             
-            #esACK, ackRecibido = self.cliente.chequearSiLlegoACK()
+            #esACK, ackRecibido = self.entidad.chequearSiLlegoACK()
             #if (ackRecibido == self.ackEsperado):
-            #    print("Acá no debería entrar")
             #    self.timers.pop(0) #Esto elimina el timer mas viejo
             #    self.paquetesEnVuelo = self.paquetesEnVuelo.filter(lambda pck: pck.sequenceNumber != self.ackEsperado)
             #    self.ackEsperado+=1
@@ -36,12 +35,11 @@ class GoBackN(enviador.Enviador):
             if (self.timers[0] + MAX_WAIT < time.time() ) :
                 self.timers = []
                 for msj in range(len(self.paquetesEnVuelo)):
-                    #cliente.mandarPaquete(pck.mensaje)
-                    cliente.mandarPaquete(self.paquetesEnVuelo[msj])
+                    #entidad.enviarPaquete(pck.mensaje)
+                    entidad.enviarPaquete(self.paquetesEnVuelo[msj])
                     self.timers.append(time.time())
 
-            #if ((time.time() >= self.timers[0] + MAX_WAIT) or (ackRecibido != self.ackEsperado)):
-
+            
             mensaje = file.read(MSJ_SIZE)
 
 

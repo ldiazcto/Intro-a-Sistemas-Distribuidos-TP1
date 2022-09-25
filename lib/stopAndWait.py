@@ -10,7 +10,7 @@ MAX_TRIES = 3
 class StopAndWait(enviador.Enviador):
 
 #STOP AND WAIT
-    def enviarPaquete(self,file, cliente):
+    def enviarPaquete(self, file, entidad):
 
         mensaje = file.read(MSJ_SIZE)
         while len(mensaje) > 0 :
@@ -21,7 +21,7 @@ class StopAndWait(enviador.Enviador):
             while ((i < MAX_TRIES) and (salir == False)) :
                 timeout_start = time.time()
                 llego = False
-                cliente.mandarPaquete(mensaje)
+                entidad.enviarPaquete(mensaje)
                 while time.time() < timeout_start + MAX_WAIT and llego == False:
                     #llego, ack = self.cliente.chequearSiLlegoACK()
                 #if (llego == True) :

@@ -3,13 +3,7 @@ from socket import *
 from abc import ABC, abstractclassmethod, abstractmethod
 import sys
 
-class Enviador(ABC):
-
-    # def __init__(self, cliente):
-    #     cliente = cliente
-        #stopAndWait = stopAndWait()
-        #goBackN = goBackN()
-        
+class Enviador(ABC):  
 
     def abrirArchivo(self,ruta):
         try:
