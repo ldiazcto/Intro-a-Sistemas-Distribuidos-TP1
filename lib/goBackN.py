@@ -11,8 +11,6 @@ MAX_VENTANA = 10
 class GoBackN(enviador.Enviador):
 
     def __init__(self):
-        enviador.Enviador.__init__(self)
-        super().__init__()
         self.ackEsperado = 0
         self.paquetesEnVuelo = []
         self.timers = []
