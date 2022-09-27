@@ -13,7 +13,9 @@ class Enviador(ABC):
             print("FILE NO ENCONTRADO")
             sys.exit(2)
         
-
+    @abstractmethod
+    def enviar(self,mensaje,entidad):
+        pass
     @abstractmethod
     def enviarPaquete(self):
         pass

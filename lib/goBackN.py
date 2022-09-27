@@ -12,10 +12,16 @@ MAX_VENTANA = 10
 class GoBackN(enviador.Enviador):
 
     def __init__(self):
-        self.ackEsperado = 0
         self.paquetesEnVuelo = []
         self.timers = []
 
+    def enviar(self,mensaje,entidad):
+        pck = gestorPaquetes.crearPaquete(0,mensaje)
+        pckBytes = gestorPaquetes.pasarPaqueteABytes(pck)
+        entidad.enviarPaquete(pckBytes)
+        self.paquetesEnVuelo.append(gestorPaquetes.pasarBytesAPaquete(pckBytes))
+        verificar = gestorPaquetes.verificarACK(gestorPaquetes.pasarBytesAPaquete(pckBytes))
+        return verificar
 #Go back N
     def enviarPaquete(self, file, entidad):
 
@@ -23,31 +29,32 @@ class GoBackN(enviador.Enviador):
         while len(mensaje) > 0 :
             
             if (len(self.paquetesEnVuelo) < MAX_VENTANA):
-                paquete = gestorPaquetes.formatear(0,mensaje)
-                entidad.enviarPaquete(paquete)
-                self.paquetesEnVuelo.append(paquete)
+
+                verificar = self.enviar(mensaje,entidad)
                 self.timers.append(time.time()) #Ordenado de mas viejo a mas nuevo
 
-            
-
-            
-            #esACK, ackRecibido = self.entidad.chequearSiLlegoACK()
-            #if (ackRecibido == self.ackEsperado):
-            #    self.timers.pop(0) #Esto elimina el timer mas viejo
-            #    self.paquetesEnVuelo = self.paquetesEnVuelo.filter(lambda pck: pck.sequenceNumber != self.ackEsperado)
-            #    self.ackEsperado+=1
-            
-            #retransmision de paquetes desde el ultimo ack recibido
-            if (self.timers[0] + MAX_WAIT < time.time() ) :
-                self.timers = []
-                for msj in range(len(self.paquetesEnVuelo)):
-                    #entidad.enviarPaquete(pck.mensaje)
-                    entidad.enviarPaquete(self.paquetesEnVuelo[msj])
+            if(verificar == False or self.timers[0] + MAX_WAIT < time.time()):
+                for pck in range(len(self.paquetesEnVuelo)):
+                    verificar = self.enviar(self.paquetesEnVuelo[pck].obtenerMensaje(),entidad) 
                     self.timers.append(time.time())
-
+            #retransmision de paquetes desde el ultimo ack recibido
+            
             mensaje = file.read(MSJ_SIZE)
 
-
         return 1
+
+"""
+if (self.timers[0] + MAX_WAIT < time.time() ) :
+    self.timers = []
+    for msj in range(len(self.paquetesEnVuelo)):
+        #entidad.enviarPaquete(pck.mensaje)
+        self.paquetesEnVuelo = self.enviar(mensaje,entidad)
+        self.timers.append(time.time())
+"""
+#esACK, ackRecibido = self.entidad.chequearSiLlegoACK()
+#if (ackRecibido == self.ackEsperado):
+#    self.timers.pop(0) #Esto elimina el timer mas viejo
+#    self.paquetesEnVuelo = self.paquetesEnVuelo.filter(lambda pck: pck.sequenceNumber != self.ackEsperado)
+#    self.ackEsperado+=1
 
         

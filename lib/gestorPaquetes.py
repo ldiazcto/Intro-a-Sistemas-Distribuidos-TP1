@@ -43,6 +43,14 @@ class Gestor_Paquete():
 
         return paqueteBytes
 
+    def verificarACK(self,pck):
+        if(pck.esACK() == 1): #es ack entonces me fijo si coincide el numero de ack con el global para saber si llego todo ok
+            if(pck.obtenerACK() == self.ack_number):
+                self.ack_number += 1
+                return True #llego bien el paquete
+        return False
+
+        
 
     """
     def obtener_data(self,mensaje):
@@ -67,6 +75,7 @@ class Gestor_Paquete():
 
     """
 
+"""
 ---Para enviar mensaje---
 leer_archivo -> mensaje_bytes
 gestor -> crea_paquete
@@ -88,3 +97,4 @@ gestor-> verificar_paquete (si el paquete esperao era el correcto o se perdió u
 gestor -> crear_ack (ya sea positivo o negativo)
 enviar-> ack (por socket)
 
+"""
