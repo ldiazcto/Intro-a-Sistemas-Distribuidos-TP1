@@ -14,7 +14,7 @@ class Conexion(threading.Thread):
         self.queue = []
         self.hay_data = False
         self.conexion_activa = True
-        self.gestor = gestorPaquetes.Gestor_Paquete()
+        self.gestor_paquete = gestorPaquetes.Gestor_Paquete()
 
 
     def pasar_data(self, paquete= b""):
@@ -45,12 +45,13 @@ class Conexion(threading.Thread):
         if mensaje == "FIN":
             print ("CIERRO CONEXION")
             self.conexion_activa = False
-        if self.gestor.verificar_mensaje(mensaje) == True:
+        paquete = self.gestor_paquete.
+        if self.gestor_paquete.verificar_mensaje(mensaje) == True:
             seq_number_a_devolver = self.gestor.obtener_seq_number()
             paquete_ack = self.gestor.realizar_paquete_ack(seq_number_a_devolver)
             self.skt.sendto(paquete_ack,(self.ip_cliente,self.puerto_cliente))
             #PONER AL QUE ESCRIBE EL ARCHIVO
-            
+        
     
     #POSIBLE BORRADO
     """def enviar_mensaje(self):

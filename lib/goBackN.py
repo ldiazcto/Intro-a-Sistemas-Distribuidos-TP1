@@ -2,6 +2,7 @@
 from socket import *
 import time
 import enviador
+import gestorPaquetes
 
 MSJ_SIZE = 5
 MAX_WAIT = 0.0005
@@ -22,9 +23,13 @@ class GoBackN(enviador.Enviador):
         while len(mensaje) > 0 :
             
             if (len(self.paquetesEnVuelo) < MAX_VENTANA):
-                entidad.enviarPaquete(mensaje)
-                self.paquetesEnVuelo.append(mensaje)
+                paquete = gestorPaquetes.formatear(0,mensaje)
+                entidad.enviarPaquete(paquete)
+                self.paquetesEnVuelo.append(paquete)
                 self.timers.append(time.time()) #Ordenado de mas viejo a mas nuevo
+
+            
+
             
             #esACK, ackRecibido = self.entidad.chequearSiLlegoACK()
             #if (ackRecibido == self.ackEsperado):
@@ -32,6 +37,7 @@ class GoBackN(enviador.Enviador):
             #    self.paquetesEnVuelo = self.paquetesEnVuelo.filter(lambda pck: pck.sequenceNumber != self.ackEsperado)
             #    self.ackEsperado+=1
             
+            #retransmision de paquetes desde el ultimo ack recibido
             if (self.timers[0] + MAX_WAIT < time.time() ) :
                 self.timers = []
                 for msj in range(len(self.paquetesEnVuelo)):
@@ -39,7 +45,6 @@ class GoBackN(enviador.Enviador):
                     entidad.enviarPaquete(self.paquetesEnVuelo[msj])
                     self.timers.append(time.time())
 
-            
             mensaje = file.read(MSJ_SIZE)
 
 
