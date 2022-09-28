@@ -3,7 +3,7 @@ import paquete
 NOT_ACK = 0
 ES_ACK = 1
 
-class Gestor_Paquete():
+class Gestor_Paquete:
     def __init__(self):
         self.seq_number = 1
         self.ack_number = 0
@@ -35,16 +35,21 @@ class Gestor_Paquete():
     #cuando lo envío al socket
     def pasarPaqueteABytes(self, pck):
         sequence = pck.obtenerSeqNumber().to_bytes(2,byteorder="big")
-        ack = pck.esACK().to_bytes(2,byteorder="big")
+        ack = (pck.esACKActual()).to_bytes(2,byteorder="big")
+        mensaje = bytes(pck.obtenerMensaje(), 'utf-8')#FIJARSE ACA, pq para convertir str a bytes en python es con otra func
+        
+        # print("El mensaje es ", mensaje)
 
         paqueteBytes = sequence
         paqueteBytes += ack
-        paqueteBytes += pck.obtenerMensaje()
+        paqueteBytes += mensaje
 
+        # print("paqueteBytes: ", paqueteBytes)
         return paqueteBytes
 
     def verificarACK(self,pck):
-        if(pck.esACK() == 1): #es ack entonces me fijo si coincide el numero de ack con el global para saber si llego todo ok
+        if(pck.esACKActual == 1): #es ack entonces me fijo si coincide el numero de ack con el global para saber si llego todo ok
+            print("nunca entra a verificacion correcta")
             if(pck.obtenerACK() == self.ack_number):
                 self.ack_number += 1
                 return True #llego bien el paquete

@@ -9,14 +9,14 @@ class Paquete:
         self.esACK = esACK
         self.mensaje = mensaje
 
-    def esACK(self):
+    def esACKActual(self):
         if self.esACK == NOT_ACK:
             return False
         return True
         
     def obtenerACK(self):
         if (self.esACK()):
-            return self.ackNumber
+            return self.esACK
         return 0
 
     def obtenerSeqNumber(self):

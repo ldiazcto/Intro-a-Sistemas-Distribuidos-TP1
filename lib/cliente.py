@@ -7,7 +7,7 @@ NOT_ACK = 0
 class Cliente(entidad.Entidad):
     
     def __init__(self, name, port):
-        super(entidad.Entidad).__init__(self,name,port)
+        super(Cliente, self).__init__(name,port)
         print("Llegue a crear el cliente")
  
 #para la subida

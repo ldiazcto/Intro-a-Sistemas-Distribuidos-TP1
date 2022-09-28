@@ -45,7 +45,7 @@ class Conexion(threading.Thread):
         if mensaje == "FIN":
             print ("CIERRO CONEXION")
             self.conexion_activa = False
-        paquete = self.gestor_paquete.
+        #paquete = self.gestor_paquete.
         if self.gestor_paquete.verificar_mensaje(mensaje) == True:
             seq_number_a_devolver = self.gestor.obtener_seq_number()
             paquete_ack = self.gestor.realizar_paquete_ack(seq_number_a_devolver)

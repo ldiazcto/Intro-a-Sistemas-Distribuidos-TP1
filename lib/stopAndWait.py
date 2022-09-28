@@ -10,11 +10,14 @@ MAX_TRIES = 3
 
 class StopAndWait(enviador.Enviador):
 
+    def __init__(self):
+        self.gestorPaquetes = gestorPaquetes.Gestor_Paquete()
+
     def enviar(self,mensaje,entidad):
-        pck = gestorPaquetes.crearPaquete(0,mensaje)
-        pckBytes = gestorPaquetes.pasarPaqueteABytes(pck)
+        pck = self.gestorPaquetes.crearPaquete(mensaje)
+        pckBytes = self.gestorPaquetes.pasarPaqueteABytes(pck)
         entidad.enviarPaquete(pckBytes)
-        verificar = gestorPaquetes.verificarACK(gestorPaquetes.pasarBytesAPaquete(pckBytes))
+        verificar = self.gestorPaquetes.verificarACK(self.gestorPaquetes.pasarBytesAPaquete(pckBytes))
         return verificar
 
 #STOP AND WAIT
@@ -31,7 +34,9 @@ class StopAndWait(enviador.Enviador):
             #si no llego un ack o no es el correcto, -> reenvío
             #si salta el timer, -> reenvío
             #estoy dispuesta a reenviar MAX_TRIES
+            print("El verificar de mi mensaje es: ", verificar)
             while((verificar == False or time.time() >= timeout_start + MAX_WAIT) and i < MAX_TRIES):
+                print("Vuelvo a enviar, intento de envio nro, ", i)
                 verificar = self.enviar(mensaje,entidad)
                 timeout_start = time.time()
                 i += 1
