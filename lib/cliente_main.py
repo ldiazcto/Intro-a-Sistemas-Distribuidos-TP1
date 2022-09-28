@@ -43,9 +43,20 @@ def cerrarArchivo(file):
         
 #     if(opt in ('-v','--verbose')):
 #         verbosity += 1
+#         if(verbosity >= 3):
+#            logging.debug()
                     
 #     if (opt in ('-q','--quiet')):
 #         verbosity -= 1
+#         if(verbosity < 0):
+#           logging.warning()     
+#
+#
+#
+#
+#
+#
+#
     
 
 
