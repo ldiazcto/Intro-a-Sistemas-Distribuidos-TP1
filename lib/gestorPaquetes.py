@@ -7,6 +7,7 @@ class Gestor_Paquete:
     def __init__(self):
         self.seq_number = 1
         self.ack_number = 0
+        self.seq_number_receiver = 1
         self.COMIENZA_DATA = 4
         self.COMIENZA_SEQ_NUMBER = 0
         self.FIN_SEQ_NUMBER = 2
@@ -55,6 +56,9 @@ class Gestor_Paquete:
                 return True #llego bien el paquete
         return False
 
+
+    def verificar_mensaje_recibido(self,paquete):
+        return (paquete.obtenerSeqNumber() == self.seq_number)
         
 
     """

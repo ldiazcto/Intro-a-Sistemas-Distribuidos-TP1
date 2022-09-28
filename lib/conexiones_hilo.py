@@ -45,10 +45,12 @@ class Conexion(threading.Thread):
         if mensaje == "FIN":
             print ("CIERRO CONEXION")
             self.conexion_activa = False
-        #paquete = self.gestor_paquete.
-        if self.gestor_paquete.verificar_mensaje(mensaje) == True:
-            seq_number_a_devolver = self.gestor.obtener_seq_number()
-            paquete_ack = self.gestor.realizar_paquete_ack(seq_number_a_devolver)
+        paquete = self.gestor_paquete.pasarBytesAPaquete(mensaje)
+        if (self.gestor_paquete.verificar_mensaje_recibido(paquete) == True):
+            paquete_ack = self.gestor_paquete.crearPaqueteACK(1)
+            self.skt.sendto(paquete_ack,(self.ip_cliente,self.puerto_cliente))
+        else:
+            paquete_ack = self.gestor_paquete.crearPaqueteACK(0)
             self.skt.sendto(paquete_ack,(self.ip_cliente,self.puerto_cliente))
             #PONER AL QUE ESCRIBE EL ARCHIVO
         
