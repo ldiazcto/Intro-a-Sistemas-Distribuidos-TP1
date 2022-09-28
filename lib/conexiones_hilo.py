@@ -71,7 +71,7 @@ class Conexion(threading.Thread):
             cargaPaquete = paquete.obtenerMensaje
             #Aca llamo a las funciones del cliente para manejo de paquetes y le paso el paquete OJO QUE HAY QUE GUARDAR LA RUTA EN LA CONEXION
 """
-        if (self.gestor_paquete.cierreConexion(5)): #no me gusta se podria hacer a traves del gestor
+        if (self.gestor_paquete.cierreConexion(5)): #no me gusta se podria hacer a traves del gesto
             paquete_ack = self.gestor_paquete.crearPaqueteACK(1)
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
             #Receiver.cerrarArchivo(self.ruta_archivo)

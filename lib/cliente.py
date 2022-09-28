@@ -52,7 +52,7 @@ class Cliente(entidad.Entidad):
         while True:
             lista_sokcets_listos = select.select([self.entidadSocket], [], [], 1)
             if (time.time() >= (timeout_start + MAX_WAIT)):
-                return None
+                return self.gestorPaquetes.cierreConexion(5)
             if not lista_sokcets_listos[0]:
                 continue
             paqueteString = self.entidadSocket.recvfrom(2048)

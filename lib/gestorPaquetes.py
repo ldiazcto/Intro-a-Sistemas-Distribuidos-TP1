@@ -42,7 +42,7 @@ class Gestor_Paquete:
 
     #cuando lo recibo del socket
     def pasarBytesAPaquete(self, paqueteBytes):
-        seq_number_recibido = int.from_bytes(paqueteBytes[self.COMIENZA_SEQ_NUMBER:self.FIN_SEQ_NUMBER],"big")
+        seq_number_recibido = int.from_bytes(paqueteBytes[self.COMIENZA_SEQ_NUMBER:self.FIN_SEQ_NUMBER],"big") #esto rompe
         ack_recibido = int.from_bytes(paqueteBytes[self.COMIENZA_ACK:self.FIN_ACK],"big")
         mensaje = paqueteBytes[self.FIN_ACK:]
 
