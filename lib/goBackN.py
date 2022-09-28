@@ -20,7 +20,10 @@ class GoBackN(enviador.Enviador):
         pckBytes = self.gestorPaquetes.pasarPaqueteABytes(pck)
         entidad.enviarPaquete(pckBytes)
         self.paquetesEnVuelo.append(self.gestorPaquetes.pasarBytesAPaquete(pckBytes))
-        verificar = self.gestorPaquetes.verificarACK(self.gestorPaquetes.pasarBytesAPaquete(pckBytes))
+        paqueteRecibido = entidad.recibirPaquete()
+        if (paqueteRecibido == None):
+            return False
+        verificar = self.gestorPaquetes.verificarACK(paqueteRecibido)
         return verificar
 #Go back N
     def enviarPaquete(self, file, entidad):

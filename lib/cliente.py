@@ -55,6 +55,6 @@ class Cliente(entidad.Entidad):
                 return None
             if not lista_sokcets_listos[0]:
                 continue
-            paqueteString, server_address = self.entidadSocket.recvfrom(2048)
+            paqueteString = self.entidadSocket.recvfrom(2048)
             return  self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
         

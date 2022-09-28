@@ -50,14 +50,7 @@ def cerrarArchivo(file):
 #         verbosity -= 1
 #         if(verbosity < 0):
 #           logging.warning()     
-#
-#
-#
-#
-#
-#
-#
-    
+
 
 
 # def definirPuertoYNombre(opt, arg):
