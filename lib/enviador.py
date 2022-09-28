@@ -2,17 +2,32 @@
 from socket import *
 from abc import ABC, abstractclassmethod, abstractmethod
 import sys
+import gestorPaquetes
+import time
+
+MAX_WAIT = 0.005
+MAX_TRIES = 3
 
 class Enviador(ABC):  
 
-    def abrirArchivo(self,ruta):
-        try:
-            file = open(ruta,'r')
-            return file
-        except FileNotFoundError: #o IOERROR o FileExistsError
-            print("FILE NO ENCONTRADO")
-            sys.exit(2)
-        
+    def __init__(self):
+        self.gestorPaquetes = gestorPaquetes.Gestor_Paquete()
+    
+    #no la probé
+    def enviarPaqueteHandshake(self, cliente, paqueteBytes):
+        cliente.enviarPaquete(paqueteBytes)
+        timeout_start = time.time()
+        i = 0
+        recepcionACKCorrecto = False  
+        while (time.time() <= timeout_start + MAX_WAIT and i < MAX_TRIES and not recepcionACKCorrecto) :
+            paqueteRecibido = cliente.recibirPaquete()
+            recepcionACKCorrecto = self.gestorPaquetes.verificarACK(paqueteRecibido)
+            if (not recepcionACKCorrecto) :
+                cliente.enviarPaquete(paqueteBytes)
+                timeout_start = time.time()
+                i += 1
+
+
     @abstractmethod
     def enviar(self,mensaje,entidad):
         pass

@@ -15,15 +15,14 @@ class Entidad(ABC):
         def enviarPaquete(self, mensaje):
                 pass
 
-        def enviarArchivo(self, ruta, enviador):
-            file = enviador.abrirArchivo(ruta)
+        def enviarArchivo(self, file, enviador):
             enviador.enviarPaquete(file, self)
 
         
         @abstractmethod
         def recibirPaquete(self):
                 #pensarla, para descargar paquetes
-                return
+                pass
 
         def recibirArchivo(self, ruta):
             #pensarla, tal vez puede ser genérica

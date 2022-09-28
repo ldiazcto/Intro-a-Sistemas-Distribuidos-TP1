@@ -6,6 +6,22 @@ SERVER_ADDR = ""
 SERVER_PORT = 120
 FILEPATH = ""
 FILENAME = ""
+MAX_FILE_SIZE = 30
+UPLOAD = 2
+DOWNLOAD = 3
+
+def abrirArchivo(ruta):
+        try:
+            file = open(ruta,'rb')
+            return file
+        except FileNotFoundError: #o IOERROR o FileExistsError
+            print("FILE NO ENCONTRADO")
+            sys.exit(2)
+
+def cerrarArchivo(file):
+    file.close()
+
+
 
 # def obtenerArgumentos():
 #     opcionesCortas = "hvqH:p:s:n:d:" #se utilizan con -. 
@@ -45,11 +61,12 @@ FILENAME = ""
 
 def main():
    
-    cliente_prueba = cliente.Cliente("localhost", 120)
+    cliente_prueba = cliente.Cliente("localhost", 12000)
     stopWait = stopAndWait.StopAndWait()
     #backN = goBackN.GoBackN() #llamo a la clase, y me ejecuta el constructor
     print("Se creo el cliente con exito")
-    cliente_prueba.enviarArchivo("./lib/hola.txt",stopWait)
+    file = abrirArchivo("./lib/hola.txt")
+    cliente_prueba.enviarArchivo(file,stopWait)
     return 0
     
     # opciones, argumentos = obtenerArgumentos()
@@ -92,16 +109,26 @@ def main():
     #                             #cliente.recibirArchivo(FILEPATH)
     #                 elif(protocolo == "G" or protocolo == "g"):
     #                     if(sys.argv[0] == "upload"):
-    #                         if(opt in ('-s','--src')):
+    #                         if(opt in ('-s','--src')): #esto no debería ser un if, este valor debería estar
     #                             FILEPATH = arg
-    #                             #ruta de origen del paquete
-    #                             client.enviarArchivo(FILEPATH,backN)
+
+#                             fileSize = os.stat(FILEPATH).st_size
+#                             if fileSize > MAX_FILE_SIZE:
+#                                   print("El tamaño del archivo excede los límites posibles. El máximo es " + MAX_FILE_SIZE + " en bytes.")
+#                                   sys.exit(2)
+
+#                             file = self.abrirArchivo(FILEPATH)
+#                             cliente.enviarHandshake(FILENAME, tamanio_archivo, UPLOAD)
+
+#                             client.enviarArchivo(FILEPATH,backN)
+#                             self.cerrarArchivo(file)
     #                     if(sys.argv[0] == "download"):
     #                         if(opt in ('-d','--dst')):
     #                             print("No está implementado")
-    #                             FILEPATH = arg
-    #                             #ruta de destino del paquete
-    #                             #cliente.recibirArchivo(FILEPATH)
+    #                             FILEPATH = arg #ruta donde guardo el archivo
+    #                             #cliente.enviarHandshake(FILENAME, DOWNLOAD)
+    #                             #file = cliente.recibirArchivo(FILENAME)
+    #                             #self.guardarArchivo(file, FILEPATH) #lo hizo lucas, tengo que probar
     #                 cambiarModo = input("Quiere cambiar de protocolo? S/N: \n")
     #                 if(cambiarModo == "N"):
     #                     seguir = False
@@ -112,7 +139,7 @@ def main():
     #                     return
     #         sys.exit(0)
 
-    #     except sys.argv[0] != "upload" and sys.argv[0] != "download":
+    #     except sys.argv[0] != "upload" and sys.argv[0] != "download": #agregar except para no sourcfile y no sourcename ni destination port
     #         print(" -- DEAD CONNECTION --")
     #         sys.exit(2)
 

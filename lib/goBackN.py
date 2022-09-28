@@ -2,7 +2,6 @@
 from socket import *
 import time
 import enviador
-import gestorPaquetes
 
 MSJ_SIZE = 5
 MAX_WAIT = 0.0005
@@ -14,12 +13,14 @@ class GoBackN(enviador.Enviador):
     def __init__(self):
         self.paquetesEnVuelo = []
         self.timers = []
+
+        
     def enviar(self,mensaje,entidad):
-        pck = gestorPaquetes.crearPaquete(0,mensaje)
-        pckBytes = gestorPaquetes.pasarPaqueteABytes(pck)
+        pck = self.gestorPaquetes.crearPaquete(mensaje)
+        pckBytes = self.gestorPaquetes.pasarPaqueteABytes(pck)
         entidad.enviarPaquete(pckBytes)
-        self.paquetesEnVuelo.append(gestorPaquetes.pasarBytesAPaquete(pckBytes))
-        verificar = gestorPaquetes.verificarACK(gestorPaquetes.pasarBytesAPaquete(pckBytes))
+        self.paquetesEnVuelo.append(self.gestorPaquetes.pasarBytesAPaquete(pckBytes))
+        verificar = self.gestorPaquetes.verificarACK(self.gestorPaquetes.pasarBytesAPaquete(pckBytes))
         return verificar
 #Go back N
     def enviarPaquete(self, file, entidad):
