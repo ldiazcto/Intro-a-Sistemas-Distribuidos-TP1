@@ -1,6 +1,8 @@
+import os
 import cliente, stopAndWait, goBackN #nombre del archivo
 import getopt
 import sys
+import logging
 
 SERVER_ADDR = ""
 SERVER_PORT = 120
@@ -23,67 +25,82 @@ def cerrarArchivo(file):
 
 
 
-# def obtenerArgumentos():
-#     opcionesCortas = "hvqH:p:s:n:d:" #se utilizan con -. 
-#     opcionesLargas = ["help","verbose","quiet","host=","port=","src=","name=","dst="] #se utilizan con --
+def obtenerArgumentos():
+    opcionesCortas = "hvqH:p:s:n:d:" #se utilizan con -. 
+    opcionesLargas = ["help","verbose","quiet","host=","port=","src=","name=","dst="] #se utilizan con --
 
-#     listaArgumentos = sys.argv[1:]
-#     try:
-#         return getopt.getopt(listaArgumentos,opcionesCortas,opcionesLargas) #par tuplas
-#     except getopt.error as err:
-#         print(str(err))
-#         sys.exit(2)   #conexion muerta
+    listaArgumentos = sys.argv[1:]
+    print(listaArgumentos)
+    try:
+        return getopt.getopt(listaArgumentos,opcionesCortas,opcionesLargas) #par tuplas
+    except getopt.error as err:
+        print(str(err))
+        sys.exit(2)   #conexion muerta
 
 
-# def definirVerbosidad(opt):
-#     verbosity = 0
-#     if ((opt in ('-v','--verbose')) and opt in (('-q','--quiet'))):
-#         print("Se pide alta y baja verbosidad a la vez. Por favor, elegir uno o ninguno.")
-#         sys.exit(0)
+def definirVerbosidad(opt, logger):
+    #Para definir la verbosidad, le tengo que setear el nivel al logger, dependiendo lo que quiero mostrar 
+    verbosity = 0
+    if ((opt in ('-v','--verbose')) and opt in (('-q','--quiet'))):
+        print("Se pide alta y baja verbosidad a la vez. Por favor, elegir uno o ninguno.")
+        sys.exit(0)
         
-#     if(opt in ('-v','--verbose')):
-#         verbosity += 1
-#         if(verbosity >= 3):
-#            logging.debug()
+    if(opt in ('-v','--verbose')):
+        verbosity += 1
+        if(verbosity >= 3):
+           logging.debug()
                     
-#     if (opt in ('-q','--quiet')):
-#         verbosity -= 1
-#         if(verbosity < 0):
-#           logging.warning()     
+    if (opt in ('-q','--quiet')):
+        verbosity -= 1
+        if(verbosity < 0):
+          logging.warning()     
 
 
 
-# def definirPuertoYNombre(opt, arg):
-#     if(opt in ('-p','--port')):
-#         SERVER_PORT = arg
-#         #puerto del servidor
+def definirPuertoYNombre(opt, arg):
+    if(opt in ('-p','--port')):
+        SERVER_PORT = arg
+        #puerto del servidor
                     
-#     if(opt in ('-n','--name')):
-#         FILENAME = arg
-#         #nombre del paquete
+    if(opt in ('-n','--name')):
+        FILENAME = arg
+        #nombre del paquete
 
 
 def main():
-   
-    cliente_prueba = cliente.Cliente("localhost", 12000)
-    #stopWait = stopAndWait.StopAndWait()
-    backN = goBackN.GoBackN() #llamo a la clase, y me ejecuta el constructor
-    print("Se creo el cliente con exito")
-    file = abrirArchivo("./lib/hola.txt")
-    cliente_prueba.enviarArchivo(file,backN)
-    return 0
-    
-    # opciones, argumentos = obtenerArgumentos()
 
+    file_handler = logging.FileHandler(filename='tmp.log')
+    stdout_handler = logging.StreamHandler(stream=sys.stdout)
+    handlers = [file_handler, stdout_handler]
+
+    logging.basicConfig(
+        level=logging.DEBUG, 
+        format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s',
+        handlers=handlers
+    )
+
+    logger = logging.getLogger()
+    logger.info("Se inicio el logger")
+    
+    # cliente_prueba = cliente.Cliente("localhost", 12000, logger)
+    # #stopWait = stopAndWait.StopAndWait()
+    # backN = goBackN.GoBackN() #llamo a la clase, y me ejecuta el constructor
+    # print("Se creo el cliente con exito")
+    # file = abrirArchivo("./lib/hola.txt")
+    # cliente_prueba.enviarArchivo(file,backN)
+    # return 0
+    # opciones, argumentos = obtenerArgumentos()
+    # print("OPCIONES: ",opciones)
     # for opt,arg in opciones: #para entrar en las tuplas de opciones y analizar
     #     try:
+    #         print("Elegi mis opciones: ", opt)
     #         if(sys.argv[0] == "upload" or sys.argv[0] == "download"):
     #             if (opt in ('-h','--help')):
     #                 #mostrar mensaje de ayuda
     #                 print("Preguntamos qué hace acá por slack")
     #                 sys.exit(0) #salir con exito
 
-    #             definirVerbosidad(opt)
+    #             definirVerbosidad(opt, logger)
 
     #             if (opt in ('-H','--host')):
     #                 SERVER_ADDR = arg
@@ -115,31 +132,29 @@ def main():
     #                     if(sys.argv[0] == "upload"):
     #                         if(opt in ('-s','--src')): #esto no debería ser un if, este valor debería estar
     #                             FILEPATH = arg
+                            
+                            
+    #                         fileSize = os.stat(FILEPATH).st_size
+    #                         if fileSize > MAX_FILE_SIZE:
+    #                               print("El tamaño del archivo excede los límites posibles. El máximo es " + MAX_FILE_SIZE + " en bytes.")
+    #                               sys.exit(2)
 
-#                             fileSize = os.stat(FILEPATH).st_size
-#                             if fileSize > MAX_FILE_SIZE:
-#                                   print("El tamaño del archivo excede los límites posibles. El máximo es " + MAX_FILE_SIZE + " en bytes.")
-#                                   sys.exit(2)
-
-#                             file = self.abrirArchivo(FILEPATH)
-#                             handshakeExitoso = cliente.entablarHandshake(FILENAME, tamanio_archivo, UPLOAD)
-#                             if (not handshakeExitoso) :
-#                                   return
-#                             client.enviarArchivo(FILEPATH,backN)
-#                             self.cerrarArchivo(file)
+    #                         file = abrirArchivo(FILEPATH)
+    #                         # handshakeExitoso = cliente.entablarHandshake(FILENAME, tamanio_archivo, UPLOAD)
+    #                         # if (not handshakeExitoso) :
+    #                         #       return
+    #                         client.enviarArchivo(FILEPATH,backN)
+    #                         cerrarArchivo(file)
     #                     if(sys.argv[0] == "download"):
     #                         if(opt in ('-d','--dst')):
     #                             FILEPATH = arg #ruta donde guardo el archivo
-    #                             handshakeExitoso = cliente.entablarHandshake(FILENAME, 0, DOWNLOAD)
-    #                             if (not handshakeExitoso) :
-#                                      return
-    #                             
+    #                             # handshakeExitoso = cliente.entablarHandshake(FILENAME, 0, DOWNLOAD)
+    #                             # if (not handshakeExitoso) :
+    #                             #      return
+                                
     #                              #file = cliente.recibirArchivo(FILEPATH, FILENAME)
-    #                               self.cerrarArchivo(file)
-    # 
-    # 
-    # 
-    # 
+    #                             cerrarArchivo(file)
+
     #                 cambiarModo = input("Quiere cambiar de protocolo? S/N: \n")
     #                 if(cambiarModo == "N"):
     #                     seguir = False

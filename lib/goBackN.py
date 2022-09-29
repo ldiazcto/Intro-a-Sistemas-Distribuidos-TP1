@@ -2,7 +2,7 @@
 from socket import *
 import time
 import enviador
-from lib.paquete import Paquete
+import paquete
 
 MSJ_SIZE = 5
 MAX_WAIT = 0.0005
@@ -14,6 +14,7 @@ class GoBackN(enviador.Enviador):
     def __init__(self):
         self.paquetesEnVuelo = []
         self.timers = []
+        super(GoBackN, self).__init__()
 
     def agregarPaqueteEnVuelo(self,paquete):
         self.paquetesEnVuelo.append(self.gestorPaquetes.pasarBytesAPaquete(paquete))

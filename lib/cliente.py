@@ -5,6 +5,8 @@ import enviador
 import select
 import time
 import os
+import logging
+import cliente_main
 
 UPLOAD = 2
 MAX_WAIT = 0.5
@@ -15,10 +17,10 @@ MAX_WAIT_RESPONSE = 0.01
 
 class Cliente(entidad.Entidad):
     
-    def __init__(self, name, port):
+    def __init__(self, name, port, logger):
         super(Cliente,self).__init__(name,port)
         self.gestorPaquetes = gestorPaquetes.Gestor_Paquete()
-        print("Llegue a crear el cliente")
+        logger.info("Llegue al cliente")
  
 #para la subida
 
