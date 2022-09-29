@@ -82,13 +82,13 @@ def main():
     logger = logging.getLogger()
     logger.info("Se inicio el logger")
     
-    # cliente_prueba = cliente.Cliente("localhost", 12000, logger)
-    # #stopWait = stopAndWait.StopAndWait()
-    # backN = goBackN.GoBackN() #llamo a la clase, y me ejecuta el constructor
-    # print("Se creo el cliente con exito")
-    # file = abrirArchivo("./lib/hola.txt")
-    # cliente_prueba.enviarArchivo(file,backN)
-    # return 0
+    cliente_prueba = cliente.Cliente("localhost", 12000, logger)
+    #stopWait = stopAndWait.StopAndWait()
+    backN = goBackN.GoBackN() #llamo a la clase, y me ejecuta el constructor
+    print("Se creo el cliente con exito")
+    file = abrirArchivo("./lib/hola.txt")
+    cliente_prueba.enviarArchivo(file,backN)
+    return 0
     # opciones, argumentos = obtenerArgumentos()
     # print("OPCIONES: ",opciones)
     # for opt,arg in opciones: #para entrar en las tuplas de opciones y analizar
