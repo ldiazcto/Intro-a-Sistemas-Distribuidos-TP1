@@ -18,7 +18,7 @@ class StopAndWait(enviador.Enviador):
         while(paqueteRecibido == None and cantidad_intentos <= 3):
             entidad.enviarPaquete(pckBytes)
             paqueteRecibido = entidad.recibirPaquete()
-            print("Entro a recibirPaquete(): ",cantidad_intentos)
+            #print("Entro a recibirPaquete(): ",cantidad_intentos)
             cantidad_intentos += 1
         if(cantidad_intentos > 3):
             return (False,None)

@@ -4,8 +4,8 @@ from socket import *
 class Entidad(ABC):
 
         def __init__(self,name,port):
-                self.name = name
-                self.port = port
+                self.name = name #el nombre de a quien le envía esta entidad
+                self.port = port #el port de a quién le envía esta entidad
                 self.entidadSocket = socket(AF_INET,SOCK_DGRAM)
 
 

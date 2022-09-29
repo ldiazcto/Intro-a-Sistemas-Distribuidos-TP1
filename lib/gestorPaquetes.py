@@ -5,6 +5,7 @@ ACK = 1
 UPLOAD = 2
 DOWNLOAD = 3
 REFUSED = 4
+FIN = 5
 
 class Gestor_Paquete:
     def __init__(self):
@@ -35,6 +36,9 @@ class Gestor_Paquete:
 
     def crearPaqueteRefused(self):
         return paquete.Paquete(self.seq_number, REFUSED, None)    
+        
+    def crearPaqueteFin(self):
+        return paquete.Paquete(self.seq_number, FIN, None)    
 
     #cuando lo recibo del socket
     def pasarBytesAPaquete(self, paqueteBytes):
@@ -55,7 +59,8 @@ class Gestor_Paquete:
         paqueteBytes = sequence
         paqueteBytes += ack
         if (mensaje != None):
-            paqueteBytes += pck.obtenerMensaje()
+            mensaje = bytes(pck.obtenerMensaje(), 'utf-8')#FIJARSE ACA, pq para convertir str a bytes en python es con otra func
+            paqueteBytes += mensaje
 
         print("paqueteBytes: ", paqueteBytes)
         return paqueteBytes

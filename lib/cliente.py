@@ -6,28 +6,30 @@ import select
 import time
 import os
 import logging
-import cliente_main
+#import cliente_main
 
 UPLOAD = 2
 MAX_WAIT = 0.5
-MAX_TRIES = 3
+MAX_TRIES = 2
 ACK_INCORRECT = 0
 ACK_CORRECT = 1
-MAX_WAIT_RESPONSE = 0.01
+MAX_WAIT_RESPONSE = 300
+NOT_BLOCKING = 0
+BLOCKING = 1
 
 class Cliente(entidad.Entidad):
     
-    def __init__(self, name, port, logger):
+    def __init__(self, name, port):
         super(Cliente,self).__init__(name,port)
         self.gestorPaquetes = gestorPaquetes.Gestor_Paquete()
-        logger.info("Llegue al cliente")
+        #logger.info("Llegue al cliente")
  
 #para la subida
 
 #PARA CLIENTE
     def enviarPaquete(self,pckBytes):
         self.entidadSocket.sendto(pckBytes ,(self.name,self.port))
-        print("-- ENVIAR PAQUETE -- envié el paquete actual")
+        #print("-- ENVIAR PAQUETE -- envié el paquete actual")
         
     def enviarArchivo(self, file, enviador):
         enviador.enviarPaquete(file, self)
@@ -47,8 +49,8 @@ class Cliente(entidad.Entidad):
 
     def entablarHandshake(self, fileName, fileSize, operador):
         paquete = self.crearPaqueteHandshake(fileName, fileSize, operador)
-        paqueteBytes = gestorPaquetes.pasarPaqueteABytes(paquete)
-        enviador.enviarPaqueteHandshake(self, paqueteBytes)
+        paqueteBytes = self.gestorPaquetes.pasarPaqueteABytes(paquete)
+        self.enviador.enviarPaqueteHandshake(self, paqueteBytes)
         funciono = False  #ME FALTA VERIFICAR QUE HAYA FUNCIONADO! verifica el ack que debí haber recibido  -- no sé si recibirPaquete sirve para esto
         if funciono :
             return True
@@ -61,45 +63,65 @@ class Cliente(entidad.Entidad):
         # si recibo el ack del handshake -> continúo (hecho en el main)
         
         ruta = filePath + "/" + fileName
-        file = open(ruta, "w")
+        file = open(ruta, 'w')
         
         i = 0
         timeActual = time.time()
+        self.entidadSocket.setblocking(NOT_BLOCKING)
         while True:
-            paqueteBytes, serverAdress = self.serverSocket.recvfrom(2048)
-            if len(paqueteBytes) == 0 :
+            print("\n--NUEVA ITERACIÓN DEL WHILE --")
+            try :
+                paqueteBytes, serverAdress = self.entidadSocket.recvfrom(2048)
+            except BlockingIOError:
                 if time.time() > timeActual + MAX_WAIT_RESPONSE :
-                    file.close()
-                    os.remove(file.name)
-                    #acá debería borrar el archivo hecho porque el servidor no responde y no me mandó el FIN
                     break
                 continue
-            
-            paqueteRecibido = gestorPaquetes.pasarBytesAPaquete(paqueteBytes)
-            esPaqueteOrdenado = gestorPaquetes.verificar_mensaje_recibido(paqueteRecibido)
+            print("Recibí algo! :) ")
+
+            print("Y es un paquete :D ")
+            paqueteRecibido = self.gestorPaquetes.pasarBytesAPaquete(paqueteBytes)
+            esPaqueteOrdenado = self.gestorPaquetes.verificar_mensaje_recibido(paqueteRecibido)
             if (esPaqueteOrdenado) :
-                paqueteACK = gestorPaquetes.crearPaqueteACK(ACK_CORRECT)
-                file.write(paqueteRecibido.obtenerMensaje()) #no sé si estoy escribiendo en ascii o bytes
+                ("\nEs un paquete ordenado\n")
+                paqueteACK = self.gestorPaquetes.crearPaqueteACK(ACK_CORRECT)
+            
+                nombre, extension = fileName.split('.')
+                mensaje = paqueteRecibido.obtenerMensaje()
+                if (extension == "txt" or extension == "docs" ) :
+                    mensaje = mensaje.decode('ascii')
+                
+                file.write(mensaje) #no sé si estoy escribiendo en ascii o bytes
                 timeActual = time.time()
                 i = 0
+            
             else :
-                paqueteACK = gestorPaquetes.crearPaqueteACK(ACK_INCORRECT)
+                paqueteACK = self.gestorPaquetes.crearPaqueteACK(ACK_INCORRECT)
                 i += 1
 
-            paqueteACKBytes = gestorPaquetes.pasarPaqueteABytes(paqueteACK)
+            paqueteACKBytes = self.gestorPaquetes.pasarPaqueteABytes(paqueteACK)
             
             #envio el paquete de ack
             self.enviarPaquete(paqueteACKBytes)
+            if (paqueteRecibido.esFin()) :
+                print("ES DE TIPO FIN!")
+            else:
+                print("NO es de tipo fin")
             if not (i <= MAX_TRIES and not paqueteRecibido.esFin()) :
                 break
                 #es feo, sí, pero estoy emulando un do-while. Esto quiere decir que quiero que se ejecute el loop hasta que 
                 #           el server me envió un paquete de fin  o
                 #           haya esperado el mismo paquete la máxima cantidad de veces (?)
             
-            if (i > MAX_TRIES) :
-                file.close()
-                os.remove(file.name)
-                #acá debería borrar el archivo hecho porque el servidor no responde y no me mandó el FIN
+        self.entidadSocket.setblocking(BLOCKING)
+
+        if (i >= MAX_TRIES or time.time() > timeActual + MAX_WAIT_RESPONSE) :
+            file.close()
+            os.remove(file.name)
+            print("Salto el timer o recibí más de tres veces el paquete en desorden")
+            return None
+            #acá debería borrar el archivo hecho porque el servidor no responde y no me mandó el FIN
+        
+        print("tengo el archivo y no hubo ningun error, bien!")
         return file
 
 

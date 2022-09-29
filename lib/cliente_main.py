@@ -8,87 +8,107 @@ SERVER_ADDR = ""
 SERVER_PORT = 120
 FILEPATH = ""
 FILENAME = ""
-MAX_FILE_SIZE = 30
+MAX_FILE_SIZE = 30 #esto debería hacerlo el server o.0
 UPLOAD = 2
 DOWNLOAD = 3
 
-def abrirArchivo(ruta):
-        try:
-            file = open(ruta,'rb')
-            return file
-        except FileNotFoundError: #o IOERROR o FileExistsError
-            print("FILE NO ENCONTRADO")
-            sys.exit(2)
+#NIVELES DE LOGS
+NOTSET = 0
+DEBUG = 10
+INFO = 20
+WARNING = 30
+CRITICAL = 50
+QUIET = 51
 
-def cerrarArchivo(file):
-    file.close()
+# def abrirArchivo(ruta):
+#         try:
+#             file = open(ruta,'rb')
+#             return file
+#         except FileNotFoundError: #o IOERROR o FileExistsError
+#             print("FILE NO ENCONTRADO")
+#             sys.exit(2)
 
-
-
-def obtenerArgumentos():
-    opcionesCortas = "hvqH:p:s:n:d:" #se utilizan con -. 
-    opcionesLargas = ["help","verbose","quiet","host=","port=","src=","name=","dst="] #se utilizan con --
-
-    listaArgumentos = sys.argv[1:]
-    print(listaArgumentos)
-    try:
-        return getopt.getopt(listaArgumentos,opcionesCortas,opcionesLargas) #par tuplas
-    except getopt.error as err:
-        print(str(err))
-        sys.exit(2)   #conexion muerta
+# def cerrarArchivo(file):
+#     file.close()
 
 
-def definirVerbosidad(opt, logger):
-    #Para definir la verbosidad, le tengo que setear el nivel al logger, dependiendo lo que quiero mostrar 
-    verbosity = 0
-    if ((opt in ('-v','--verbose')) and opt in (('-q','--quiet'))):
-        print("Se pide alta y baja verbosidad a la vez. Por favor, elegir uno o ninguno.")
-        sys.exit(0)
-        
-    if(opt in ('-v','--verbose')):
-        verbosity += 1
-        if(verbosity >= 3):
-           logging.debug()
+
+# def obtenerArgumentos():
+#     opcionesCortas = "hvqH:p:s:n:d:" #se utilizan con -. 
+#     opcionesLargas = ["help","verbose","quiet","host=","port=","src=","name=","dst="] #se utilizan con --
+
+#     listaArgumentos = sys.argv[1:]
+#     print(listaArgumentos)
+#     try:
+#         return getopt.getopt(listaArgumentos,opcionesCortas,opcionesLargas) #par tuplas
+#     except getopt.error as err:
+#         print(str(err))
+#         sys.exit(2)   #conexion muerta
+
+
+# def definirVerbosidad(opt, logger):
+#     #Para definir la verbosidad, le tengo que setear el nivel al logger, dependiendo lo que quiero mostrar 
+#     verbosity = 0
+#     if ((opt in ('-v','--verbose')) and opt in (('-q','--quiet'))):
+#         print("Se pide alta y baja verbosidad a la vez. Por favor, elegir uno o ninguno.")
+#         sys.exit(0)
+
+#
+# q = 0
+# nada por default 1
+# v = 2 
+
+#     if(opt in ('-v','--verbose')):
+#         verbosity += 1
+#         logger.setLevel()           
+#
+#         if(verbosity >= 3):
+#            logger.setLevel(logging.DEBUG)
+#            logging.debug()
                     
-    if (opt in ('-q','--quiet')):
-        verbosity -= 1
-        if(verbosity < 0):
-          logging.warning()     
+#     if (opt in ('-q','--quiet')):
+#         verbosity -= 1
+
+
+#         if(verbosity < 0):
+#           logging.warning()     
 
 
 
-def definirPuertoYNombre(opt, arg):
-    if(opt in ('-p','--port')):
-        SERVER_PORT = arg
-        #puerto del servidor
+# def definirPuertoYNombre(opt, arg):
+#     if(opt in ('-p','--port')):
+#         SERVER_PORT = arg
+#         #puerto del servidor
                     
-    if(opt in ('-n','--name')):
-        FILENAME = arg
-        #nombre del paquete
+#     if(opt in ('-n','--name')):
+#         FILENAME = arg
+#         #nombre del paquete
 
 
 def main():
 
-    file_handler = logging.FileHandler(filename='tmp.log')
-    stdout_handler = logging.StreamHandler(stream=sys.stdout)
-    handlers = [file_handler, stdout_handler]
+    # file_handler = logging.FileHandler(filename='tmp.log')
+    # stdout_handler = logging.StreamHandler(stream=sys.stdout)
+    # handlers = [file_handler, stdout_handler]
 
-    logging.basicConfig(
-        level=logging.DEBUG, 
-        format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s',
-        handlers=handlers
-    )
+    # logging.basicConfig(
+    #     level=logging.DEBUG, 
+    #     format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s',
+    #     handlers=handlers
+    # )
 
-    logger = logging.getLogger()
-    logger.info("Se inicio el logger")
+    # logger = logging.getLogger()
     
-    cliente_prueba = cliente.Cliente("localhost", 12000, logger)
-    #stopWait = stopAndWait.StopAndWait()
-    backN = goBackN.GoBackN() #llamo a la clase, y me ejecuta el constructor
-    print("Se creo el cliente con exito")
-    file = abrirArchivo("./lib/hola.txt")
-    cliente_prueba.enviarArchivo(file,backN)
+    # logger.info("Se inicio el logger")
+    
+    # cliente_prueba = cliente.Cliente("localhost", 12000, logger)
+    # #stopWait = stopAndWait.StopAndWait()
+    # backN = goBackN.GoBackN() #llamo a la clase, y me ejecuta el constructor
+    # print("Se creo el cliente con exito")
+    # file = abrirArchivo("./lib/hola.txt")
+    # cliente_prueba.enviarArchivo(file,backN)
     return 0
+
     # opciones, argumentos = obtenerArgumentos()
     # print("OPCIONES: ",opciones)
     # for opt,arg in opciones: #para entrar en las tuplas de opciones y analizar
@@ -168,5 +188,4 @@ def main():
     #     except sys.argv[0] != "upload" and sys.argv[0] != "download": #agregar except para no sourcfile y no sourcename ni destination port
     #         print(" -- DEAD CONNECTION --")
     #         sys.exit(2)
-
-main()
+    main()
