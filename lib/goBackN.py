@@ -2,6 +2,7 @@
 from socket import *
 import time
 import enviador
+from lib.paquete import Paquete
 
 MSJ_SIZE = 5
 MAX_WAIT = 0.0005
@@ -14,17 +15,30 @@ class GoBackN(enviador.Enviador):
         self.paquetesEnVuelo = []
         self.timers = []
 
-        
+    def agregarPaqueteEnVuelo(self,paquete):
+        self.paquetesEnVuelo.append(self.gestorPaquetes.pasarBytesAPaquete(paquete))
+
+    def paqueteEnVueloI(self,i):
+        return(self.paquetesEnVuelo[i])
+    
+    def agregarTimer(self,timer):
+        self.timers.append(time.time())
+
+    def timerI(self,i):
+        return(self.timers[i])
+
     def enviar(self,mensaje,entidad):
         pck = self.gestorPaquetes.crearPaquete(mensaje)
         pckBytes = self.gestorPaquetes.pasarPaqueteABytes(pck)
         entidad.enviarPaquete(pckBytes)
         self.paquetesEnVuelo.append(self.gestorPaquetes.pasarBytesAPaquete(pckBytes))
+        """
         paqueteRecibido = entidad.recibirPaquete()
         if (paqueteRecibido == None):
             return False
         verificar = self.gestorPaquetes.verificarACK(paqueteRecibido)
         return verificar
+        """
 #Go back N
     def enviarPaquete(self, file, entidad):
 
@@ -33,15 +47,15 @@ class GoBackN(enviador.Enviador):
             
             if (len(self.paquetesEnVuelo) < MAX_VENTANA):
 
-                verificar = self.enviar(mensaje,entidad)
+                verificar = self.enviar(mensaje,entidad) #este seria solo enviar
                 self.timers.append(time.time()) #Ordenado de mas viejo a mas nuevo
-
+            """
             if(verificar == False or self.timers[0] + MAX_WAIT < time.time()):
                 for pck in range(len(self.paquetesEnVuelo)):
                     verificar = self.enviar(self.paquetesEnVuelo[pck].obtenerMensaje(),entidad) 
                     self.timers.append(time.time())
             #retransmision de paquetes desde el ultimo ack recibido
-            
+            """
             mensaje = file.read(MSJ_SIZE)
 
             #Si en mi primer envio en la ventana N, recibo acks, osea ok el envio, sigo leyendo y reinicio la lista en vuelo
