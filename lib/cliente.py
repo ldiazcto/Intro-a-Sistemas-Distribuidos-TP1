@@ -24,10 +24,7 @@ class Cliente(entidad.Entidad):
 #para la subida
 
 #PARA CLIENTE
-    def enviarPaquete(self,pckBytes):
-        self.entidadSocket.sendto(pckBytes ,(self.name,self.port))
-        #print("-- ENVIAR PAQUETE -- envié el paquete actual")
-        
+       
     def enviarArchivo(self, file, enviador):
         enviador.enviarPaquete(file, self)
 

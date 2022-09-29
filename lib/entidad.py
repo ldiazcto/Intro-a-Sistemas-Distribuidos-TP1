@@ -48,10 +48,10 @@ class Entidad(ABC):
                 print("Sali del while, debería estar acá, i vale ", i)
                 return False
 
-        @abstractmethod
-        def enviarPaquete(self, mensaje):
-                pass
 
+        def enviarPaquete(self,pckBytes):
+                self.entidadSocket.sendto(pckBytes ,(self.name,self.port))
+        
         def enviarArchivo(self, file, enviador):
             enviador.enviarPaquete(file, self)
 

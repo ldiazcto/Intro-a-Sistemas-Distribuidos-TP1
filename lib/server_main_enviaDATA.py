@@ -2,6 +2,7 @@
 
 import socket
 import gestorPaquetes
+
 FIN = 5
 #tiene la info y la envía
 

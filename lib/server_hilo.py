@@ -2,11 +2,13 @@
 from socket import*
 import select
 import threading
+import time
 import entidad
 import conexiones_hilo
+import gestorPaquetes
 
-
-
+MAX_WAIT_HANDSHAKE = 30
+MAX_TAMANIO_PERMITIDO = 30 #en bytes
 
 class Server(threading.Thread,entidad.Entidad):
     def __init__(self):
@@ -21,7 +23,6 @@ class Server(threading.Thread,entidad.Entidad):
         self.numero_hilos = 0
         
         
-
 
     def run(self):
         while True:
@@ -43,6 +44,51 @@ class Server(threading.Thread,entidad.Entidad):
                    self.conexiones[conexion].join() 
                    self.conexiones.pop(conexion)   
 
+    def chequearHandshakeApropiado(paquete):
+        return (paquete.esDownload() or paquete.esUpload())
+
+    def obtenerTamanio(mensaje):
+        nombre, tamanio = mensaje.split("-")
+        return tamanio
+
+    def chequearTamanio(self, paquete) :
+        if paquete.esDownload() :
+            return True
+        
+        tamanio = self.obtenerTamanio(paquete.obtenerMensaje())
+        if (tamanio >= MAX_TAMANIO_PERMITIDO):
+            return False
+        return True
+
+    def esHandshakeUpload(paquete):
+        return paquete.esUpload()
+
+    def enviarACKHandshake(self):
+        #crear paquete
+        gP = gestorPaquetes.Gestor_Paquete()
+        pck = gP.crearPaqueteACK()
+        
+        #pasarlo a bytes
+        pckBytes = gP.pasarPaqueteABytes(pck)
+
+        #pasarlo con enviarPaquete 
+        self.enviarPaquete(pckBytes)
+
+    def recibirHandshake(self):
+        time_start = time.time()
+        paqueteRecibido = None
+        while time.time() < time_start + MAX_WAIT_HANDSHAKE and paqueteRecibido == None:
+                paqueteRecibido = self.recibirPaquete()
+        
+        if (paqueteRecibido == None) :
+            print("Salto el timer, me voy")
+            return None
+        
+        return paqueteRecibido
+            
+                
+                
+
     def cerrar_socket(self):
         self.socket_cerrado = True
 
@@ -54,10 +100,6 @@ class Server(threading.Thread,entidad.Entidad):
             self.conexiones.pop(conexion)
         print("DO SOMETHING")
 
-    def recibirPaquete(self):
-                #pensarla, para descargar paquetes
-                return
-    
 
     def enviarPaquete(self, mensaje):
                 pass
