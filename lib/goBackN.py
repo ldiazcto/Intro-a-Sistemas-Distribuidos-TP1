@@ -33,8 +33,9 @@ class GoBackN(enviador.Enviador):
     def enviar(self,mensaje,entidad):
         pck = self.gestorPaquetes.crearPaquete(mensaje)
         pckBytes = self.gestorPaquetes.pasarPaqueteABytes(pck)
-        entidad.enviarPaquete(pckBytes)
         self.paquetesEnVuelo.append(self.gestorPaquetes.pasarBytesAPaquete(pckBytes))
+        entidad.enviarPaquete(pckBytes)
+        
         """
         paqueteRecibido = entidad.recibirPaquete()
         if (paqueteRecibido == None):
@@ -67,24 +68,25 @@ class GoBackN(enviador.Enviador):
 """
 
 """
-base_envio = 0
-paquete_a_enviar = 0
+base_envio = 0 --> sequence number del paquete mas viejo no reconocido
+paquete_a_enviar = 0 --> sequence number del paquete siguiente que se va a enviar
+
+[0,base-1] --> paquetes que se transmitieron y fueron reconocidos
+[base,paquete_enviar - 1] --> paquetes que han sido transmitidos pero no se reconocieron todavia
+[paquete_enviar,base+N-1] --> no lo entendi xd
+[base+N,inf] --> paquetes que no se pueden transmitir hasta que llegue el reconocimiento del paquete cuyo seq_number = base
+
 
 mensaje = file.read(MSJ_SIZE)
 while len(mensaje) > 0:
     if(paquete_a_enviar < base_envio + MAX_VENTANA):
         self.enviar(mensaje,entidad)
-        paquete_a_enviar += 1
-    paqueteRecibido = entidad.recibirPaquete()
-    verificar = goBackN.gestorPaquetes.verificarACK(paqueteRecibido)
-    if(verificar == True):
-        base_envio += 1
-        if(paqueteRecibido in paquetesEnVuelo):
-            paquetesEnVuelo.remove(paqueteRecibido)
         if(base_envio == paquete_a_enviar):
-            timeout = 0
-        else:
-            timeout = time.time()
+            timer = time.time()
+        paquete_a_enviar += 1
+    else:
+        rechazar_mensaje(mensaje)
+    
 
     if(timeout):
         timeout = time.time()
