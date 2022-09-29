@@ -58,8 +58,9 @@ class Gestor_Paquete:
 
         paqueteBytes = sequence
         paqueteBytes += ack
+
+        #ES PARA LOS ACK LA PARTE DE MENSAJE ES NONE!!!!!!!!
         if (mensaje != None):
-            mensaje = bytes(pck.obtenerMensaje(), 'utf-8')#FIJARSE ACA, pq para convertir str a bytes en python es con otra func
             paqueteBytes += mensaje
 
         print("paqueteBytes: ", paqueteBytes)

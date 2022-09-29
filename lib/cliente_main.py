@@ -20,13 +20,13 @@ WARNING = 30
 CRITICAL = 50
 QUIET = 51
 
-# def abrirArchivo(ruta):
-#         try:
-#             file = open(ruta,'rb')
-#             return file
-#         except FileNotFoundError: #o IOERROR o FileExistsError
-#             print("FILE NO ENCONTRADO")
-#             sys.exit(2)
+def abrirArchivo(ruta):
+        try:
+            file = open(ruta,'rb')
+            return file
+        except FileNotFoundError: #o IOERROR o FileExistsError
+            print("FILE NO ENCONTRADO")
+            sys.exit(2)
 
 # def cerrarArchivo(file):
 #     file.close()
@@ -101,14 +101,14 @@ def main():
     
     # logger.info("Se inicio el logger")
     
-    # cliente_prueba = cliente.Cliente("localhost", 12000, logger)
-    # #stopWait = stopAndWait.StopAndWait()
-    # backN = goBackN.GoBackN() #llamo a la clase, y me ejecuta el constructor
-    # print("Se creo el cliente con exito")
-    # file = abrirArchivo("./lib/hola.txt")
-    # cliente_prueba.enviarArchivo(file,backN)
+    cliente_prueba = cliente.Cliente("localhost", 12000)
+    # stopWait = stopAndWait.StopAndWait()
+    backN = goBackN.GoBackN() #llamo a la clase, y me ejecuta el constructor
+    print("Se creo el cliente con exito")
+    file = abrirArchivo("./lib/hola.txt")
+    cliente_prueba.enviarArchivo(file,backN)
     return 0
-
+main()
     # opciones, argumentos = obtenerArgumentos()
     # print("OPCIONES: ",opciones)
     # for opt,arg in opciones: #para entrar en las tuplas de opciones y analizar
@@ -188,4 +188,4 @@ def main():
     #     except sys.argv[0] != "upload" and sys.argv[0] != "download": #agregar except para no sourcfile y no sourcename ni destination port
     #         print(" -- DEAD CONNECTION --")
     #         sys.exit(2)
-    main()
+    

@@ -3,6 +3,7 @@ from socket import *
 import time
 import enviador
 import paquete
+import goBackNRecv
 
 MSJ_SIZE = 5
 MAX_WAIT = 0.0005
@@ -14,6 +15,7 @@ class GoBackN(enviador.Enviador):
     def __init__(self):
         self.paquetesEnVuelo = []
         self.timers = []
+        self.goBackNRecv = goBackNRecv.GoBackNRecv(MAX_VENTANA)
         super(GoBackN, self).__init__()
 
     def agregarPaqueteEnVuelo(self,paquete):
@@ -44,27 +46,53 @@ class GoBackN(enviador.Enviador):
     def enviarPaquete(self, file, entidad):
 
         mensaje = file.read(MSJ_SIZE)
-        while len(mensaje) > 0 :
-            
+        while (len(mensaje) > 0):
             if (len(self.paquetesEnVuelo) < MAX_VENTANA):
-
-                verificar = self.enviar(mensaje,entidad) #este seria solo enviar
+                self.enviar(mensaje,entidad) #este seria solo enviar
                 self.timers.append(time.time()) #Ordenado de mas viejo a mas nuevo
-            """
-            if(verificar == False or self.timers[0] + MAX_WAIT < time.time()):
-                for pck in range(len(self.paquetesEnVuelo)):
-                    verificar = self.enviar(self.paquetesEnVuelo[pck].obtenerMensaje(),entidad) 
-                    self.timers.append(time.time())
-            #retransmision de paquetes desde el ultimo ack recibido
-            """
+            self.goBackNRecv.recibirParalelo(self,entidad,self.paquetesEnVuelo)
             mensaje = file.read(MSJ_SIZE)
-
-            #Si en mi primer envio en la ventana N, recibo acks, osea ok el envio, sigo leyendo y reinicio la lista en vuelo
-            if(verificar == True and len(self.paquetesEnVuelo) > MAX_VENTANA):
-                self.paquetesEnVuelo = []
-
+        
         return 1
 
+
+    """while (termino de leer el archivo):
+        mensaje =  leer
+        if tamaño actual ventana < max ventana:
+            mando el mensaje
+        si el timer esta prendido:
+            no hago nada
+        empiezo timer
+        recibo ack pero es no bloqueante
+"""
+
+"""
+base_envio = 0
+paquete_a_enviar = 0
+
+mensaje = file.read(MSJ_SIZE)
+while len(mensaje) > 0:
+    if(paquete_a_enviar < base_envio + MAX_VENTANA):
+        self.enviar(mensaje,entidad)
+        paquete_a_enviar += 1
+    paqueteRecibido = entidad.recibirPaquete()
+    verificar = goBackN.gestorPaquetes.verificarACK(paqueteRecibido)
+    if(verificar == True):
+        base_envio += 1
+        if(paqueteRecibido in paquetesEnVuelo):
+            paquetesEnVuelo.remove(paqueteRecibido)
+        if(base_envio == paquete_a_enviar):
+            timeout = 0
+        else:
+            timeout = time.time()
+
+    if(timeout):
+        timeout = time.time()
+        for(pck in paquetesEnVuelo):
+            self.enviar(pck.obtenerMensaje(),entidad)
+    mensaje = file.read(MSJ_SIZE)
+    
+"""
 
 """
 #--------------
