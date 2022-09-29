@@ -30,10 +30,6 @@ class Gestor_Paquete:
         self.ack_number_receiver += agregado
         return paquete.Paquete(self.ack_number_receiver, ACK, None)
 
-    def cierreConexion(self,FIN):
-        pck = paquete.Paquete(self.seq_number,FIN,None)
-        return pck.esFin()
-    
     def crearPaqueteHandshake(self, operador, mensaje):
         return paquete.Paquete(self.seq_number, operador, mensaje)
 
@@ -63,7 +59,11 @@ class Gestor_Paquete:
 
         print("paqueteBytes: ", paqueteBytes)
         return paqueteBytes
-
+ 
+    def cierreConexion(self,FIN):
+        pck = paquete.Paquete(self.seq_number,FIN,None)
+        return pck.esFin()
+    
     def verificarACK(self,pck):
         if(pck.esACK() == True): #es ack entonces me fijo si coincide el numero de ack con el global para saber si llego todo ok
             if(pck.obtenerSeqNumber() == self.ack_number_sender):
@@ -71,10 +71,10 @@ class Gestor_Paquete:
                 return True #llego bien el paquete
         return False
 
-
+#nombre raro, mejor verificarPaqueteOrdenado o algo así, para explicitar que estoy chequeando si llegó el paquete con el seq number apropiado
     def verificar_mensaje_recibido(self,paquete):
         return (paquete.obtenerSeqNumber() == self.seq_number_receiver)
-        
+    
 
     """
     def obtener_data(self,mensaje):

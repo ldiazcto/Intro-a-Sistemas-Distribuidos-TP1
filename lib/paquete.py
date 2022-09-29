@@ -29,21 +29,13 @@ class Paquete:
         return self.mensaje
 
     def esUpload(self):
-        if self.operador == UPLOAD:
-            return True
-        return False
+        return self.operador == UPLOAD
 
     def esDownload(self):
-        if self.operador == DOWNLOAD:
-            return True
-        return False
+        return self.operador == DOWNLOAD
 
     def esRefused(self):
-        if self.operador == REFUSED:
-            return True
-        return False
+        return self.operador == REFUSED
 
     def esFin(self):
-        if self.operador == FIN:
-            return True
-        return False
+        return self.operador == FIN

@@ -5,7 +5,7 @@ import enviador
 
 MSJ_SIZE = 5
 MAX_WAIT = 0.5
-MAX_TRIES = 3
+
 
 class StopAndWait(enviador.Enviador):
 
@@ -14,10 +14,15 @@ class StopAndWait(enviador.Enviador):
         pckBytes = self.gestorPaquetes.pasarPaqueteABytes(pck)
         entidad.enviarPaquete(pckBytes)
         paqueteRecibido = entidad.recibirPaquete()
-        if (paqueteRecibido == None):
-            return False
-        verificar = self.gestorPaquetes.verificarACK(paqueteRecibido)
-        return verificar
+        cantidad_intentos = 1
+        while(paqueteRecibido == None and cantidad_intentos <= 3):
+            entidad.enviarPaquete(pckBytes)
+            paqueteRecibido = entidad.recibirPaquete()
+            print("Entro a recibirPaquete(): ",cantidad_intentos)
+            cantidad_intentos += 1
+        if(cantidad_intentos > 3):
+            return (False,None)
+        return (True,paqueteRecibido)
 
 #STOP AND WAIT
     def enviarPaquete(self, file, entidad):
@@ -26,22 +31,35 @@ class StopAndWait(enviador.Enviador):
         
         while(len(mensaje) > 0):
             print("mensaje: ",mensaje)
-            timeout_start = time.time()
             #de mensaje a paquete
-            verificar = self.enviar(mensaje,entidad)
-            i = 0
+            intentar_mandar,paquete_recibido = self.enviar(mensaje,entidad)
             #chequear si llego un ack
             #si llego un ack, verificar que es el correcto
             #si no llego un ack o no es el correcto, -> reenvío
             #si salta el timer, -> reenvío
             #estoy dispuesta a reenviar MAX_TRIES
-            while((verificar == False and i < MAX_TRIES) or time.time() >= (timeout_start + MAX_WAIT)):
-                verificar = self.enviar(mensaje,entidad)
-                timeout_start = time.time()
+            
+            if (intentar_mandar == False):
+                return
+            verificar_ack = self.gestorPaquetes.verificarACK(paquete_recibido)
+            intentar_mandar_ack = True
+            if(verificar_ack == False): #EXTREMA SEGURIDAD --> ACK CORRUPTO
+                cant_max_envios = 0
+                while (cant_max_envios <= 3):
+                    intentar_mandar_ack,paquete_recibido = self.enviar(mensaje,entidad)
+                    cant_max_envios += 1
+            if (intentar_mandar_ack == False):
+                return
+            """
+            i = 1
+            while(verificar_ack == False and i <= 3):
+                print("-- ENVIAR PAQUETE --- No recibí el ACK o salto el timer, envío de nuevo. Vez ",i," de 4")
+                verificar,paquete_perdido = self.enviar(mensaje,entidad)
                 i += 1
-
+            """
+            
             mensaje = file.read(MSJ_SIZE)
-        return self.gestorPaquetes.cierreConexion(5)
+        return
        
 
 """

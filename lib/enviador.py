@@ -19,10 +19,10 @@ class Enviador(ABC):
         timeout_start = time.time()
         i = 0
         recepcionACKCorrecto = False  
-        while (time.time() <= timeout_start + MAX_WAIT and i < MAX_TRIES and not recepcionACKCorrecto) :
+        while (i < MAX_TRIES and not recepcionACKCorrecto) :
             paqueteRecibido = cliente.recibirPaquete()
             recepcionACKCorrecto = self.gestorPaquetes.verificarACK(paqueteRecibido)
-            if (not recepcionACKCorrecto) :
+            if (not recepcionACKCorrecto or time.time() > timeout_start + MAX_WAIT) :
                 cliente.enviarPaquete(paqueteBytes)
                 timeout_start = time.time()
                 i += 1

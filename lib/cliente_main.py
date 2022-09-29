@@ -66,11 +66,11 @@ def cerrarArchivo(file):
 def main():
    
     cliente_prueba = cliente.Cliente("localhost", 12000)
-    stopWait = stopAndWait.StopAndWait()
-    #backN = goBackN.GoBackN() #llamo a la clase, y me ejecuta el constructor
+    #stopWait = stopAndWait.StopAndWait()
+    backN = goBackN.GoBackN() #llamo a la clase, y me ejecuta el constructor
     print("Se creo el cliente con exito")
     file = abrirArchivo("./lib/hola.txt")
-    cliente_prueba.enviarArchivo(file,stopWait)
+    cliente_prueba.enviarArchivo(file,backN)
     return 0
     
     # opciones, argumentos = obtenerArgumentos()
@@ -122,17 +122,24 @@ def main():
 #                                   sys.exit(2)
 
 #                             file = self.abrirArchivo(FILEPATH)
-#                             cliente.enviarHandshake(FILENAME, tamanio_archivo, UPLOAD)
-
+#                             handshakeExitoso = cliente.entablarHandshake(FILENAME, tamanio_archivo, UPLOAD)
+#                             if (not handshakeExitoso) :
+#                                   return
 #                             client.enviarArchivo(FILEPATH,backN)
 #                             self.cerrarArchivo(file)
     #                     if(sys.argv[0] == "download"):
     #                         if(opt in ('-d','--dst')):
-    #                             print("No está implementado")
     #                             FILEPATH = arg #ruta donde guardo el archivo
-    #                             #cliente.enviarHandshake(FILENAME, DOWNLOAD)
-    #                             #file = cliente.recibirArchivo(FILENAME)
-    #                             #self.guardarArchivo(file, FILEPATH) #lo hizo lucas, tengo que probar
+    #                             handshakeExitoso = cliente.entablarHandshake(FILENAME, 0, DOWNLOAD)
+    #                             if (not handshakeExitoso) :
+#                                      return
+    #                             
+    #                              #file = cliente.recibirArchivo(FILEPATH, FILENAME)
+    #                               self.cerrarArchivo(file)
+    # 
+    # 
+    # 
+    # 
     #                 cambiarModo = input("Quiere cambiar de protocolo? S/N: \n")
     #                 if(cambiarModo == "N"):
     #                     seguir = False
