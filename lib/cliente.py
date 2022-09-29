@@ -1,7 +1,6 @@
 from socket import *
 import entidad
 import gestorPaquetes
-import select
 import time
 import os
 import logging

@@ -53,14 +53,12 @@ class Gestor_Paquete:
         sequence = pck.obtenerSeqNumber().to_bytes(2,byteorder="big")
         ack = (pck.obtenerOperador()).to_bytes(2,byteorder="big") #Aca deberia llamar a la función o es lo que paquete tiene seteado (?)
         mensaje = pck.obtenerMensaje()
-        #print("El mensaje es ", mensaje)
 
         paqueteBytes = sequence
         paqueteBytes += ack
 
-        #ES PARA LOS ACK LA PARTE DE MENSAJE ES NONE!!!!!!!!
         if (mensaje != None):
-            paqueteBytes += mensaje
+            paqueteBytes += bytes(mensaje, "ascii")
 
         print("paqueteBytes: ", paqueteBytes)
         return paqueteBytes
@@ -70,7 +68,10 @@ class Gestor_Paquete:
         return pck.esFin()
     
     def verificarACK(self,pck):
-        if(pck.esACK() == True): #es ack entonces me fijo si coincide el numero de ack con el global para saber si llego todo ok
+        if (pck == None):
+            return False
+
+        if (pck.esACK() == True): #es ack entonces me fijo si coincide el numero de ack con el global para saber si llego todo ok
             if(pck.obtenerSeqNumber() == self.ack_number_sender):
                 self.ack_number_sender += 1
                 return True #llego bien el paquete

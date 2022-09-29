@@ -13,7 +13,7 @@ class Enviador(ABC):
     def __init__(self):
         self.gestorPaquetes = gestorPaquetes.Gestor_Paquete()
     
-    #no la probé
+    
     def enviarPaqueteHandshake(self, cliente, paqueteBytes):
         cliente.enviarPaquete(paqueteBytes)
         timeout_start = time.time()

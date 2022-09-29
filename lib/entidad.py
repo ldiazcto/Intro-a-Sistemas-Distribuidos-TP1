@@ -1,7 +1,8 @@
 from abc import ABC, abstractclassmethod, abstractmethod
 from socket import *
 import time
-import enviador
+import stopAndWait
+import select
 
 UPLOAD = 2
 MAX_TRIES = 2
@@ -30,12 +31,14 @@ class Entidad(ABC):
                 paquete = self.crearPaqueteHandshake(fileName, fileSize, operador)
                 paqueteBytes = self.gestorPaquetes.pasarPaqueteABytes(paquete)
                 i = 0
+                env = stopAndWait.StopAndWait()
                 while i <= MAX_TRIES:
-                        self.enviador.enviarPaqueteHandshake(self, paqueteBytes)
+                        env.enviarPaqueteHandshake(self, paqueteBytes)
                         paqueteRecibido = self.recibirPaquete()
                         if paqueteRecibido == None:
                                 print("Debería entrar acá, intento ", i)
-                                return False 
+                                i +=1
+                                continue 
                         
                         esPaqueteOrdenado = self.gestorPaquetes.verificar_mensaje_recibido(paqueteRecibido)
                         if (esPaqueteOrdenado) :
