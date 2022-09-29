@@ -6,14 +6,6 @@ import cliente
 import sys
 
 
-def abrirArchivo(ruta):
-        try:
-            file = open(ruta,'rb')
-            return file
-        except FileNotFoundError: #o IOERROR o FileExistsError
-            print("FILE NO ENCONTRADO")
-            sys.exit(2)
-
 def cerrarArchivo(file):
     if (file is not None) :
         file.close()
