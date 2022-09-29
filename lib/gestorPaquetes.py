@@ -52,7 +52,6 @@ class Gestor_Paquete:
     def pasarPaqueteABytes(self, pck):
         sequence = pck.obtenerSeqNumber().to_bytes(2,byteorder="big")
         ack = (pck.obtenerOperador()).to_bytes(2,byteorder="big") #Aca deberia llamar a la función o es lo que paquete tiene seteado (?)
-        #mensaje = bytes(pck.obtenerMensaje(), 'utf-8')#FIJARSE ACA, pq para convertir str a bytes en python es con otra func
         mensaje = pck.obtenerMensaje()
         #print("El mensaje es ", mensaje)
 

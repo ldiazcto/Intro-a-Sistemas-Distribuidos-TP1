@@ -1,0 +1,48 @@
+import os
+import cliente, stopAndWait, goBackN #nombre del archivo
+import getopt
+import sys
+import logging
+
+UPLOAD = 2
+
+def cerrarArchivo(file):
+    if (file is not None) :
+        file.close()
+
+#envía el handshake
+
+def iniciaHandshakeUPLOAD():
+   
+        #creo cliente
+        #como estoy en upload, creo paquete de handshake
+        #se lo envío al server llamando a cliente.entablarHandshake()
+        #si funciona devuelve True, es porque el paquete se envió al server, el server lo recibió y se recibió un ack de respuesta
+
+        receiverPort = 12000
+        receiverName = "localhost"
+        
+        cliente_prueba = cliente.Cliente(receiverName, receiverPort)
+        print("Se creo el cliente con exito")
+        
+        resultado = cliente_prueba.entablarHandshake("hola.txt", 10, UPLOAD)
+        print("\n\n -- Volvi al iniciaHandshakeUPLOAD --")
+        if resultado:
+                print("El handshake funciono correctamente, wii")
+        else:
+                print("El handshake no funciono, algo salio mal :(")
+
+
+        cliente_prueba.entidadSocket.close()
+        return 0
+
+
+def iniciaHandshakeDOWNLOAD():
+        print("Aun no implementado :)")
+
+
+print("--PRUEBA CLIENTE INICIA HANDSHAKE UPLOAD--")
+iniciaHandshakeUPLOAD()
+
+print("--PRUEBA CLIENTE RECIBE HANDSHAKE DOWNLOAD--")
+iniciaHandshakeDOWNLOAD()
