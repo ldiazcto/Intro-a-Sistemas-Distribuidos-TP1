@@ -77,6 +77,8 @@ class Gestor_Paquete:
                 return True #llego bien el paquete
         return False
 
+    def verificarRefused(self, pck):
+        return pck.esRefused()
 #nombre raro, mejor verificarPaqueteOrdenado o algo así, para explicitar que estoy chequeando si llegó el paquete con el seq number apropiado
     def verificar_mensaje_recibido(self,paquete):
         return (paquete.obtenerSeqNumber() == self.seq_number_receiver)

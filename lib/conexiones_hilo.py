@@ -121,11 +121,12 @@ class Conexion(threading.Thread):
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paqueteRefused),(self.ip_cliente,self.puerto_cliente))
             return False
 
-        archivoExiste = self.chequearExistenciaArchivo(paquete)
-        print("\n Server: salii de chequearExistenciaArchivo")
-        if (not archivoExiste) :
-                print("El archivo pedido no existe, me voy")
-                return False
+        #Falta una función para buscar en el download
+        #archivoExiste = self.chequearExistenciaArchivo(paquete)
+        #print("\n Server: salii de chequearExistenciaArchivo")
+        #if (not archivoExiste) :
+        #        print("El archivo pedido no existe, me voy")
+        #        return False
 
         self.enviarACKHandshake(self)
 

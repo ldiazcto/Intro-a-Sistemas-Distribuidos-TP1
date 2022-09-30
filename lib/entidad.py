@@ -39,6 +39,10 @@ class Entidad(ABC):
                         if (esPaqueteOrdenado) :
                                 print("Cliente: Recibí un ack ordenado!")
                                 return True
+                        esPaqueteRefused = self.gestorPaquetes.verificarRefused(paqueteRecibido)
+                        if (esPaqueteRefused) :
+                                print("Cliente: el server rechazó la conexión :_(")
+                                return False
                         print("Cliente: No recibí un ack o no fue ordenado, intento ", i)
                         i +=1
 
