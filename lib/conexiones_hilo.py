@@ -176,16 +176,14 @@ class Conexion(threading.Thread):
     def chequearExistenciaArchivo(self, paquete) :
         print("Entre a chequear Existencia Archivo")
         nombre, tamanio = self.obtenerNombreYTamanio(paquete)
-        print("nombre es ", nombre)
         i = 0
-        (root, dirs, files) = os.walk(DIRECTORIO_BUSQUEDA)
-        print(root)
-        print(dirs)
-        print(files)
-        while i < len(list(files)):
-            print("files es ", files)
-            i=+1
-        print(i)
+
+        resultado = os.walk(DIRECTORIO_BUSQUEDA)
+        listGrande = list(resultado)
+        tupla = listGrande[0]
+        names = tupla[2]
+        if nombre in names :
+            return True
         return False
 
     def esHandshakeUpload(self, paquete):

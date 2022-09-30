@@ -52,7 +52,7 @@ def downloadArchivoInexistente():
         if resultado:
                 print("No debería caer acá, estoy intentando descargar un archivo inexistente")
         else:
-                print("El archivo a descargar no existe, debería caer acá")
+                print("-- EEEXIIIITOOOO -- El archivo a descargar no existe, debería caer acá")
                 
 
         cliente_prueba.entidadSocket.close()
@@ -70,7 +70,7 @@ def downloadArchivoExistente():
         resultado = cliente_prueba.entablarHandshake("prueba_doc.doc", 395, DOWNLOAD)
         print("\n -- Volvi al iniciaHandshakeDOWNLOAD --")
         if resultado:
-                print("debería caer acá, el archivo existe")
+                print("-- EEEXIIIITOOOO -- debería caer acá, el archivo existe")
         else:
                 print("NO DEBERÍA CAER ACÁ")
                 

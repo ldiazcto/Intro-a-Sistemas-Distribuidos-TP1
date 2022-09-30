@@ -58,7 +58,8 @@ class Gestor_Paquete:
         paqueteBytes += ack
 
         if (mensaje != None):
-            paqueteBytes += mensaje
+            mensajeBytes =  bytes(mensaje, 'utf-8')
+            paqueteBytes += mensajeBytes
 
         print("paqueteBytes: ", paqueteBytes)
         return paqueteBytes
