@@ -25,12 +25,12 @@ def iniciaHandshakeUPLOAD():
         cliente_prueba = cliente.Cliente(receiverName, receiverPort)
         print("Se creo el cliente con exito")
         
-        resultado = cliente_prueba.entablarHandshake("hola.txt", 10, UPLOAD)
+        resultado = cliente_prueba.entablarHandshake("hola.txt", 1000, UPLOAD)
         print("\n\n -- Volvi al iniciaHandshakeUPLOAD --")
         if resultado:
-                print("El handshake funciono correctamente, wii")
+                print("Cliente: el entablarHandshake funciono correctamente, wii")
         else:
-                print("El handshake no funciono, algo salio mal :(")
+                print("Cliente: el entablarHandshake no funciono, algo salio mal :(")
 
 
         cliente_prueba.entidadSocket.close()

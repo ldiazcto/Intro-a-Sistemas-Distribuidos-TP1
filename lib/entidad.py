@@ -35,17 +35,14 @@ class Entidad(ABC):
                 while i <= MAX_TRIES:
                         env.enviarPaqueteHandshake(self, paqueteBytes)
                         paqueteRecibido = self.recibirPaquete()
-                        if paqueteRecibido == None:
-                                print("Debería entrar acá, intento ", i)
-                                i +=1
-                                continue 
-                        
-                        esPaqueteOrdenado = self.gestorPaquetes.verificar_mensaje_recibido(paqueteRecibido)
+                        esPaqueteOrdenado = self.gestorPaquetes.verificarACK(paqueteRecibido)
                         if (esPaqueteOrdenado) :
+                                print("Cliente: Recibí un ack ordenado!")
                                 return True
+                        print("Cliente: No recibí un ack o no fue ordenado, intento ", i)
                         i +=1
 
-                print("Sali del while, debería estar acá, i vale ", i)
+                print("Cliente: sali del while en el intento ", i)
                 return False
 
 
@@ -61,13 +58,18 @@ class Entidad(ABC):
                 while True:
                         lista_sockets_listos = select.select([self.entidadSocket], [], [], 1)
                         var = time.time()
-                        if (var >= (timeout_start + MAX_WAIT)):   
+                        if (var >= (timeout_start + MAX_WAIT)):
+                                print("\nEntre al timeout de recibirPaquete")   
                                 return None
                                 #volver a mandar_mensaje
                         if not lista_sockets_listos[0]:
+                                print("\nEntre a not lista_sockets_listos[0] de recibirPaquete")
                                 continue
                         paqueteString, sourceAddress = self.entidadSocket.recvfrom(2048)
-                        return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
+                        print("\n paqueteString es ", paqueteString)
+                        pckRecibido = self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
+                        print("Y pckRecibido es ", pckRecibido)
+                        return pckRecibido
 
         def recibirArchivo(self, ruta):
             #pensarla, tal vez puede ser genérica

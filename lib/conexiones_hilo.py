@@ -1,4 +1,5 @@
 import threading
+import time
 import gestorPaquetes
 import receiver
 from socket import *
@@ -10,6 +11,10 @@ UPLOAD = 2
 DOWNLOAD = 3
 REFUSED = 4
 FIN = 5
+
+
+MAX_WAIT_HANDSHAKE = 30
+MAX_TAMANIO_PERMITIDO = 30 #en bytes
 
 class Conexion(threading.Thread):
     def __init__(self,numero_hilo, conexion_cliente):
@@ -39,21 +44,25 @@ class Conexion(threading.Thread):
                     self.hay_data = False #si la cola queda vacia establezco que no hay mas data, por ahora
                 if mensaje is None:   # If you send `None`, the thread will exit.
                     return
-                #print (mensaje)
                 self.imprimir_mensaje(mensaje)
                 self.procesar_mensaje(mensaje)
+                print("HASTA ACA LLEGO!")
                 #self.enviar_mensaje()
 
 
     def imprimir_mensaje(self, message):
         print ("Numero_hilo:",self.nombre,"conexion:",self.conexion_cliente)
         print ("Mensaje:",message)
+        print("\n")
 
     def procesar_mensaje(self,mensaje):
         if mensaje == "FIN":
             print ("CIERRO CONEXION")
             self.conexion_activa = False
         paquete = self.gestor_paquete.pasarBytesAPaquete(mensaje)
+
+        self.recibirHandshake()
+
         """
         #es el primero no hace falta verificar mensaje recibido
         if (paquete.esUpload()):
@@ -94,3 +103,48 @@ class Conexion(threading.Thread):
 
     def esta_activa(self):
         return self.conexion_activa
+
+
+    def chequearHandshakeApropiado(paquete):
+        return (paquete.esDownload() or paquete.esUpload())
+
+    def obtenerTamanio(mensaje):
+        nombre, tamanio = mensaje.split("-")
+        return tamanio
+
+    def chequearTamanio(self, paquete) :
+        if paquete.esDownload() :
+            return True
+        
+        tamanio = self.obtenerTamanio(paquete.obtenerMensaje())
+        if (tamanio >= MAX_TAMANIO_PERMITIDO):
+            return False
+        return True
+
+    def esHandshakeUpload(paquete):
+        return paquete.esUpload()
+
+    def enviarACKHandshake(self):
+        #crear paquete
+        gP = gestorPaquetes.Gestor_Paquete()
+        pck = gP.crearPaqueteACK()
+        
+        #pasarlo a bytes
+        pckBytes = gP.pasarPaqueteABytes(pck)
+
+        #pasarlo con enviarPaquete 
+        self.enviarPaquete(pckBytes)
+
+    def recibirHandshake(self):
+        time_start = time.time()
+        paqueteRecibido = None
+        while time.time() < time_start + MAX_WAIT_HANDSHAKE and paqueteRecibido == None:
+                print("\nEntro al while")
+                paqueteRecibido = self.recibirPaquete()
+                print("Paquete es ", paqueteRecibido)
+        
+        if (paqueteRecibido == None) :
+            print("Salto el timer, me voy")
+        
+        return paqueteRecibido
+      
