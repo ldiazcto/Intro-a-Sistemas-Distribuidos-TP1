@@ -7,6 +7,8 @@ import select
 UPLOAD = 2
 MAX_TRIES = 2
 MAX_WAIT = 0.5
+NOT_BLOCKING= 0 
+BLOCKING = 1
 
 class Entidad(ABC):
 
@@ -71,12 +73,15 @@ class Entidad(ABC):
                         return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
 
         def recibirPaqueteBackN(self):
-                while True:
-                        lista_sockets_listos = select.select([self.entidadSocket], [], [], 1)
-                        if not lista_sockets_listos[0]:
-                                continue
-                        paqueteString, sourceAddress = self.entidadSocket.recvfrom(2048)
-                        return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
+                self.entidadSocket.setblocking(NOT_BLOCKING)
+                try :
+                        paqueteString, serverAdress = self.entidadSocket.recvfrom(2048)
+                except BlockingIOError:
+                        self.entidadSocket.setblocking(BLOCKING)
+                        return None
+                self.entidadSocket.setblocking(BLOCKING)
+                return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
+      
 
         def recibirArchivo(self, ruta):
             #pensarla, tal vez puede ser genérica

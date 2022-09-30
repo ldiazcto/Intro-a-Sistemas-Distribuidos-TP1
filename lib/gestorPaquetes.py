@@ -59,14 +59,9 @@ class Gestor_Paquete:
 
         if (mensaje != None):
             if(pck.esDownload() or pck.esUpload()):
-                mensajeBytes =  bytes(mensaje, 'utf-8')
-            else:
-                mensajeBytes = mensaje
+                mensaje =  bytes(mensaje, 'utf-8')
 
-            paqueteBytes += mensajeBytes
-            #mensajeBytes =  bytes(mensaje, 'utf-8')
             paqueteBytes += mensaje
-
         print("paqueteBytes: ", paqueteBytes)
         return paqueteBytes
  
@@ -76,13 +71,21 @@ class Gestor_Paquete:
     
     def verificarACK(self,pck):
         if (pck == None):
+            print("es none")
             return False
-
+        print("sequence number de pck: ",pck.obtenerSeqNumber())
+        print("ack number global: ",self.ack_number_sender)
         if (pck.esACK() == True): #es ack entonces me fijo si coincide el numero de ack con el global para saber si llego todo ok
             if(pck.obtenerSeqNumber() == self.ack_number_sender):
-                self.ack_number_sender += 1
                 return True #llego bien el paquete
         return False
+        
+
+    def actualizarACK(self,pck):
+        verificacion = self.verificarACK(pck)
+        if (verificacion) :
+            self.ack_number_sender += 1
+        return verificacion
 
     def verificarRefused(self, pck):
         if pck == None:

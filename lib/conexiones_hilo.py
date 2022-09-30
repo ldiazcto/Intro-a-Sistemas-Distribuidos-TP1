@@ -67,14 +67,17 @@ class Conexion(threading.Thread):
         paquete = self.gestor_paquete.pasarBytesAPaquete(paqueteBytes)
         print("\npaquete es ", paquete)
 
-        print("Estoy por entrar a procesarHandshake")
-        handshakeExitoso = self.procesarHandshake(paquete)
-        if (not handshakeExitoso) :
-            print("El handshake no funcó, me tengo que ir")
-            return
-        print("--Server: EL HANDSHAKE FUNCÓ!--")
-        
         """
+        print("Estoy por entrar a procesarHandshake")
+        if (not self.handshakeRealizado) :
+            handshakeExitoso = self.procesarHandshake(paquete)
+            if (not handshakeExitoso) :
+                print("El handshake no funcó, me tengo que ir")
+                return
+            self.handshakeRealizado = True
+            print("--Server: EL HANDSHAKE FUNCÓ!--")
+        
+        
         #es el primero no hace falta verificar mensaje recibido
         if (paquete.esUpload()):
             cargaPaquete = paquete.obtenerMensaje
@@ -100,9 +103,11 @@ class Conexion(threading.Thread):
         """
         if (self.gestor_paquete.verificar_mensaje_recibido(paquete) == True):
             paquete_ack = self.gestor_paquete.crearPaqueteACK(1)
+            print("mando ack verificado")
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
         else:
             paquete_ack = self.gestor_paquete.crearPaqueteACK(0)
+            print("mando ack no verificado")
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
             #PONER AL QUE ESCRIBE EL ARCHIVO
         

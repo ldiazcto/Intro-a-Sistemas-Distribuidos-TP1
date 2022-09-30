@@ -41,7 +41,7 @@ class StopAndWait(enviador.Enviador):
             
             if (intentar_mandar == False):
                 return
-            verificar_ack = self.gestorPaquetes.verificarACK(paquete_recibido)
+            verificar_ack = self.gestorPaquetes.actualizarACK(paquete_recibido) #lo cambi;e a verificarACK
             intentar_mandar_ack = True
             if(verificar_ack == False): #EXTREMA SEGURIDAD --> ACK CORRUPTO
                 cant_max_envios = 0
