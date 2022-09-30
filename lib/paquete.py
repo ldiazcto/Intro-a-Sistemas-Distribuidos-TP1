@@ -1,4 +1,5 @@
 #from asyncio.windows_events import NULL
+import string
 from time import time as timer
 
 DATA = 0 #a veces llamado NOT_ACK

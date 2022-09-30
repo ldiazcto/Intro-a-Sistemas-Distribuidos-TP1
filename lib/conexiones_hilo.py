@@ -1,3 +1,4 @@
+import os
 import threading
 import time
 import gestorPaquetes
@@ -11,8 +12,9 @@ UPLOAD = 2
 DOWNLOAD = 3
 REFUSED = 4
 FIN = 5
+ACK_CORRECT = 1
 
-
+DIRECTORIO_BUSQUEDA = "/Users/abrildiazmiguez/Desktop/BDD_Servidor"
 MAX_WAIT_HANDSHAKE = 30
 MAX_TAMANIO_PERMITIDO = 30 #en bytes
 
@@ -121,16 +123,15 @@ class Conexion(threading.Thread):
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paqueteRefused),(self.ip_cliente,self.puerto_cliente))
             return False
 
-        #Falta una función para buscar en el download
-        #archivoExiste = self.chequearExistenciaArchivo(paquete)
-        #print("\n Server: salii de chequearExistenciaArchivo")
-        #if (not archivoExiste) :
-        #        print("El archivo pedido no existe, me voy")
-        #        return False
+        archivoExiste = self.chequearExistenciaArchivo(paquete)
+        print("archivoExiste vale ", archivoExiste)
+        if (not archivoExiste and paquete.esDownload()) :
+                print("El archivo pedido no existe, me voy")
+                return False
 
-        self.enviarACKHandshake(self)
+        self.enviarACKHandshake(ACK_CORRECT)
 
-        if self.esHandshakeUpload(self, paquete) :
+        if self.esHandshakeUpload(paquete) :
                 x=1
                 print("Es de tipo upload")
                 #lógica para el upload
@@ -144,30 +145,42 @@ class Conexion(threading.Thread):
     def chequearHandshakeApropiado(self, paquete):
         return (paquete.esDownload() or paquete.esUpload())
 
-    def obtenerTamanio(self, mensaje):
+
+
+    def obtenerNombreYTamanio(self, mensaje):
         nombre, tamanio = str(mensaje, "ascii").split("-")
-        return int(tamanio)
+        return nombre, int(tamanio)
 
     def chequearTamanio(self, paquete) :
         if paquete.esDownload() :
             return True
         
-        tamanio = self.obtenerTamanio(paquete.obtenerMensaje())
+        nombre, tamanio = self.obtenerNombreYTamanio(paquete.obtenerMensaje())
         if (tamanio >= MAX_TAMANIO_PERMITIDO):
             return False
         return True
 
+    def chequearExistenciaArchivo(self, paquete) :
+        nombre, tamanio = self.obtenerNombreYTamanio(paquete.obtenerMensaje())
+        filenames = os.walk(DIRECTORIO_BUSQUEDA)
+        print("recibido de os.walk = ", filenames)
+        if nombre in filenames:
+            return True
+        return False
+
     def esHandshakeUpload(self, paquete):
         return paquete.esUpload()
 
-    def enviarACKHandshake(self):
+
+
+
+    def enviarACKHandshake(self, agregado):
         #crear paquete
         gP = gestorPaquetes.Gestor_Paquete()
-        pck = gP.crearPaqueteACK()
+        pck = gP.crearPaqueteACK(agregado)
         
         #pasarlo a bytes
         pckBytes = gP.pasarPaqueteABytes(pck)
 
-        #pasarlo con enviarPaquete 
-        self.enviarPaquete(pckBytes)
+        self.skt.sendto(pckBytes,(self.ip_cliente,self.puerto_cliente))
      
