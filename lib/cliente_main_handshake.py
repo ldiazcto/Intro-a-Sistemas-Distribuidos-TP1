@@ -6,6 +6,7 @@ import sys
 import logging
 
 UPLOAD = 2
+DOWNLOAD = 3
 
 def cerrarArchivo(file):
     if (file is not None) :
@@ -26,7 +27,7 @@ def iniciaHandshakeUPLOAD():
         cliente_prueba = cliente.Cliente(receiverName, receiverPort)
         print("Se creo el cliente con exito")
         
-        resultado = cliente_prueba.entablarHandshake("hola.txt", 1, UPLOAD)
+        resultado = cliente_prueba.entablarHandshake("hola.txt", 395, UPLOAD)
         print("\n -- Volvi al iniciaHandshakeUPLOAD --")
         if resultado:
                 print("Cliente: el entablarHandshake funciono correctamente, wii")
@@ -38,12 +39,29 @@ def iniciaHandshakeUPLOAD():
         return 0
 
 
-def iniciaHandshakeDOWNLOAD():
-        print("Aun no implementado :)")
+def downloadArchivoInexistente():
+   
+        receiverPort = 12000
+        receiverName = "localhost"
+        
+        cliente_prueba = cliente.Cliente(receiverName, receiverPort)
+        print("Se creo el cliente con exito")
+        
+        resultado = cliente_prueba.entablarHandshake("hola.txt", 395, DOWNLOAD)
+        print("\n -- Volvi al iniciaHandshakeDOWNLOAD --")
+        if resultado:
+                print("No debería caer acá, estoy intentando descargar un archivo inexistente")
+        else:
+                print("El archivo a descargar no existe, debería caer acá")
+                
+
+        cliente_prueba.entidadSocket.close()
+        return 0
+
 
 
 print("\n--PRUEBA CLIENTE INICIA HANDSHAKE UPLOAD--")
 iniciaHandshakeUPLOAD()
 
 print("\n\n--PRUEBA CLIENTE RECIBE HANDSHAKE DOWNLOAD--")
-iniciaHandshakeDOWNLOAD()
+downloadArchivoInexistente()

@@ -25,8 +25,7 @@ def iniciaHandshakeUPLOAD():
         print("\nServer: volví de start")
 
         while True:
-                print ("Para detener el servidor ingrese la palabra FIN")
-                palabra = input()
+                palabra = input("Para detener el servidor ingrese la palabra FIN")
                 if palabra == "FIN":
                         serverPrueba.cerrar_socket()
                         serverPrueba.finalizar()
