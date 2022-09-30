@@ -70,6 +70,14 @@ class Entidad(ABC):
                         paqueteString, sourceAddress = self.entidadSocket.recvfrom(2048)
                         return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
 
+        def recibirPaqueteBackN(self):
+                while True:
+                        lista_sockets_listos = select.select([self.entidadSocket], [], [], 1)
+                        if not lista_sockets_listos[0]:
+                                continue
+                        paqueteString, sourceAddress = self.entidadSocket.recvfrom(2048)
+                        return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
+
         def recibirArchivo(self, ruta):
             #pensarla, tal vez puede ser genérica
                 x = 1
