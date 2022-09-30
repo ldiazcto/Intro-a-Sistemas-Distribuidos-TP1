@@ -13,6 +13,7 @@ class GoBackNNuevo(enviador.Enviador):
         self.older_seq_number = 1
         self.new_seq_number = 1
         self.paquetesEnVuelo = []
+        self.paquetesRecibidos = []
         super(GoBackNNuevo,self).__init__()
 
     def enviar(self,mensaje,entidad):
@@ -23,15 +24,19 @@ class GoBackNNuevo(enviador.Enviador):
         while True:
             if(self.new_seq_number < self.older_seq_number + N):
                 pck = self.gestorPaquetes.crearPaquete(mensaje)
+                print("mensaje: ",mensaje)
                 self.paquetesEnVuelo.append(pck)
                 entidad.enviarPaquete(self.gestorPaquetes.pasarPaqueteABytes(pck))
                 self.new_seq_number = pck.obtenerSeqNumber()
                 if(self.older_seq_number == self.new_seq_number):
                     timeout_start = time.time()
+                pck_recibido = entidad.recibirPaquete() #salgo del continue y obtengo el ultimo paquete recibido
+                self.paquetesRecibidos.append(pck_recibido)
                 continue
-
-            pck_recibido = entidad.recibirPaquete() #salgo del continue y obtengo el ultimo paquete recibido
-            verificar = self.gestorPaquetes.verificarACK(pck_recibido) #verifico si el ack es el que esperaba (el del ultimo)
+            
+            
+            print("ultimo paquete recibido: ",self.paquetesRecibidos[-1])
+            verificar = self.gestorPaquetes.verificarACK(self.paquetesRecibidos[-1]) #verifico si el ack es el que esperaba (el del ultimo)
             if(verificar == True): #si lo es, entonces significa que los anteriores los recibi bien
                 for pck in range(len(self.paquetesEnVuelo)):
                     if(pck <= pck_recibido.obtenerSeqNumber()):

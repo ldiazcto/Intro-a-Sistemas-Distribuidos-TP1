@@ -58,7 +58,7 @@ class Gestor_Paquete:
         paqueteBytes += ack
 
         if (mensaje != None):
-            paqueteBytes += bytes(mensaje, "ascii")
+            paqueteBytes += mensaje
 
         print("paqueteBytes: ", paqueteBytes)
         return paqueteBytes
