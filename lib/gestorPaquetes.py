@@ -64,6 +64,8 @@ class Gestor_Paquete:
                 mensajeBytes = mensaje
 
             paqueteBytes += mensajeBytes
+            #mensajeBytes =  bytes(mensaje, 'utf-8')
+            paqueteBytes += mensaje
 
         print("paqueteBytes: ", paqueteBytes)
         return paqueteBytes
