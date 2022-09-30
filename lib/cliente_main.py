@@ -1,5 +1,5 @@
 import os
-import cliente, stopAndWait, goBackN #nombre del archivo
+import cliente, stopAndWait, goBackNNuevo #nombre del archivo
 import getopt
 import sys
 import logging
@@ -103,7 +103,7 @@ def main():
     
     cliente_prueba = cliente.Cliente("localhost", 12000)
     # stopWait = stopAndWait.StopAndWait()
-    backN = goBackN.GoBackN() #llamo a la clase, y me ejecuta el constructor
+    backN = goBackN.GoBackNNuevo() #llamo a la clase, y me ejecuta el constructor
     print("Se creo el cliente con exito")
     file = abrirArchivo("./lib/hola.txt")
     cliente_prueba.enviarArchivo(file,backN)

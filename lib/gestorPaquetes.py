@@ -24,6 +24,12 @@ class Gestor_Paquete:
         pck = paquete.Paquete(self.seq_number, DATA, mensaje)
         self.seq_number += 1
         return pck
+
+    
+    def crearPaquete(sequence_number,mensaje):
+        pck = paquete.Paquete(sequence_number,DATA,mensaje)
+        return pck
+    
     
     #cuando creas un paquete de tipo ACK
     def crearPaqueteACK(self, agregado):
