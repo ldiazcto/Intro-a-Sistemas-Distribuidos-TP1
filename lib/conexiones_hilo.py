@@ -39,30 +39,34 @@ class Conexion(threading.Thread):
             if self.conexion_activa == False:
                 return
             if self.hay_data: #verifico si me pasaron nueva data
-                mensaje = self.queue.pop(0) #obtengo la data
+                paqueteBytes = self.queue.pop(0) #obtengo la data
                 if len(self.queue) == 0:
                     self.hay_data = False #si la cola queda vacia establezco que no hay mas data, por ahora
-                if mensaje is None:   # If you send `None`, the thread will exit.
+                if paqueteBytes is None:   # If you send `None`, the thread will exit.
                     return
-                self.imprimir_mensaje(mensaje)
-                self.procesar_mensaje(mensaje)
-                print("HASTA ACA LLEGO!")
+                self.imprimir_mensaje(paqueteBytes)
+                self.procesar_mensaje(paqueteBytes)
                 #self.enviar_mensaje()
 
 
-    def imprimir_mensaje(self, message):
-        print ("Numero_hilo:",self.nombre,"conexion:",self.conexion_cliente)
-        print ("Mensaje:",message)
+    def imprimir_mensaje(self, paqueteBytes):
+        print ("Numero_hilo: ",self.nombre,"conexion:",self.conexion_cliente)
+        print ("paqueteBytes: ",paqueteBytes)
         print("\n")
 
-    def procesar_mensaje(self,mensaje):
-        if mensaje == "FIN":
+    def procesar_mensaje(self,paqueteBytes):
+        if paqueteBytes == "FIN":
             print ("CIERRO CONEXION")
             self.conexion_activa = False
-        paquete = self.gestor_paquete.pasarBytesAPaquete(mensaje)
+        paquete = self.gestor_paquete.pasarBytesAPaquete(paqueteBytes)
+        print("\npaquete es ", paquete)
 
-        self.recibirHandshake()
-
+        handshakeExitoso = self.procesarHandshake(paquete)
+        if (not handshakeExitoso) :
+            print("El handshake no funcó, me tengo que ir")
+            return
+        print("--Server: EL HANDSHAKE FUNCÓ!--")
+        
         """
         #es el primero no hace falta verificar mensaje recibido
         if (paquete.esUpload()):
@@ -104,13 +108,44 @@ class Conexion(threading.Thread):
     def esta_activa(self):
         return self.conexion_activa
 
+    def procesarHandshake(self, paquete):
+        handshakeApropiado = self.chequearHandshakeApropiado(paquete)
+        if (not handshakeApropiado) :
+            print("Se envió un paquete que no es handshake, me voy")
+            return False
+        
+        tamanioApropiado = self.chequearTamanio(paquete)
+        if (not tamanioApropiado) :
+            print("El tamaño pasado no es apropiado, mando ack de refused y me voy")
+            paqueteRefused = self.gestor_paquete.crearPaqueteRefused()
+            self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paqueteRefused),(self.ip_cliente,self.puerto_cliente))
+            return False
 
-    def chequearHandshakeApropiado(paquete):
+        archivoExiste = self.chequearExistenciaArchivo(paquete)
+        print("\n Server: salii de chequearExistenciaArchivo")
+        if (not archivoExiste) :
+                print("El archivo pedido no existe, me voy")
+                return False
+
+        self.enviarACKHandshake(self)
+
+        if self.esHandshakeUpload(self, paquete) :
+                x=1
+                print("Es de tipo upload")
+                #lógica para el upload
+        else :
+                x=2
+                print("Es de tipo download")
+                #lógica para el download
+
+        return True
+
+    def chequearHandshakeApropiado(self, paquete):
         return (paquete.esDownload() or paquete.esUpload())
 
-    def obtenerTamanio(mensaje):
-        nombre, tamanio = mensaje.split("-")
-        return tamanio
+    def obtenerTamanio(self, mensaje):
+        nombre, tamanio = str(mensaje, "ascii").split("-")
+        return int(tamanio)
 
     def chequearTamanio(self, paquete) :
         if paquete.esDownload() :
@@ -121,7 +156,7 @@ class Conexion(threading.Thread):
             return False
         return True
 
-    def esHandshakeUpload(paquete):
+    def esHandshakeUpload(self, paquete):
         return paquete.esUpload()
 
     def enviarACKHandshake(self):
@@ -134,17 +169,4 @@ class Conexion(threading.Thread):
 
         #pasarlo con enviarPaquete 
         self.enviarPaquete(pckBytes)
-
-    def recibirHandshake(self):
-        time_start = time.time()
-        paqueteRecibido = None
-        while time.time() < time_start + MAX_WAIT_HANDSHAKE and paqueteRecibido == None:
-                print("\nEntro al while")
-                paqueteRecibido = self.recibirPaquete()
-                print("Paquete es ", paqueteRecibido)
-        
-        if (paqueteRecibido == None) :
-            print("Salto el timer, me voy")
-        
-        return paqueteRecibido
-      
+     

@@ -1,5 +1,6 @@
 import os
-import cliente, stopAndWait, goBackN #nombre del archivo
+import cliente, stopAndWait, goBackN
+import gestorPaquetes
 import getopt
 import sys
 import logging
@@ -41,8 +42,8 @@ def iniciaHandshakeDOWNLOAD():
         print("Aun no implementado :)")
 
 
-print("--PRUEBA CLIENTE INICIA HANDSHAKE UPLOAD--")
+print("\n--PRUEBA CLIENTE INICIA HANDSHAKE UPLOAD--")
 iniciaHandshakeUPLOAD()
 
-print("--PRUEBA CLIENTE RECIBE HANDSHAKE DOWNLOAD--")
+print("\n\n--PRUEBA CLIENTE RECIBE HANDSHAKE DOWNLOAD--")
 iniciaHandshakeDOWNLOAD()

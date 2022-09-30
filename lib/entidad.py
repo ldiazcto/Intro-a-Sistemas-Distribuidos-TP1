@@ -59,17 +59,12 @@ class Entidad(ABC):
                         lista_sockets_listos = select.select([self.entidadSocket], [], [], 1)
                         var = time.time()
                         if (var >= (timeout_start + MAX_WAIT)):
-                                print("\nEntre al timeout de recibirPaquete")   
                                 return None
                                 #volver a mandar_mensaje
                         if not lista_sockets_listos[0]:
-                                print("\nEntre a not lista_sockets_listos[0] de recibirPaquete")
                                 continue
                         paqueteString, sourceAddress = self.entidadSocket.recvfrom(2048)
-                        print("\n paqueteString es ", paqueteString)
-                        pckRecibido = self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
-                        print("Y pckRecibido es ", pckRecibido)
-                        return pckRecibido
+                        return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
 
         def recibirArchivo(self, ruta):
             #pensarla, tal vez puede ser genérica
