@@ -10,21 +10,24 @@ class GoBackNNuevo(enviador.Enviador):
 
 
     def __init__(self):
-        super(GoBackNNuevo,self).__init()
         self.older_seq_number = 1
         self.new_seq_number = 1
         self.paquetesEnVuelo = []
+        super(GoBackNNuevo,self).__init__()
+
+    def enviar(self,mensaje,entidad):
+        return 1
 
     def enviarPaquete(self,file,entidad):
         mensaje = file.read(MSJ_SIZE)
         while True:
             if(self.new_seq_number < self.older_seq_number + N):
-                pck = self.gestorPaquetes.crearPaquete(self.new_seq_number,mensaje)
+                pck = self.gestorPaquetes.crearPaquete(mensaje)
                 self.paquetesEnVuelo.append(pck)
                 entidad.enviarPaquete(self.gestorPaquetes.pasarPaqueteABytes(pck))
+                self.new_seq_number = pck.obtenerSeqNumber()
                 if(self.older_seq_number == self.new_seq_number):
                     timeout_start = time.time()
-                self.new_seq_number += 1
                 continue
 
             pck_recibido = entidad.recibirPaquete() #salgo del continue y obtengo el ultimo paquete recibido
@@ -34,7 +37,7 @@ class GoBackNNuevo(enviador.Enviador):
                     if(pck <= pck_recibido.obtenerSeqNumber()):
                         self.paquetesEnVuelo.remove(self.paquetesEnVuelo[pck])
                 self.older_seq_number = pck_recibido.obtenerSeqNumber()+1
-                if(self.older_seq_number == self.new_seq_number):
+                if(self.older_seq_number == pck_recibido.obtenerSeqNumber()):
                     timeout_start = 0
                 else:
                     timeout_start = time.time()
@@ -44,6 +47,7 @@ class GoBackNNuevo(enviador.Enviador):
                     entidad.enviarPaquete(self.gestorPaquetes.pasarPaqueteABytes(pck))
             if(len(mensaje) < 0):
                 break
+            mensaje = file.read(MSJ_SIZE)
 
         return 1
 
