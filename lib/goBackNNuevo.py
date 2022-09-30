@@ -8,6 +8,7 @@ N = 2 #tamanio de la ventana
 
 class GoBackNNuevo(enviador.Enviador):
 
+    # GO BACK N TIENE ACK ACUMULATIVOS, SI SE PIERDE UN PAQUETE ME VA A DEVOLVER EL ACK DEL ANTERIOR YA QUE VA A DESCARTAR LOS PAQUETES SIGUIENTES AL QUE PERDIO
 
     def __init__(self):
         self.older_seq_number = 1
@@ -23,6 +24,7 @@ class GoBackNNuevo(enviador.Enviador):
         mensaje = file.read(MSJ_SIZE)
         i=0
         while True:
+            #si el numero de sequencia del siguiente paquete a enviar es menor al numero de seq del primer paquete que envie __
             if(self.new_seq_number < self.older_seq_number + N):
                 pck = self.gestorPaquetes.crearPaquete(mensaje)
                 self.paquetesEnVuelo.append(pck)
@@ -31,24 +33,20 @@ class GoBackNNuevo(enviador.Enviador):
                 if(self.older_seq_number == self.new_seq_number): #entrás cuando corriste la ventana entera
                     timeout_start = time.time()
                 pck_recibido = entidad.recibirPaqueteBackN() #salgo del continue y obtengo el ultimo paquete recibido
-                if (pck_recibido == None) :
-                    #no me llegó ack, mando nuevo paquete si puedo
-                    mensaje = file.read(MSJ_SIZE)
-                    continue
                 #me llegó ack, lo revisamos
                 print("pck recibido es ", pck_recibido)
                 ackEsperado = self.gestorPaquetes.actualizarACK(pck_recibido)
-                if (ackEsperado) :
-                    #es el ack que yo esperaba, puedo enviar otro paquete
+                if (ackEsperado) : #SI RECIBO UN ACK, SIGNIFICA QUE RECIBI EL ACK DEL ULTIMO PAQUETE QUE LLEGO BIEN
+                                    # (ES DECIR QUE, TODOS LOS PAQUETES ANTERIORES TMB LLEGARON BIEN)
+                    #muevo el older_seq_number a la posicion siguiente al new_seq_number
                     self.older_seq_number = pck_recibido.obtenerSeqNumber()+1 
-                    if(self.older_seq_number == pck_recibido.obtenerSeqNumber()):
-                        timeout_start = 0 
-                    for pck in range(len(self.paquetesEnVuelo)):
+                    if(self.older_seq_number == pck_recibido.obtenerSeqNumber()): 
+                        timeout_start = 0 #reinicio el timer porque los paquetes me llegaron bien, corro el older porque tengo que mandar paquetes nuevos 
+                    for pck in range(len(self.paquetesEnVuelo)): #borro los paquetes anteriores al ack que recibi, porque llegaron bien
                         if(pck <= pck_recibido.obtenerSeqNumber()):
                             self.paquetesEnVuelo.remove(self.paquetesEnVuelo[pck])
-                else :
-                    #no me llegó el ack que quería
-                    #necesito reenviar este paquete
+                if(timeout_start == 0): #SI SALTA TIMEOUT SIGNIFICA QUE PERDI UN PAQUETE Y POR ENDE TENGO QUE VOLVER A INICIAR EL TIMER Y
+                                        # ENVIAR LOS PAQUETES QUE ME QUEDARON EN LA LISTA DE PAQUETES EN VUELO
                     timeout_start = time.time()
                     for pck in self.paquetesEnVuelo:
                         entidad.enviarPaquete(self.gestorPaquetes.pasarPaqueteABytes(pck))
