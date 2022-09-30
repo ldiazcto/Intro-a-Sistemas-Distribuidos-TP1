@@ -59,9 +59,29 @@ def downloadArchivoInexistente():
         return 0
 
 
+def downloadArchivoExistente():
+   
+        receiverPort = 12000
+        receiverName = "localhost"
+        
+        cliente_prueba = cliente.Cliente(receiverName, receiverPort)
+        print("Se creo el cliente con exito")
+        
+        resultado = cliente_prueba.entablarHandshake("prueba_doc.doc", 395, DOWNLOAD)
+        print("\n -- Volvi al iniciaHandshakeDOWNLOAD --")
+        if resultado:
+                print("debería caer acá, el archivo existe")
+        else:
+                print("NO DEBERÍA CAER ACÁ")
+                
+
+        cliente_prueba.entidadSocket.close()
+        return 0
+
 
 print("\n--PRUEBA CLIENTE INICIA HANDSHAKE UPLOAD--")
 iniciaHandshakeUPLOAD()
 
 print("\n\n--PRUEBA CLIENTE RECIBE HANDSHAKE DOWNLOAD--")
 downloadArchivoInexistente()
+downloadArchivoExistente()

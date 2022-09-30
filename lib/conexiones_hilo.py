@@ -17,7 +17,7 @@ ACK_CORRECT = 1
 DIRECTORIO_BUSQUEDA = "/Users/abrildiazmiguez/Desktop/BDD_Servidor"
 MAX_WAIT_HANDSHAKE = 30
 MAX_TAMANIO_PERMITIDO = 30 #en bytes
-MAX_WAIT_SERVIDOR = 30 #30 segs
+MAX_WAIT_SERVIDOR = 10 #30 segs
 
 class Conexion(threading.Thread):
     def __init__(self,numero_hilo, conexion_cliente):
@@ -40,9 +40,7 @@ class Conexion(threading.Thread):
     def run(self):
         time_start = time.time()
         while time.time() <= time_start + MAX_WAIT_SERVIDOR:
-            print("Entre al while\n")
             if self.conexion_activa == False:
-                print("conexion inactiva")
                 return
             if self.hay_data: #verifico si me pasaron nueva data
                 paqueteBytes = self.queue.pop(0) #obtengo la data
@@ -52,10 +50,7 @@ class Conexion(threading.Thread):
                     return
                 self.imprimir_mensaje(paqueteBytes)
                 self.procesar_mensaje(paqueteBytes)
-                print("Termine de procesar mensaje")
                 #self.enviar_mensaje()
-            else :
-                print("\nSe queda trabado acá y no puedo volver a lo original\n")
                 
 
 
@@ -181,10 +176,16 @@ class Conexion(threading.Thread):
     def chequearExistenciaArchivo(self, paquete) :
         print("Entre a chequear Existencia Archivo")
         nombre, tamanio = self.obtenerNombreYTamanio(paquete)
-        filenames = os.walk(DIRECTORIO_BUSQUEDA)
-        print("recibido de os.walk = ", filenames)
-        if nombre in filenames:
-            return True
+        print("nombre es ", nombre)
+        i = 0
+        (root, dirs, files) = os.walk(DIRECTORIO_BUSQUEDA)
+        print(root)
+        print(dirs)
+        print(files)
+        while i < len(list(files)):
+            print("files es ", files)
+            i=+1
+        print(i)
         return False
 
     def esHandshakeUpload(self, paquete):
