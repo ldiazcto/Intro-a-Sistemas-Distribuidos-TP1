@@ -103,7 +103,7 @@ def main():
     
     cliente_prueba = cliente.Cliente("localhost", 12000)
     # stopWait = stopAndWait.StopAndWait()
-    backN = goBackN.GoBackNNuevo() #llamo a la clase, y me ejecuta el constructor
+    backN = goBackNNuevo.GoBackNNuevo() #llamo a la clase, y me ejecuta el constructor
     print("Se creo el cliente con exito")
     file = abrirArchivo("./lib/hola.txt")
     cliente_prueba.enviarArchivo(file,backN)
