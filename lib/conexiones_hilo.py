@@ -42,11 +42,12 @@ class Conexion(threading.Thread):
             if self.hay_data: #verifico si me pasaron nueva data
                 break
         #este pop y procesamiento inicial est'a bien, pero tiene que mandar esa tira inicial en el handshake, sino se pierde ese paquete
-        #tiraBytes = self.queue.pop(0)
-        #if len(self.queue) == 0:
-        #    self.hay_data = False
-        #paqueteBytes = self.gestor_paquete.pasarBytesAPaquete(tiraBytes)
-        #self.procesarHandshake(paqueteBytes)
+        tiraBytes = self.queue.pop(0)
+        if len(self.queue) == 0:
+            self.hay_data = False
+        paqueteBytes = self.gestor_paquete.pasarBytesAPaquete(tiraBytes)
+        self.procesarHandshake(paqueteBytes)
+        """
         time_start = time.time()
         while time.time() <= time_start + MAX_WAIT_SERVIDOR:
             if self.conexion_activa == False:
@@ -60,6 +61,7 @@ class Conexion(threading.Thread):
                 self.imprimir_mensaje(paqueteBytes)
                 self.procesar_mensaje(paqueteBytes)
                 #self.enviar_mensaje()
+        """
 
 
     def imprimir_mensaje(self, paqueteBytes):
@@ -160,7 +162,7 @@ class Conexion(threading.Thread):
         if self.esHandshakeUpload(paquete) :
                 print("Es de tipo upload")
                 filepath = self.obtener_ruta_archivo(paquete)
-                file = open(file, 'ab')
+                file = open(filepath, 'wb')
                 self.recibir_archivo(file)
                 #lógica para el upload
         else :
