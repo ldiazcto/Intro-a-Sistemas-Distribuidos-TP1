@@ -86,12 +86,13 @@ class Entidad(ABC):
         def recibirPaqueteBackN(self):
                 self.entidadSocket.setblocking(NOT_BLOCKING)
                 try :
-                        paqueteString, serverAdress = self.entidadSocket.recvfrom(2048)
+                        paqueteString, sourceAddress = self.entidadSocket.recvfrom(2048)
+                        #self.entidadSocket.setblocking(BLOCKING)
+                        return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
                 except BlockingIOError:
                         self.entidadSocket.setblocking(BLOCKING)
                         return None
-                self.entidadSocket.setblocking(BLOCKING)
-                return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
+                
       
 
         def recibirArchivo(self, ruta):

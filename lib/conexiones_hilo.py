@@ -45,9 +45,8 @@ class Conexion(threading.Thread):
         tiraBytes = self.queue.pop(0)
         if len(self.queue) == 0:
             self.hay_data = False
-        paqueteBytes = self.gestor_paquete.pasarBytesAPaquete(tiraBytes)
-        self.procesarHandshake(paqueteBytes)
-        """
+        #paqueteBytes = self.gestor_paquete.pasarBytesAPaquete(tiraBytes)
+        #self.procesarHandshake(paqueteBytes)
         time_start = time.time()
         while time.time() <= time_start + MAX_WAIT_SERVIDOR:
             if self.conexion_activa == False:
@@ -61,7 +60,6 @@ class Conexion(threading.Thread):
                 self.imprimir_mensaje(paqueteBytes)
                 self.procesar_mensaje(paqueteBytes)
                 #self.enviar_mensaje()
-                """
 
 
     def imprimir_mensaje(self, paqueteBytes):

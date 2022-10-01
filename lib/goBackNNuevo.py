@@ -50,8 +50,9 @@ class GoBackNNuevo(enviador.Enviador):
             if(timeout_start == 0): #SI SALTA TIMEOUT SIGNIFICA QUE PERDI UN PAQUETE Y POR ENDE TENGO QUE VOLVER A INICIAR EL TIMER Y
                                     # ENVIAR LOS PAQUETES QUE ME QUEDARON EN LA LISTA DE PAQUETES EN VUELO
                 timeout_start = time.time()
-                for pck in self.paquetesEnVuelo:
-                    entidad.enviarPaquete(self.gestorPaquetes.pasarPaqueteABytes(pck))
+                for pck in range(len(self.paquetesEnVuelo)):
+                    if(pck > pck_recibido.obtenerSeqNumber()):
+                        entidad.enviarPaquete(self.gestorPaquetes.pasarPaqueteABytes(self.paquetesEnVuelo[pck]))
 
             mensaje = file.read(MSJ_SIZE)
             """if(len(mensaje) > 0):
