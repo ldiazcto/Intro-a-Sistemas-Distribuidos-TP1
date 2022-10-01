@@ -6,6 +6,7 @@ import paquete
 MSJ_SIZE = 5
 N = 2 #tamanio de la ventana
 MAX_WAIT_GOBACKN = 0.9
+MAX_TRIES = 3
 
 class GoBackNNuevo(enviador.Enviador):
 
@@ -22,6 +23,7 @@ class GoBackNNuevo(enviador.Enviador):
 
     def enviarPaquete(self,file,entidad):
         mensaje = file.read(MSJ_SIZE)
+        timeout_start = 0
         while (len(mensaje) > 0):
             #si el numero de sequencia del siguiente paquete a enviar es menor al numero de seq del primer paquete que envie
             # -- ENVIAR ACK --
@@ -57,7 +59,36 @@ class GoBackNNuevo(enviador.Enviador):
 
             mensaje = file.read(MSJ_SIZE)
 
-        print("\n sali del while \n ")
+        # -- NO TENGO M'AS PARA LEER, SOLO RECIBO Y REENVIO --
+        i = 0
+        while time.time() <= timeout_start + MAX_WAIT_GOBACKN and i <= MAX_TRIES:
+            # -- RECIBIR ACK --
+            pck_recibido = entidad.recibirPaqueteBackN() #obtengo el ultimo paquete recibido
+            print("pck_recibido: ", pck_recibido)
+            ackRecibido = self.gestorPaquetes.actualizarACK(pck_recibido)
+            
+            # -- VERIFICACION DE ACK --
+            if (ackRecibido == True) : #SI RECIBO UN ACK, SIGNIFICA QUE RECIBI EL ACK DEL ULTIMO PAQUETE QUE LLEGO BIEN
+                                        # (ES DECIR QUE, TODOS LOS PAQUETES ANTERIORES TMB LLEGARON BIEN)
+                #muevo el older_seq_number a la posicion siguiente al new_seq_number
+                print(" -------Entre al primer if-------")
+                self.older_seq_number = pck_recibido.obtenerSeqNumber()+1 
+                timeout_start = time.time() #reinicio el timer porque los paquetes me llegaron bien, corro el older porque tengo que mandar paquetes nuevos 
+                self.paquetesEnVuelo.pop(0) #borro los paquetes anteriores al ack que recibi, porque llegaron bien
+                    
+            else :
+                i +=1
+            # -- REENVIAR PCKS EN CASO DE ERROR --
+            if(ackRecibido == False and timeout_start + MAX_WAIT_GOBACKN <= time.time() ): #SI SALTO TIMEOUT, ENTONCES PERDI UN PAQUETE Y POR ENDE TENGO 
+                                    #QUE VOLVER A INICIAR EL TIMER Y ENVIAR LOS PAQUETES QUE ME QUEDARON EN LA LISTA DE PAQUETES EN VUELO
+                print(" \nEntre al segundo if\n")
+                timeout_start = time.time()
+                for pck in range(len(self.paquetesEnVuelo)):
+                    entidad.enviarPaquete(self.gestorPaquetes.pasarPaqueteABytes(self.paquetesEnVuelo[pck]))
+
+
+
+        print("\n sali de los dos whiles, todo deber'ia haber sido procesado \n ")
     
         return 1
 

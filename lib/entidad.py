@@ -74,16 +74,14 @@ class Entidad(ABC):
                         paqueteString, sourceAddress = self.entidadSocket.recvfrom(2048)
                         return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
 
-        def recibirPaqueteBackN(self,timeout):
-                timeActual = time.time()
+        def recibirPaqueteBackN(self):
                 self.entidadSocket.setblocking(NOT_BLOCKING)
                 try :
                         paqueteString, sourceAddress = self.entidadSocket.recvfrom(2048)
                         self.entidadSocket.setblocking(BLOCKING)
                         return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
                 except BlockingIOError:
-                        if(timeout > timeActual + MAX_WAIT_RESPONSE):
-                                return None
+                        return None
                 
       
 

@@ -103,14 +103,14 @@ def main():
     
     # logger.info("Se inicio el logger")
     
-    cliente_prueba = cliente.Cliente("localhost", 8083, 12000) #los dos puertos del cliente son 8080 y el server escucha del 12000
-    stopWait = stopAndWait.StopAndWait()
-    #backN = goBackNNuevo.GoBackNNuevo() #llamo a la clase, y me ejecuta el constructor
+    cliente_prueba = cliente.Cliente("localhost", 8080, 12000) #los dos puertos del cliente son 8080 y el server escucha del 12000
+    #stopWait = stopAndWait.StopAndWait()
+    backN = goBackNNuevo.GoBackNNuevo() #llamo a la clase, y me ejecuta el constructor
     print("Se creo el cliente con exito")
-    cliente_prueba.entablarHandshake("hola3.txt", 395, UPLOAD)
+    cliente_prueba.entablarHandshake("hola2.txt", 395, UPLOAD)
     file = abrirArchivo("./lib/hola.txt")
     print("Se abri'o el archivo con exito")
-    cliente_prueba.enviarArchivo(file,stopWait)
+    cliente_prueba.enviarArchivo(file,backN)
 
     gP = gestorPaquetes.Gestor_Paquete()
     pckFin = gP.crearPaqueteFin()
