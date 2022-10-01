@@ -71,14 +71,12 @@ class Gestor_Paquete:
     
     def verificarACK(self,pck):
         if (pck == None):
-            print("es none")
+            print("el pck recibido es none")
             return False
-        print("sequence number de pck: ",pck.obtenerSeqNumber())
-        print("ack number global: ",self.ack_number_sender)
         if (pck.esACK() == True): #es ack entonces me fijo si coincide el numero de ack con el global para saber si llego todo ok
-            print("ES ACK")
+            print("el pck recibido ES ACK")
             if(pck.obtenerSeqNumber() == self.ack_number_sender):
-                print("Es CORRECTO")
+                print("el ack recibido Es CORRECTO")
                 return True #llego bien el paquete
         return False
         

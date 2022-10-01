@@ -4,7 +4,7 @@ import time
 import enviador
 
 MSJ_SIZE = 5
-MAX_WAIT = 0.5
+MAX_WAIT = 1
 
 
 class StopAndWait(enviador.Enviador):
@@ -13,11 +13,14 @@ class StopAndWait(enviador.Enviador):
         pck = self.gestorPaquetes.crearPaquete(mensaje)
         pckBytes = self.gestorPaquetes.pasarPaqueteABytes(pck)
         entidad.enviarPaquete(pckBytes)
-        paqueteRecibido = entidad.recibirPaquete()
         cantidad_intentos = 1
         print("\n--El mensaje a enviar es: ", mensaje)
         print("\n-cantidad intentos es ", cantidad_intentos)
+
+        paqueteRecibido = entidad.recibirPaquete()
+        
         while(paqueteRecibido == None and cantidad_intentos <= 3):
+            print("\n\n El paquete recibido es de tipo ", paqueteRecibido)
             entidad.enviarPaquete(pckBytes)
             paqueteRecibido = entidad.recibirPaquete()
             cantidad_intentos += 1
@@ -33,7 +36,6 @@ class StopAndWait(enviador.Enviador):
         mensaje = file.read(MSJ_SIZE)
         
         while(len(mensaje) > 0):
-            print("mensaje: ",mensaje)
             #de mensaje a paquete
             intentar_mandar,paquete_recibido = self.enviar(mensaje,entidad)
             #chequear si llego un ack

@@ -15,7 +15,6 @@ REFUSED = 4
 FIN = 5
 ACK_CORRECT = 1
 
-DIRECTORIO_BUSQUEDA = "/Users/abrildiazmiguez/Desktop/BDD_Servidor"
 MAX_WAIT_HANDSHAKE = 30
 MAX_TAMANIO_PERMITIDO = 500 #en bytes
 MAX_WAIT_SERVIDOR = 10 #30 segs
@@ -39,24 +38,35 @@ class Conexion(threading.Thread):
         self.hay_data = True
 
     def run(self):
+        print("Entre al run de conexiones_hilo")
         while True:
             if self.hay_data: #verifico si me pasaron nueva data
                 break
-        tiraBytes = self.queue.pop(0)
-        if len(self.queue) == 0:
-            self.hay_data = False
-        paqueteBytes = self.gestor_paquete.pasarBytesAPaquete(tiraBytes)
+        print("hay data en el hilo")
+        #este pop y procesamiento inicial est'a bien, pero tiene que mandar esa tira inicial en el handshake, sino se pierde ese paquete
+        #tiraBytes = self.queue.pop(0)
+        #if len(self.queue) == 0:
+        #    self.hay_data = False
+        #paqueteBytes = self.gestor_paquete.pasarBytesAPaquete(tiraBytes)
         #self.procesarHandshake(paqueteBytes)
         time_start = time.time()
+        print(" Empez'o el timer")
         while time.time() <= time_start + MAX_WAIT_SERVIDOR:
+            print("Entre al while")
             if self.conexion_activa == False:
+                print(" Conexion inactiva, me voy de conexiones_hilo")
                 return
             if self.hay_data: #verifico si me pasaron nueva data
+                print(" Hay data, vamos bien")
                 paqueteBytes = self.queue.pop(0) #obtengo la data
+                print(" Le hizo un poco a la queue")
                 if len(self.queue) == 0:
+                    print(" El len de la queue es 0, no hay m'as data")
                     self.hay_data = False #si la cola queda vacia establezco que no hay mas data, por ahora
                 if paqueteBytes is None:   # If you send `None`, the thread will exit.
+                    print("el paquete bytes es None, me voy de conexiones_hilo")
                     return
+                print(" Estoy a punto de imprimir el mensaje")
                 self.imprimir_mensaje(paqueteBytes)
                 self.procesar_mensaje(paqueteBytes)
                 #self.enviar_mensaje()
@@ -72,8 +82,7 @@ class Conexion(threading.Thread):
             print ("CIERRO CONEXION")
             self.conexion_activa = False
         
-        #paquete = self.gestor_paquete.pasarBytesAPaquete(paqueteBytes)
-        print("\npaquete es ", paqueteBytes)
+        paquete = self.gestor_paquete.pasarBytesAPaquete(paqueteBytes)
 
         """
         print("Estoy por entrar a procesarHandshake")
@@ -101,7 +110,7 @@ class Conexion(threading.Thread):
         if (paquete.esDownload()):
             cargaPaquete = paquete.obtenerMensaje
             #Aca llamo a las funciones del cliente para manejo de paquetes y le paso el paquete OJO QUE HAY QUE GUARDAR LA RUTA EN LA CONEXION
-""" 
+        """ 
         """
         if (paquete.esACK()): #no me gusta se podria hacer a traves del gesto
             paquete_ack = self.gestor_paquete.crearPaqueteACK(1)
@@ -109,7 +118,7 @@ class Conexion(threading.Thread):
             #Receiver.cerrarArchivo(self.ruta_archivo)
             self.conexion_activa = False
         """
-        if (self.gestor_paquete.verificar_mensaje_recibido(paqueteBytes) == True):
+        if (self.gestor_paquete.verificar_mensaje_recibido(paquete) == True):
             paquete_ack = self.gestor_paquete.crearPaqueteACK(1)
             print("mando ack verificado")
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
