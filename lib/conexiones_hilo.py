@@ -5,6 +5,8 @@ import gestorPaquetes
 import receiver
 from socket import *
 import paquete
+import stopAndWait
+import goBackN
 from pathlib import Path
 
 DATA = 0 #a veces llamado NOT_ACK
@@ -121,12 +123,15 @@ class Conexion(threading.Thread):
                 #lógica para el upload
         else :
                 print("Es de tipo download")
-                #filepath,tipo = self.obtener_ruta_archivo_download(paquete)
-                #if(tipo == "stopAndWait"):
-                #
-                #else:
-                #
-                
+                """
+                filepath,tipo = self.obtener_ruta_archivo_download(paquete)
+                if(tipo == "stopAndWait"):
+                    env = stopAndWait.StopAndWait()
+                    env.enviarPaquete(filepath)
+                else:
+                    env = goBackN.GoBackN()
+                    env.enviarPaquete(filepath)
+                """
                 #lógica para el download        
                 #cargaPaquete = paquete.obtenerMensaje
                 #Aca llamo a las funciones del cliente para manejo de paquetes y le paso el paquete OJO QUE HAY QUE GUARDAR LA RUTA EN LA CONEXION"""
