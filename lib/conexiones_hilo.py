@@ -64,7 +64,7 @@ class Conexion(threading.Thread):
         
         paquete = self.gestor_paquete.pasarBytesAPaquete(paqueteBytes)
 
-        print("Estoy en procesar mensaje, acabo de pasar el paqueteBytes a paquete")
+        #print("El paquete recibido en procesar_mensaje es = ", paquete)
 
         if (self.gestor_paquete.verificar_mensaje_recibido(paquete) == True):
             paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_CORRECT)
@@ -190,12 +190,13 @@ class Conexion(threading.Thread):
             if self.conexion_activa == False:
                 return
             if self.hay_data: #verifico si me pasaron nueva data
-                print("HAY DATA")
                 paqueteBytes = self.queue.pop(0) #obtengo la data
+                print("\n\n-- En recibi_archivo, el paqueteBytes recien recibido es: ", paqueteBytes)
                 if len(self.queue) == 0:
                     self.hay_data = False #si la cola queda vacia establezco que no hay mas data, por ahora
                 if paqueteBytes is None:   # If you send `None`, the thread will exit.
                     return
                 self.imprimir_mensaje(paqueteBytes)
                 self.procesar_mensaje(paqueteBytes,file)
-                print("\n\n Volvi de procesar_mensaje, el paqueteBytes era: ", paqueteBytes)
+                print("Volvi de procesar_mensaje, el paqueteBytes era: ", paqueteBytes)
+                print("\n\n")

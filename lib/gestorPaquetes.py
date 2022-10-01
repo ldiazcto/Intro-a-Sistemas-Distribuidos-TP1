@@ -10,9 +10,9 @@ FIN = 5
 class Gestor_Paquete:
     def __init__(self):
         self.seq_number = 1
-        self.ack_number_receiver = 0 #
-        self.ack_number_sender = 1 #
-        self.seq_number_receiver = 1 #
+        self.ack_number_receiver = 0
+        self.ack_number_sender = 1
+        self.seq_number_receiver = 1
         self.COMIENZA_DATA = 4
         self.COMIENZA_SEQ_NUMBER = 0
         self.FIN_SEQ_NUMBER = 2
@@ -42,7 +42,7 @@ class Gestor_Paquete:
 
     #cuando lo recibo del socket
     def pasarBytesAPaquete(self, paqueteBytes):
-        seq_number_recibido = int.from_bytes(paqueteBytes[self.COMIENZA_SEQ_NUMBER:self.FIN_SEQ_NUMBER],"big") #esto rompe
+        seq_number_recibido = int.from_bytes(paqueteBytes[self.COMIENZA_SEQ_NUMBER:self.FIN_SEQ_NUMBER],"big")
         ack_recibido = int.from_bytes(paqueteBytes[self.COMIENZA_ACK:self.FIN_ACK],"big")
         mensaje = paqueteBytes[self.FIN_ACK:]
 
@@ -58,34 +58,25 @@ class Gestor_Paquete:
         paqueteBytes += ack
 
         if (mensaje != None):
-            if(pck.esDownload() or pck.esUpload()):
-                mensaje =  bytes(mensaje, 'utf-8')
+            #mensajeBytes =  bytes(mensaje, 'utf-8')
             paqueteBytes += mensaje
-        
-        print("Recibido en gestorPaquete: paqueteBytes: ", paqueteBytes)
+
+        print("paqueteBytes: ", paqueteBytes)
         return paqueteBytes
- 
+    
+    
     def cierreConexion(self,FIN):
         pck = paquete.Paquete(self.seq_number,FIN,None)
         return pck.esFin()
     
     def verificarACK(self,pck):
         if (pck == None):
-            print("el pck recibido es none")
             return False
         if (pck.esACK() == True): #es ack entonces me fijo si coincide el numero de ack con el global para saber si llego todo ok
-            print("el pck recibido ES ACK")
             if(pck.obtenerSeqNumber() == self.ack_number_sender):
-                print("el ack recibido Es CORRECTO")
+                self.ack_number_sender += 1
                 return True #llego bien el paquete
         return False
-        
-
-    def actualizarACK(self,pck):
-        verificacion = self.verificarACK(pck)
-        if (verificacion) :
-            self.ack_number_sender += 1
-        return verificacion
 
     def verificarRefused(self, pck):
         if pck == None:

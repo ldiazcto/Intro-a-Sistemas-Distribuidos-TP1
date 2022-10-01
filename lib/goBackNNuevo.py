@@ -28,6 +28,7 @@ class GoBackNNuevo(enviador.Enviador):
             print("\n\nMensaje antes de enviar: ", mensaje)
             print("En esta iteración, el new_seq_number es ", self.new_seq_number)
             print("En esta iteración, el older_seq_number es ", self.older_seq_number)
+            print("En esta iteración, el older_seq_number+N es ", self.older_seq_number+N)
             
             #si el numero de sequencia del siguiente paquete a enviar es menor al numero de seq del primer paquete que envie
             # -- ENVIAR ACK --
@@ -57,7 +58,9 @@ class GoBackNNuevo(enviador.Enviador):
                     
 
             # -- REENVIAR PCKS EN CASO DE ERROR --
-            if(ackRecibido == False and timeout_start + MAX_WAIT_GOBACKN <= time.time() ): #SI SALTO TIMEOUT, ENTONCES PERDI UN PAQUETE Y POR ENDE TENGO 
+            print("El time actual: ", time.time())
+            print("El timeout_start + MAXWAIT, que es el timer = ", timeout_start + MAX_WAIT_GOBACKN)
+            if(ackRecibido == False and  (time.time() - timeout_start)  >= MAX_WAIT_GOBACKN ): #SI SALTO TIMEOUT, ENTONCES PERDI UN PAQUETE Y POR ENDE TENGO 
                                     #QUE VOLVER A INICIAR EL TIMER Y ENVIAR LOS PAQUETES QUE ME QUEDARON EN LA LISTA DE PAQUETES EN VUELO
                 timeout_start = time.time()
                 for pck in range(len(self.paquetesEnVuelo)):
@@ -66,6 +69,7 @@ class GoBackNNuevo(enviador.Enviador):
 
             mensaje = file.read(MSJ_SIZE)
 
+    """"
         # -- NO TENGO M'AS PARA LEER, SOLO RECIBO Y REENVIO --
         while time.time() <= timeout_start + MAX_WAIT_GOBACKN and len(self.paquetesEnVuelo) != 0:
             # -- RECIBIR ACK --
@@ -96,6 +100,7 @@ class GoBackNNuevo(enviador.Enviador):
         print("\n sali de los dos whiles, todo deber'ia haber sido procesado \n ")
     
         return 1
+        """
 
 """
 El cliente solo va a necesitar un solo timer del paquete en vuelo mas antiguo, cuando se agota el tiempo de espera el cliente
