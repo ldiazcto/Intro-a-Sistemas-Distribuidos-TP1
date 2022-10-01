@@ -30,6 +30,7 @@ class Server(threading.Thread,entidad.Entidad):
             if not lista_sokcets_listos[0]:
                 continue
             message, clientAdress = self.serverSocket.recvfrom(2048) #tamanio buffer para 1 paquete
+            print()
             print ("El mensaje recibido es: ", message)
             #modifiedMessage = message.decode() #decoder paquete
             if(clientAdress not in self.conexiones): #verifico si ya existe la direccion de donde recibi el paquete

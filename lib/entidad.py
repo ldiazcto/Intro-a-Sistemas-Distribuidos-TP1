@@ -6,7 +6,7 @@ import select
 
 UPLOAD = 2
 MAX_TRIES = 2
-MAX_WAIT = 0.5
+MAX_WAIT = 1
 NOT_BLOCKING= 0 
 BLOCKING = 1
 
@@ -16,6 +16,7 @@ class Entidad(ABC):
                 self.name = name #el nombre de a quien le envía esta entidad
                 self.port = port #el port de a quién le envía esta entidad
                 self.entidadSocket = socket(AF_INET,SOCK_DGRAM)
+
 
 
 #para la subida
@@ -35,13 +36,17 @@ class Entidad(ABC):
                 i = 0
                 env = stopAndWait.StopAndWait()
                 while i <= MAX_TRIES:
-                        env.enviarPaqueteHandshake(self, paqueteBytes)
+                        #VER COMO RESOLVER PORQUE EL HANDSHAKE NO SE MANDA EN STOP AND WAIT
+                        #LINEA DE ABAJO ES UN BUUUGGGG !!!!!
+                        #env.enviarPaqueteHandshake(self, paqueteBytes)
+                        self.enviarPaquete(paqueteBytes) #MANDO HANDSHAKE DE FORMA COMUN 
                         paqueteRecibido = self.recibirPaquete()
                         esPaqueteOrdenado = self.gestorPaquetes.verificarACK(paqueteRecibido)
                         if (esPaqueteOrdenado) :
                                 print("Cliente: Recibí un ack ordenado!")
                                 return True
                         esPaqueteRefused = self.gestorPaquetes.verificarRefused(paqueteRecibido)
+                        print ("PAaquete Refuse es:",esPaqueteRefused)
                         if (esPaqueteRefused) :
                                 print("Cliente: el server rechazó la conexión :_(")
                                 return False
@@ -61,13 +66,19 @@ class Entidad(ABC):
         
         def recibirPaquete(self):
                 timeout_start = time.time()
+                self.entidadSocket.setblocking(False)
                 while True:
-                        lista_sockets_listos = select.select([self.entidadSocket], [], [], 1)
+                        lista_sockets_listos = select.select([self.entidadSocket], [], [], 0)
                         var = time.time()
-                        if (var >= (timeout_start + MAX_WAIT)):
+                        if ((var - timeout_start) >= (MAX_WAIT)):
+                                print ("var es", var)
+                                print ("timeout_start es", timeout_start)
+                                print ("timeout_start + MAX_WAIT es:", timeout_start + MAX_WAIT)
+                                print ("var - timeout_start es: ", var - timeout_start)
                                 return None
                                 #volver a mandar_mensaje
                         if not lista_sockets_listos[0]:
+                                #print ("ENTRON ACA NUNCA LEO")
                                 continue
                         paqueteString, sourceAddress = self.entidadSocket.recvfrom(2048)
                         return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)

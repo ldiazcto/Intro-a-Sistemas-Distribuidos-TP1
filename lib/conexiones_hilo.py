@@ -5,6 +5,7 @@ import gestorPaquetes
 import receiver
 from socket import *
 import paquete
+from pathlib import Path
 
 DATA = 0 #a veces llamado NOT_ACK
 ACK = 1
@@ -16,7 +17,7 @@ ACK_CORRECT = 1
 
 DIRECTORIO_BUSQUEDA = "/Users/abrildiazmiguez/Desktop/BDD_Servidor"
 MAX_WAIT_HANDSHAKE = 30
-MAX_TAMANIO_PERMITIDO = 30 #en bytes
+MAX_TAMANIO_PERMITIDO = 500 #en bytes
 MAX_WAIT_SERVIDOR = 10 #30 segs
 
 class Conexion(threading.Thread):
@@ -38,6 +39,15 @@ class Conexion(threading.Thread):
         self.hay_data = True
 
     def run(self):
+        while True:
+            if self.hay_data: #verifico si me pasaron nueva data
+                break
+        tiraBytes = self.queue.pop(0)
+        if len(self.queue) == 0:
+            self.hay_data = False
+        paqueteBytes = self.gestor_paquete.pasarBytesAPaquete(tiraBytes)
+        self.procesarHandshake(paqueteBytes)
+        """
         time_start = time.time()
         while time.time() <= time_start + MAX_WAIT_SERVIDOR:
             if self.conexion_activa == False:
@@ -51,7 +61,7 @@ class Conexion(threading.Thread):
                 self.imprimir_mensaje(paqueteBytes)
                 self.procesar_mensaje(paqueteBytes)
                 #self.enviar_mensaje()
-                
+                """
 
 
     def imprimir_mensaje(self, paqueteBytes):
@@ -125,6 +135,9 @@ class Conexion(threading.Thread):
         handshakeApropiado = self.chequearHandshakeApropiado(paquete)
         if (not handshakeApropiado) :
             print("Se envió un paquete que no es handshake, me voy")
+            paqueteRefused = self.gestor_paquete.crearPaqueteRefused()
+            self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paqueteRefused),(self.ip_cliente,self.puerto_cliente))
+            #CIERRO LA CONEXION ??
             return False
         
         tamanioApropiado = self.chequearTamanio(paquete)
@@ -138,6 +151,7 @@ class Conexion(threading.Thread):
         print("archivoExiste vale ", archivoExiste)
         if (not archivoExiste and paquete.esDownload()) :
                 print("El archivo pedido no existe, me voy")
+                #hay que establecer este protocolo
                 paqueteRefused = self.gestor_paquete.crearPaqueteRefused()
                 self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paqueteRefused),(self.ip_cliente,self.puerto_cliente))
                 return False
@@ -145,8 +159,8 @@ class Conexion(threading.Thread):
         self.enviarACKHandshake(ACK_CORRECT)
 
         if self.esHandshakeUpload(paquete) :
-                x=1
                 print("Es de tipo upload")
+                self.recibir_archivo()
                 #lógica para el upload
         else :
                 x=2
@@ -172,7 +186,7 @@ class Conexion(threading.Thread):
         print("entre a chequearTamanio")
         if paquete.esDownload() :
             return True
-        
+        MAX_TAMANIO_PERMITIDO
         nombre, tamanio = self.obtenerNombreYTamanio(paquete)
         if (tamanio >= MAX_TAMANIO_PERMITIDO):
             return False
@@ -180,14 +194,30 @@ class Conexion(threading.Thread):
 
     def chequearExistenciaArchivo(self, paquete) :
         print("Entre a chequear Existencia Archivo")
+        #print(Path.cwd())
+        #dirname = os.path.dirname(".")
+  
+        #Print the directory name  
+        #print(dirname)
+        #return True
         nombre, tamanio = self.obtenerNombreYTamanio(paquete)
         i = 0
-
-        resultado = os.walk(DIRECTORIO_BUSQUEDA)
+        
+        path = os.getcwd()
+        new_path = path + "/lib"
+        print("Path de archivos",new_path)
+        listOfFiles = os.listdir(new_path)  
+        #print(listOfFiles)
+        #for filename in listOfFiles:
+            #print("archivo: ", filename)
+        """
+        resultado = os.walk(".")
         listGrande = list(resultado)
         tupla = listGrande[0]
         names = tupla[2]
-        if nombre in names :
+        print("Archivos son:", names)
+        """
+        if nombre in listOfFiles :
             return True
         return False
 
@@ -206,4 +236,19 @@ class Conexion(threading.Thread):
         pckBytes = gP.pasarPaqueteABytes(pck)
 
         self.skt.sendto(pckBytes,(self.ip_cliente,self.puerto_cliente))
-     
+    
+
+    def recibir_archivo(self):
+        time_start = time.time()
+        while time.time() <= time_start + MAX_WAIT_SERVIDOR:
+            if self.conexion_activa == False:
+                return
+            if self.hay_data: #verifico si me pasaron nueva data
+                paqueteBytes = self.queue.pop(0) #obtengo la data
+                if len(self.queue) == 0:
+                    self.hay_data = False #si la cola queda vacia establezco que no hay mas data, por ahora
+                if paqueteBytes is None:   # If you send `None`, the thread will exit.
+                    return
+                self.imprimir_mensaje(paqueteBytes)
+                self.procesar_mensaje(paqueteBytes)
+            

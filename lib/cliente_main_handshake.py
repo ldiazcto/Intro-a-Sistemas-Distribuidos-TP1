@@ -47,7 +47,7 @@ def downloadArchivoInexistente():
         cliente_prueba = cliente.Cliente(receiverName, receiverPort)
         print("Se creo el cliente con exito")
         
-        resultado = cliente_prueba.entablarHandshake("hola.txt", 395, DOWNLOAD)
+        resultado = cliente_prueba.entablarHandshake("prueba_doc.doc", 395, DOWNLOAD)
         print("\n -- Volvi al iniciaHandshakeDOWNLOAD --")
         if resultado:
                 print("No debería caer acá, estoy intentando descargar un archivo inexistente")
@@ -67,7 +67,7 @@ def downloadArchivoExistente():
         cliente_prueba = cliente.Cliente(receiverName, receiverPort)
         print("Se creo el cliente con exito")
         
-        resultado = cliente_prueba.entablarHandshake("prueba_doc.doc", 395, DOWNLOAD)
+        resultado = cliente_prueba.entablarHandshake("hola.txt", 395, DOWNLOAD)
         print("\n -- Volvi al iniciaHandshakeDOWNLOAD --")
         if resultado:
                 print("-- EEEXIIIITOOOO -- debería caer acá, el archivo existe")
