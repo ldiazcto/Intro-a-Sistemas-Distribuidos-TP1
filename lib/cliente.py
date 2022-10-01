@@ -19,6 +19,7 @@ class Cliente(entidad.Entidad):
     def __init__(self, name, port):
         super(Cliente,self).__init__(name,port)
         self.gestorPaquetes = gestorPaquetes.Gestor_Paquete()
+        
         #logger.info("Llegue al cliente")
  
 #para la subida

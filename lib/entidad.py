@@ -17,6 +17,7 @@ class Entidad(ABC):
                 self.name = name #el nombre de a quien le envía esta entidad
                 self.port = port #el port de entrada del contrario (si por ejemplo est'as instanciando un cliente, este es el puerto por donde escucha el servidor)
                 self.entidadSocket = socket(AF_INET,SOCK_DGRAM)
+                self.entidadSocket.bind('',port)
 
 
 

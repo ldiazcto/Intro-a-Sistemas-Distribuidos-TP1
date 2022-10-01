@@ -5,16 +5,16 @@ import paquete
 
 MSJ_SIZE = 5
 N = 2 #tamanio de la ventana
+MAX_WAIT_GOBACKN = 0.9
 
 class GoBackNNuevo(enviador.Enviador):
 
     # GO BACK N TIENE ACK ACUMULATIVOS, SI SE PIERDE UN PAQUETE ME VA A DEVOLVER EL ACK DEL ANTERIOR YA QUE VA A DESCARTAR LOS PAQUETES SIGUIENTES AL QUE PERDIO
 
     def __init__(self):
-        self.older_seq_number = 1
+        self.older_seq_number = 0
         self.new_seq_number = 0
         self.paquetesEnVuelo = []
-        self.acksRecibidos = []
         super(GoBackNNuevo,self).__init__()
 
     def enviar(self,mensaje,entidad):
@@ -23,49 +23,42 @@ class GoBackNNuevo(enviador.Enviador):
     def enviarPaquete(self,file,entidad):
         mensaje = file.read(MSJ_SIZE)
         while (len(mensaje) > 0):
-            #si el numero de sequencia del siguiente paquete a enviar es menor al numero de seq del primer paquete que envie __
+            #si el numero de sequencia del siguiente paquete a enviar es menor al numero de seq del primer paquete que envie
+            # -- ENVIAR ACK --
             if(self.new_seq_number < self.older_seq_number + N):
+                if(self.older_seq_number == self.new_seq_number): #entrás cuando corriste la ventana entera
+                    timeout_start = time.time()
                 pck = self.gestorPaquetes.crearPaquete(mensaje)
                 self.paquetesEnVuelo.append(pck)
                 entidad.enviarPaquete(self.gestorPaquetes.pasarPaqueteABytes(pck))
                 self.new_seq_number = pck.obtenerSeqNumber()
-                if(self.older_seq_number == self.new_seq_number): #entrás cuando corriste la ventana entera
-                    timeout_start = time.time()
-                pck_recibido = entidad.recibirPaqueteBackN(timeout_start) #salgo del continue y obtengo el ultimo paquete recibido
-                #me llegó ack, lo revisamos
-                print("pck_recibido: ",pck_recibido)
-                ackRecibido = self.gestorPaquetes.actualizarACK(pck_recibido)
-                if(ackRecibido):
-                    self.acksRecibidos.append(ackRecibido)
-            #Quiero el ultimo ack nomas, si es True es porque los anteriores hasta ese llegaron bien
-            print("ultimo pck recibido: ",pck_recibido)
-            if (ackRecibido) : #SI RECIBO UN ACK, SIGNIFICA QUE RECIBI EL ACK DEL ULTIMO PAQUETE QUE LLEGO BIEN
-                                # (ES DECIR QUE, TODOS LOS PAQUETES ANTERIORES TMB LLEGARON BIEN)
+            
+            # -- RECIBIR ACK --
+            pck_recibido = entidad.recibirPaqueteBackN() #obtengo el ultimo paquete recibido
+            print("pck_recibido: ",pck_recibido)
+            ackRecibido = self.gestorPaquetes.actualizarACK(pck_recibido)
+            
+            # -- VERIFICACION DE ACK --
+            if (ackRecibido == True) : #SI RECIBO UN ACK, SIGNIFICA QUE RECIBI EL ACK DEL ULTIMO PAQUETE QUE LLEGO BIEN
+                                        # (ES DECIR QUE, TODOS LOS PAQUETES ANTERIORES TMB LLEGARON BIEN)
                 #muevo el older_seq_number a la posicion siguiente al new_seq_number
                 self.older_seq_number = pck_recibido.obtenerSeqNumber()+1 
-                if(self.older_seq_number == pck_recibido.obtenerSeqNumber()): 
-                    timeout_start = 0 #reinicio el timer porque los paquetes me llegaron bien, corro el older porque tengo que mandar paquetes nuevos 
-                for pck in range(len(self.paquetesEnVuelo)): #borro los paquetes anteriores al ack que recibi, porque llegaron bien
-                    if(pck <= pck_recibido.obtenerSeqNumber()):
-                        self.paquetesEnVuelo.remove(self.paquetesEnVuelo[pck])
-            if(pck_recibido == None): #SI PCK RECIBIDO ES NONE SIGNIFICA QUE SALTO TIMEOUT, ENTONCES PERDI UN PAQUETE Y POR ENDE TENGO 
-                                      #QUE VOLVER A INICIAR EL TIMER Y ENVIAR LOS PAQUETES QUE ME QUEDARON EN LA LISTA DE PAQUETES EN VUELO
+                timeout_start = time.time() #reinicio el timer porque los paquetes me llegaron bien, corro el older porque tengo que mandar paquetes nuevos 
+                self.paquetesEnVuelo.pop(0) #borro los paquetes anteriores al ack que recibi, porque llegaron bien
+                    
+
+            # -- REENVIAR PCKS EN CASO DE ERROR --
+            if(ackRecibido == False and timeout_start + MAX_WAIT_GOBACKN <= time.time() ): #SI SALTO TIMEOUT, ENTONCES PERDI UN PAQUETE Y POR ENDE TENGO 
+                                    #QUE VOLVER A INICIAR EL TIMER Y ENVIAR LOS PAQUETES QUE ME QUEDARON EN LA LISTA DE PAQUETES EN VUELO
                 timeout_start = time.time()
                 for pck in range(len(self.paquetesEnVuelo)):
-                    if(pck > len(self.acksRecibidos)):
-                        entidad.enviarPaquete(self.gestorPaquetes.pasarPaqueteABytes(self.paquetesEnVuelo[pck]))
+                    entidad.enviarPaquete(self.gestorPaquetes.pasarPaqueteABytes(self.paquetesEnVuelo[pck]))
+     
 
             mensaje = file.read(MSJ_SIZE)
-            """if(len(mensaje) > 0):
-                print("older ",self.older_seq_number)
-                print("iteracion: ",i)
-                i += 1
-                continue"""
 
         print("\n sali del while \n ")
-        
-            #falta código
-
+    
         return 1
 
 """
