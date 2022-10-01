@@ -15,11 +15,14 @@ class StopAndWait(enviador.Enviador):
         entidad.enviarPaquete(pckBytes)
         paqueteRecibido = entidad.recibirPaquete()
         cantidad_intentos = 1
+        print("\n--El mensaje a enviar es: ", mensaje)
+        print("\n-cantidad intentos es ", cantidad_intentos)
         while(paqueteRecibido == None and cantidad_intentos <= 3):
             entidad.enviarPaquete(pckBytes)
             paqueteRecibido = entidad.recibirPaquete()
-            #print("Entro a recibirPaquete(): ",cantidad_intentos)
             cantidad_intentos += 1
+            print("\n--El mensaje a enviar es: ", mensaje)
+            print("\n-cantidad intentos es ", cantidad_intentos)
         if(cantidad_intentos > 3):
             return (False,None)
         return (True,paqueteRecibido)
@@ -40,6 +43,7 @@ class StopAndWait(enviador.Enviador):
             #estoy dispuesta a reenviar MAX_TRIES
             
             if (intentar_mandar == False):
+                print(" \n intentar mandar es False, return ")
                 return
             verificar_ack = self.gestorPaquetes.actualizarACK(paquete_recibido) #lo cambi;e a verificarACK
             intentar_mandar_ack = True
@@ -49,25 +53,8 @@ class StopAndWait(enviador.Enviador):
                     intentar_mandar_ack,paquete_recibido = self.enviar(mensaje,entidad)
                     cant_max_envios += 1
             if (intentar_mandar_ack == False):
+                print ("\n intentar mandar ack es False, return")
                 return
-            """
-            i = 1
-            while(verificar_ack == False and i <= 3):
-                print("-- ENVIAR PAQUETE --- No recibí el ACK o salto el timer, envío de nuevo. Vez ",i," de 4")
-                verificar,paquete_perdido = self.enviar(mensaje,entidad)
-                i += 1
-            """
-            
             mensaje = file.read(MSJ_SIZE)
         return
        
-
-"""
-while((gestorPaquetes.verificar_paquete_ack(gestorPaquetes.formatearBytesAPaquete(pckBytes)) 
-        or time.time() >= timeout_start + MAX_WAIT) and i < MAX_TRIES):
-    paquete = gestorPaquetes.formatear(0,mensaje)
-    pckBytes = gestorPaquetes.pasarPaqueteABytes(pck)
-    entidad.enviarPaquete(paquete)
-    timeout_start = time.time()
-    i += 1
-"""

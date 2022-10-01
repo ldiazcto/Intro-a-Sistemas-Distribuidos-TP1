@@ -102,12 +102,17 @@ def main():
     # logger.info("Se inicio el logger")
     
     cliente_prueba = cliente.Cliente("localhost", 12000)
-    # stopWait = stopAndWait.StopAndWait()
-    backN = goBackNNuevo.GoBackNNuevo() #llamo a la clase, y me ejecuta el constructor
+    stopWait = stopAndWait.StopAndWait()
+    #backN = goBackNNuevo.GoBackNNuevo() #llamo a la clase, y me ejecuta el constructor
     print("Se creo el cliente con exito")
     file = abrirArchivo("./lib/hola.txt")
-    cliente_prueba.enviarArchivo(file,backN)
+    print("Se abri'o el archivo con exito")
+    cliente_prueba.enviarArchivo(file,stopWait)
+    file.close()
+    cliente_prueba.cerrarSocket()
+
     return 0
+
 main()
     # opciones, argumentos = obtenerArgumentos()
     # print("OPCIONES: ",opciones)

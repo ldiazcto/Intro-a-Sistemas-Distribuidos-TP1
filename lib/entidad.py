@@ -44,17 +44,12 @@ class Entidad(ABC):
                         paqueteRecibido = self.recibirPaquete()
                         esPaqueteOrdenado = self.gestorPaquetes.verificarACK(paqueteRecibido)
                         if (esPaqueteOrdenado) :
-                                print("Cliente: Recibí un ack ordenado!")
                                 return True
                         esPaqueteRefused = self.gestorPaquetes.verificarRefused(paqueteRecibido)
-                        print ("PAaquete Refuse es:",esPaqueteRefused)
                         if (esPaqueteRefused) :
-                                print("Cliente: el server rechazó la conexión :_(")
                                 return False
-                        print("Cliente: No recibí un ack o no fue ordenado, intento ", i)
                         i +=1
 
-                print("Cliente: sali del while en el intento ", i)
                 return False
 
 
@@ -72,14 +67,8 @@ class Entidad(ABC):
                         lista_sockets_listos = select.select([self.entidadSocket], [], [], 0)
                         var = time.time()
                         if ((var - timeout_start) >= (MAX_WAIT)):
-                                print ("var es", var)
-                                print ("timeout_start es", timeout_start)
-                                print ("timeout_start + MAX_WAIT es:", timeout_start + MAX_WAIT)
-                                print ("var - timeout_start es: ", var - timeout_start)
                                 return None
-                                #volver a mandar_mensaje
                         if not lista_sockets_listos[0]:
-                                #print ("ENTRON ACA NUNCA LEO")
                                 continue
                         paqueteString, sourceAddress = self.entidadSocket.recvfrom(2048)
                         return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
@@ -93,7 +82,6 @@ class Entidad(ABC):
                         return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
                 except BlockingIOError:
                         if(timeout > timeActual + MAX_WAIT_RESPONSE):
-                        #self.entidadSocket.setblocking(BLOCKING)
                                 return None
                 
       
@@ -103,5 +91,5 @@ class Entidad(ABC):
                 x = 1
 
         def cerrarSocket(self):
-                self.clientSocket.close()
+                self.entidadSocket.close()
         
