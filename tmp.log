@@ -1,4 +1,59 @@
-[2022-09-29 12:32:40,625] {cliente_main.py:83} INFO - Se inicio el logger
-[2022-09-29 12:32:40,628] {cliente_main.py:83} INFO - Se inicio el logger
-[2022-09-29 13:21:38,582] {cliente_main.py:84} INFO - Se inicio el logger
-[2022-09-29 13:22:08,119] {cliente_main.py:84} INFO - Se inicio el logger
+[2022-10-01 06:10:59,972] {menuCliente.py:46} INFO - Se inicio el logger
+[2022-10-01 06:10:59,975] {menuCliente.py:65} DEBUG - EESTO NO DEBERIA SALIR , dado que cambie a quiet
+[2022-10-01 06:13:44,861] {menuCliente.py:46} INFO - Se inicio el logger
+[2022-10-01 06:13:44,865] {menuCliente.py:65} DEBUG - EESTO NO DEBERIA SALIR , dado que cambie a quiet
+[2022-10-01 06:14:49,295] {menuCliente.py:46} INFO - Se inicio el logger
+[2022-10-01 06:14:49,298] {menuCliente.py:65} DEBUG - EESTO NO DEBERIA SALIR , dado que cambie a quiet
+[2022-10-01 06:15:44,076] {menuCliente.py:46} INFO - Se inicio el logger
+[2022-10-01 06:15:44,082] {menuCliente.py:65} DEBUG - EESTO NO DEBERIA SALIR , dado que cambie a quiet
+[2022-10-01 06:15:44,084] {menuCliente.py:65} DEBUG - EESTO NO DEBERIA SALIR , dado que cambie a quiet
+[2022-10-01 06:15:44,087] {menuCliente.py:65} DEBUG - EESTO NO DEBERIA SALIR , dado que cambie a quiet
+[2022-10-01 07:13:09,674] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 07:13:09,678] {menuCliente.py:94} ERROR - Debe ingresar el nombre del archivo [-n/--name]
+[2022-10-01 07:15:07,907] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 07:15:46,369] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 07:19:25,199] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 07:20:13,332] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 07:20:13,391] {menuCliente.py:95} ERROR - Debe indicar una ruta de archivo [-s/--src] o [-d/--dst]
+[2022-10-01 07:20:30,040] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 07:20:30,043] {menuCliente.py:95} ERROR - Debe indicar una ruta de archivo [-s/--src] o [-d/--dst]
+[2022-10-01 07:20:55,079] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 07:20:55,082] {menuCliente.py:95} ERROR - Debe indicar una ruta de archivo [-s/--src] o [-d/--dst]
+[2022-10-01 07:22:18,063] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 07:22:18,064] {menuCliente.py:95} ERROR - Debe indicar una ruta de archivo [-s/--src] o [-d/--dst]
+[2022-10-01 07:22:49,947] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 07:22:49,950] {menuCliente.py:96} ERROR - Debe indicar una ruta de archivo [-s/--src] o [-d/--dst]
+[2022-10-01 07:23:23,320] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 07:23:23,324] {menuCliente.py:97} ERROR - Debe indicar una ruta de archivo [-s/--src] o [-d/--dst]
+[2022-10-01 07:24:03,330] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 07:24:33,800] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 07:24:33,802] {menuCliente.py:99} ERROR - Debe indicar una ruta de archivo [-s/--src] o [-d/--dst]
+[2022-10-01 12:58:08,782] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 12:58:08,786] {menuCliente.py:99} ERROR - Debe indicar una ruta de archivo [-s/--src] o [-d/--dst]
+[2022-10-01 12:59:17,595] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 12:59:17,599] {menuCliente.py:99} ERROR - Debe indicar una ruta de archivo [-s/--src] o [-d/--dst]
+[2022-10-01 12:59:54,288] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 12:59:54,293] {menuCliente.py:100} ERROR - Debe indicar una ruta de archivo [-s/--src] o [-d/--dst]
+[2022-10-01 13:00:47,769] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 13:00:47,774] {menuCliente.py:100} ERROR - Debe indicar una ruta de archivo [-s/--src] o [-d/--dst]
+[2022-10-01 13:00:56,624] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 13:02:03,734] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 13:02:22,237] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 13:02:22,241] {menuCliente.py:100} ERROR - Debe indicar una ruta de archivo [-s/--src] o [-d/--dst]
+[2022-10-01 13:02:45,816] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 13:03:21,812] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 13:03:28,342] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 13:03:28,347] {menuCliente.py:100} ERROR - Debe indicar una ruta de archivo [-s/--src] o [-d/--dst]
+[2022-10-01 13:03:49,926] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 13:03:49,929] {menuCliente.py:100} ERROR - Debe indicar una ruta de archivo [-s/--src] o [-d/--dst]
+[2022-10-01 13:04:01,615] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 13:04:50,861] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 18:05:30,278] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 18:12:34,229] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 18:23:17,427] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 18:23:24,901] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 18:23:24,903] {menuCliente.py:104} ERROR - Debe ingresar una acción a realizar [--upload]/[--download]
+[2022-10-01 18:24:13,869] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 18:24:21,098] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 18:24:50,878] {menuCliente.py:58} INFO - Se inicio el logger
+[2022-10-01 18:26:04,898] {menuCliente.py:58} INFO - Se inicio el logger

@@ -103,26 +103,42 @@ def main():
     
     # logger.info("Se inicio el logger")
     
-    cliente_prueba = cliente.Cliente("localhost", 8080, 12000) #los dos puertos del cliente son 8080 y el server escucha del 12000
-    #stopWait = stopAndWait.StopAndWait()
-    backN = goBackNNuevo.GoBackNNuevo() #llamo a la clase, y me ejecuta el constructor
+    # cliente_prueba = cliente.Cliente("localhost", 8080, 12000) #los dos puertos del cliente son 8080 y el server escucha del 12000
+    # #stopWait = stopAndWait.StopAndWait()
+    # backN = goBackNNuevo.GoBackNNuevo() #llamo a la clase, y me ejecuta el constructor
+    # print("Se creo el cliente con exito")
+    # cliente_prueba.entablarHandshake("hola2.txt", 395, UPLOAD)
+    # file = abrirArchivo("./lib/hola.txt")
+    # print("Se abri'o el archivo con exito")
+    # cliente_prueba.enviarArchivo(file,backN)
+
+    # gP = gestorPaquetes.Gestor_Paquete()
+    # pckFin = gP.crearPaqueteFin()
+    # pckFinBytes = gP.pasarPaqueteABytes(pckFin)
+    # cliente_prueba.enviarPaquete(pckFinBytes)
+    # print("Envi'e el paquete de Fin")
+
+    # file.close()
+    # cliente_prueba.cerrarSocket()
+
+    # return 0
+        #-----------------------------------------Lo que uso para handshake + upload + stopAndWait y probar (Funciona este trio)
+
+    cliente_prueba = cliente.Cliente("localhost", 12000)
+    stopWait = stopAndWait.StopAndWait()
+    # backN = goBackNNuevo.GoBackNNuevo()
     print("Se creo el cliente con exito")
-    cliente_prueba.entablarHandshake("hola2.txt", 395, UPLOAD)
+
+    ruta = "./lib/hola.txt"
+    file_size = os.path.getsize(ruta)
+    print("El tam de mi archivo es: ", file_size)
+
+    resultado = cliente_prueba.entablarHandshake(ruta, file_size, UPLOAD)
+    print("----------------------------El resultado de mi handshake es: ", resultado)
+    
     file = abrirArchivo("./lib/hola.txt")
-    print("Se abri'o el archivo con exito")
-    cliente_prueba.enviarArchivo(file,backN)
-
-    gP = gestorPaquetes.Gestor_Paquete()
-    pckFin = gP.crearPaqueteFin()
-    pckFinBytes = gP.pasarPaqueteABytes(pckFin)
-    cliente_prueba.enviarPaquete(pckFinBytes)
-    print("Envi'e el paquete de Fin")
-
-    file.close()
-    cliente_prueba.cerrarSocket()
-
+    if resultado == True : cliente_prueba.enviarArchivo(file,stopWait)
     return 0
-
 main()
     # opciones, argumentos = obtenerArgumentos()
     # print("OPCIONES: ",opciones)
