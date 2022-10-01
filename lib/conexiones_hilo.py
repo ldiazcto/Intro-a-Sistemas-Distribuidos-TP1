@@ -45,7 +45,7 @@ class Conexion(threading.Thread):
         tiraBytes = self.queue.pop(0)
         if len(self.queue) == 0:
             self.hay_data = False
-        #paqueteBytes = self.gestor_paquete.pasarBytesAPaquete(tiraBytes)
+        paqueteBytes = self.gestor_paquete.pasarBytesAPaquete(tiraBytes)
         #self.procesarHandshake(paqueteBytes)
         time_start = time.time()
         while time.time() <= time_start + MAX_WAIT_SERVIDOR:
@@ -72,8 +72,8 @@ class Conexion(threading.Thread):
             print ("CIERRO CONEXION")
             self.conexion_activa = False
         
-        paquete = self.gestor_paquete.pasarBytesAPaquete(paqueteBytes)
-        print("\npaquete es ", paquete)
+        #paquete = self.gestor_paquete.pasarBytesAPaquete(paqueteBytes)
+        print("\npaquete es ", paqueteBytes)
 
         """
         print("Estoy por entrar a procesarHandshake")
@@ -109,7 +109,7 @@ class Conexion(threading.Thread):
             #Receiver.cerrarArchivo(self.ruta_archivo)
             self.conexion_activa = False
         """
-        if (self.gestor_paquete.verificar_mensaje_recibido(paquete) == True):
+        if (self.gestor_paquete.verificar_mensaje_recibido(paqueteBytes) == True):
             paquete_ack = self.gestor_paquete.crearPaqueteACK(1)
             print("mando ack verificado")
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
