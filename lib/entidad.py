@@ -9,6 +9,7 @@ MAX_TRIES = 2
 MAX_WAIT = 1
 NOT_BLOCKING= 0 
 BLOCKING = 1
+MAX_WAIT_RESPONSE = 10
 
 class Entidad(ABC):
 
@@ -83,15 +84,17 @@ class Entidad(ABC):
                         paqueteString, sourceAddress = self.entidadSocket.recvfrom(2048)
                         return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
 
-        def recibirPaqueteBackN(self):
+        def recibirPaqueteBackN(self,timeout):
+                timeActual = time.time()
                 self.entidadSocket.setblocking(NOT_BLOCKING)
                 try :
                         paqueteString, sourceAddress = self.entidadSocket.recvfrom(2048)
-                        #self.entidadSocket.setblocking(BLOCKING)
+                        self.entidadSocket.setblocking(BLOCKING)
                         return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
                 except BlockingIOError:
-                        self.entidadSocket.setblocking(BLOCKING)
-                        return None
+                        if(timeout > timeActual + MAX_WAIT_RESPONSE):
+                        #self.entidadSocket.setblocking(BLOCKING)
+                                return None
                 
       
 

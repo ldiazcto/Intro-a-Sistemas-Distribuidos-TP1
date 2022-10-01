@@ -32,7 +32,7 @@ class GoBackNNuevo(enviador.Enviador):
                 self.new_seq_number = pck.obtenerSeqNumber()
                 if(self.older_seq_number == self.new_seq_number): #entrás cuando corriste la ventana entera
                     timeout_start = time.time()
-                pck_recibido = entidad.recibirPaqueteBackN() #salgo del continue y obtengo el ultimo paquete recibido
+                pck_recibido = entidad.recibirPaqueteBackN(timeout_start) #salgo del continue y obtengo el ultimo paquete recibido
                 #me llegó ack, lo revisamos
                 print("pck_recibido: ",pck_recibido)
                 ackEsperado = self.gestorPaquetes.actualizarACK(pck_recibido)
