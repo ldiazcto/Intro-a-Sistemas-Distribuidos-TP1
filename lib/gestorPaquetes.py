@@ -10,9 +10,9 @@ FIN = 5
 class Gestor_Paquete:
     def __init__(self):
         self.seq_number = 1
-        self.ack_number_receiver = 0
-        self.ack_number_sender = 1
-        self.seq_number_receiver = 1
+        self.ack_number_receiver = 0 #
+        self.ack_number_sender = 1 #
+        self.seq_number_receiver = 1 #
         self.COMIENZA_DATA = 4
         self.COMIENZA_SEQ_NUMBER = 0
         self.FIN_SEQ_NUMBER = 2
@@ -60,9 +60,9 @@ class Gestor_Paquete:
         if (mensaje != None):
             if(pck.esDownload() or pck.esUpload()):
                 mensaje =  bytes(mensaje, 'utf-8')
-
             paqueteBytes += mensaje
-        print("paqueteBytes: ", paqueteBytes)
+        
+        print("Recibido en gestorPaquete: paqueteBytes: ", paqueteBytes)
         return paqueteBytes
  
     def cierreConexion(self,FIN):

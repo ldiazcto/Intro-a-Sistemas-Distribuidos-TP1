@@ -14,6 +14,7 @@ DOWNLOAD = 3
 REFUSED = 4
 FIN = 5
 ACK_CORRECT = 1
+ACK_INCORRECT = 0
 
 MAX_WAIT_HANDSHAKE = 30
 MAX_TAMANIO_PERMITIDO = 500 #en bytes
@@ -47,21 +48,7 @@ class Conexion(threading.Thread):
             self.hay_data = False
         paqueteBytes = self.gestor_paquete.pasarBytesAPaquete(tiraBytes)
         self.procesarHandshake(paqueteBytes)
-        """
-        time_start = time.time()
-        while time.time() <= time_start + MAX_WAIT_SERVIDOR:
-            if self.conexion_activa == False:
-                return
-            if self.hay_data: #verifico si me pasaron nueva data
-                paqueteBytes = self.queue.pop(0) #obtengo la data
-                if len(self.queue) == 0:
-                    self.hay_data = False #si la cola queda vacia establezco que no hay mas data, por ahora
-                if paqueteBytes is None:   # If you send `None`, the thread will exit.
-                    return
-                self.imprimir_mensaje(paqueteBytes)
-                self.procesar_mensaje(paqueteBytes)
-                #self.enviar_mensaje()
-        """
+
 
 
     def imprimir_mensaje(self, paqueteBytes):
@@ -70,57 +57,22 @@ class Conexion(threading.Thread):
         print("\n")
 
     def procesar_mensaje(self,paqueteBytes,file):
+        print("Entre a procesar_mensaje")
         if paqueteBytes == "FIN":
             print ("CIERRO CONEXION")
             self.conexion_activa = False
         
         paquete = self.gestor_paquete.pasarBytesAPaquete(paqueteBytes)
 
-        """
-        print("Estoy por entrar a procesarHandshake")
-        if (not self.handshakeRealizado) :
-            handshakeExitoso = self.procesarHandshake(paquete)
-            if (not handshakeExitoso) :
-                print("El handshake no funcó, me tengo que ir")
-                return
-            self.handshakeRealizado = True
-            print("--Server: EL HANDSHAKE FUNCÓ!--")
-        
-        
-        #es el primero no hace falta verificar mensaje recibido
-        if (paquete.esUpload()):
-            cargaPaquete = paquete.obtenerMensaje
-            nombreTamanio = cargaPaquete.split("-")
-            if(tamanio > MAXTAMANIO):
-                paqueteRefused = self.gestorPaquete.crearPaqueteRefused()
-                self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paqueteRefused),(self.ip_cliente,self.puerto_cliente))
-            self.ruta_archivo = ruta+nombteTamanio[0]
-            Receiver.abrirArchivo(self.ruta_archivo)
-            paquete_ack = self.gestor_paquete.crearPaqueteACK(1)
-            self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
+        print("Estoy en procesar mensaje, acabo de pasar el paqueteBytes a paquete")
 
-        if (paquete.esDownload()):
-            cargaPaquete = paquete.obtenerMensaje
-            #Aca llamo a las funciones del cliente para manejo de paquetes y le paso el paquete OJO QUE HAY QUE GUARDAR LA RUTA EN LA CONEXION
-        """ 
-        """
-        if (paquete.esACK()): #no me gusta se podria hacer a traves del gesto
-            paquete_ack = self.gestor_paquete.crearPaqueteACK(1)
-            self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
-            #Receiver.cerrarArchivo(self.ruta_archivo)
-            self.conexion_activa = False
-        """
         if (self.gestor_paquete.verificar_mensaje_recibido(paquete) == True):
-            paquete_ack = self.gestor_paquete.crearPaqueteACK(1)
-            print("Escribo en el archivo")
+            paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_CORRECT)
             file.write(paquete.obtenerMensaje())
-            print("mando ack verificado")
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
         else:
-            paquete_ack = self.gestor_paquete.crearPaqueteACK(0)
-            print("mando ack no verificado")
+            paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_INCORRECT)
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
-            #PONER AL QUE ESCRIBE EL ARCHIVO
         
     
     #POSIBLE BORRADO
@@ -166,11 +118,12 @@ class Conexion(threading.Thread):
                 self.recibir_archivo(file)
                 #lógica para el upload
         else :
-                x=2
                 print("Es de tipo download")
                 #lógica para el download
-
-        return True
+                #cargaPaquete = paquete.obtenerMensaje
+                #Aca llamo a las funciones del cliente para manejo de paquetes y le paso el paquete OJO QUE HAY QUE GUARDAR LA RUTA EN LA CONEXION"""
+    
+                return True
 
     def chequearHandshakeApropiado(self, paquete):
         print("entre a procesar handshake apropiado")
@@ -203,29 +156,13 @@ class Conexion(threading.Thread):
 
     def chequearExistenciaArchivo(self, paquete) :
         print("Entre a chequear Existencia Archivo")
-        #print(Path.cwd())
-        #dirname = os.path.dirname(".")
-  
-        #Print the directory name  
-        #print(dirname)
-        #return True
         nombre, tamanio = self.obtenerNombreYTamanio(paquete)
         i = 0
         
         path = os.getcwd()
         new_path = path + "/lib"
         print("Path de archivos",new_path)
-        listOfFiles = os.listdir(new_path)  
-        #print(listOfFiles)
-        #for filename in listOfFiles:
-            #print("archivo: ", filename)
-        """
-        resultado = os.walk(".")
-        listGrande = list(resultado)
-        tupla = listGrande[0]
-        names = tupla[2]
-        print("Archivos son:", names)
-        """
+        listOfFiles = os.listdir(new_path) 
         if nombre in listOfFiles :
             return True
         return False
@@ -253,6 +190,7 @@ class Conexion(threading.Thread):
             if self.conexion_activa == False:
                 return
             if self.hay_data: #verifico si me pasaron nueva data
+                print("HAY DATA")
                 paqueteBytes = self.queue.pop(0) #obtengo la data
                 if len(self.queue) == 0:
                     self.hay_data = False #si la cola queda vacia establezco que no hay mas data, por ahora
@@ -260,4 +198,4 @@ class Conexion(threading.Thread):
                     return
                 self.imprimir_mensaje(paqueteBytes)
                 self.procesar_mensaje(paqueteBytes,file)
-            
+                print("\n\n Volvi de procesar_mensaje, el paqueteBytes era: ", paqueteBytes)

@@ -25,28 +25,35 @@ class GoBackNNuevo(enviador.Enviador):
         mensaje = file.read(MSJ_SIZE)
         timeout_start = 0
         while (len(mensaje) > 0):
+            print("\n\nMensaje antes de enviar: ", mensaje)
+            print("En esta iteración, el new_seq_number es ", self.new_seq_number)
+            print("En esta iteración, el older_seq_number es ", self.older_seq_number)
+            
             #si el numero de sequencia del siguiente paquete a enviar es menor al numero de seq del primer paquete que envie
             # -- ENVIAR ACK --
             if(self.new_seq_number < self.older_seq_number + N):
                 if(self.older_seq_number == self.new_seq_number): #entrás cuando corriste la ventana entera
-                    timeout_start = time.time()
+                    timeout_start = time.time()         
                 pck = self.gestorPaquetes.crearPaquete(mensaje)
                 self.paquetesEnVuelo.append(pck)
                 entidad.enviarPaquete(self.gestorPaquetes.pasarPaqueteABytes(pck))
+                print("Mensaje que acabo de enviar: ", mensaje)
                 self.new_seq_number = pck.obtenerSeqNumber()
             
             # -- RECIBIR ACK --
             pck_recibido = entidad.recibirPaqueteBackN() #obtengo el ultimo paquete recibido
-            print("pck_recibido: ",pck_recibido)
             ackRecibido = self.gestorPaquetes.actualizarACK(pck_recibido)
+            print("El ack recibido es ", ackRecibido)
+            print("\n")
             
             # -- VERIFICACION DE ACK --
             if (ackRecibido == True) : #SI RECIBO UN ACK, SIGNIFICA QUE RECIBI EL ACK DEL ULTIMO PAQUETE QUE LLEGO BIEN
                                         # (ES DECIR QUE, TODOS LOS PAQUETES ANTERIORES TMB LLEGARON BIEN)
                 #muevo el older_seq_number a la posicion siguiente al new_seq_number
+                print("recibi un nuevo ack positivo")
                 self.older_seq_number = pck_recibido.obtenerSeqNumber()+1 
                 timeout_start = time.time() #reinicio el timer porque los paquetes me llegaron bien, corro el older porque tengo que mandar paquetes nuevos 
-                self.paquetesEnVuelo.pop(0) #borro los paquetes anteriores al ack que recibi, porque llegaron bien
+                self.paquetesEnVuelo.pop(0) #borro el paquete que llego bien (voy borrando de a uno)
                     
 
             # -- REENVIAR PCKS EN CASO DE ERROR --
@@ -60,9 +67,9 @@ class GoBackNNuevo(enviador.Enviador):
             mensaje = file.read(MSJ_SIZE)
 
         # -- NO TENGO M'AS PARA LEER, SOLO RECIBO Y REENVIO --
-        i = 0
-        while time.time() <= timeout_start + MAX_WAIT_GOBACKN and i <= MAX_TRIES:
+        while time.time() <= timeout_start + MAX_WAIT_GOBACKN and len(self.paquetesEnVuelo) != 0:
             # -- RECIBIR ACK --
+            print("\n Entre al ultimo while")
             pck_recibido = entidad.recibirPaqueteBackN() #obtengo el ultimo paquete recibido
             print("pck_recibido: ", pck_recibido)
             ackRecibido = self.gestorPaquetes.actualizarACK(pck_recibido)
@@ -74,10 +81,8 @@ class GoBackNNuevo(enviador.Enviador):
                 print(" -------Entre al primer if-------")
                 self.older_seq_number = pck_recibido.obtenerSeqNumber()+1 
                 timeout_start = time.time() #reinicio el timer porque los paquetes me llegaron bien, corro el older porque tengo que mandar paquetes nuevos 
-                self.paquetesEnVuelo.pop(0) #borro los paquetes anteriores al ack que recibi, porque llegaron bien
+                self.paquetesEnVuelo.pop(0) #borro el paquete que llego bien (voy borrando de a uno)
                     
-            else :
-                i +=1
             # -- REENVIAR PCKS EN CASO DE ERROR --
             if(ackRecibido == False and timeout_start + MAX_WAIT_GOBACKN <= time.time() ): #SI SALTO TIMEOUT, ENTONCES PERDI UN PAQUETE Y POR ENDE TENGO 
                                     #QUE VOLVER A INICIAR EL TIMER Y ENVIAR LOS PAQUETES QUE ME QUEDARON EN LA LISTA DE PAQUETES EN VUELO

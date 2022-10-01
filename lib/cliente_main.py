@@ -110,7 +110,7 @@ def main():
     cliente_prueba.entablarHandshake("hola2.txt", 395, UPLOAD)
     file = abrirArchivo("./lib/hola.txt")
     print("Se abri'o el archivo con exito")
-    cliente_prueba.enviarArchivo(file,backN)
+    cliente_prueba.enviarArchivo(file, backN)
 
     gP = gestorPaquetes.Gestor_Paquete()
     pckFin = gP.crearPaqueteFin()
