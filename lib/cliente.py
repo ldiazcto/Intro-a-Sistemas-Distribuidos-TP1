@@ -54,7 +54,7 @@ class Cliente(entidad.Entidad):
                 continue
 
             paqueteRecibido = self.gestorPaquetes.pasarBytesAPaquete(paqueteBytes)
-            esPaqueteOrdenado = self.gestorPaquetes.verificar_mensaje_recibido(paqueteRecibido)
+            esPaqueteOrdenado = self.gestorPaquetes.verificarPaqueteOrdenado(paqueteRecibido)
             if (esPaqueteOrdenado) :
                 paqueteACK = self.gestorPaquetes.crearPaqueteACK(ACK_CORRECT)
                 mensaje = self.prepararMensajeParaArchivo(fileName, paqueteRecibido)

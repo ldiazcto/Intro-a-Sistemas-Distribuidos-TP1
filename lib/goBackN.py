@@ -46,7 +46,7 @@ class GoBackN(enviador.Enviador):
             ackRecibido = self.gestorPaquetes.actualizarACK(pck_recibido)
             print("El ack recibido es ", ackRecibido)
             print("\n")
-            
+            #ackRecibido = True
             # -- VERIFICACION DE ACK --
             if (ackRecibido == True) : #SI RECIBO UN ACK, SIGNIFICA QUE RECIBI EL ACK DEL ULTIMO PAQUETE QUE LLEGO BIEN
                                         # (ES DECIR QUE, TODOS LOS PAQUETES ANTERIORES TMB LLEGARON BIEN)

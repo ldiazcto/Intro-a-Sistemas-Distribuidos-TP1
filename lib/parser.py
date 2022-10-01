@@ -1,5 +1,5 @@
 from fileinput import filename
-import goBackNNuevo
+import goBackN
 import stopAndWait
 import sys
 import getopt
@@ -67,5 +67,5 @@ class Parser:
 
     def definirProtocolo(self, opt, arg, protocolo):
         if(opt in ('-o','--option')):
-            protocolo = goBackNNuevo.GoBackNNuevo()
+            protocolo = goBackN.GoBackN()
             

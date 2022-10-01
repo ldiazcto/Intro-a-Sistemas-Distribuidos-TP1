@@ -64,14 +64,16 @@ class Conexion(threading.Thread):
         
         paquete = self.gestor_paquete.pasarBytesAPaquete(paqueteBytes)
 
-        #print("El paquete recibido en procesar_mensaje es = ", paquete)
+        print("El paquete recibido en procesar_mensaje es = ", paquete)
 
-        if (self.gestor_paquete.verificar_mensaje_recibido(paquete) == True):
+        if (self.gestor_paquete.verificarPaqueteOrdenado(paquete) == True):
             paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_CORRECT)
             file.write(paquete.obtenerMensaje())
+            print(self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
         else:
             paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_INCORRECT)
+            print(self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
         
     
@@ -113,13 +115,19 @@ class Conexion(threading.Thread):
 
         if self.esHandshakeUpload(paquete) :
                 print("Es de tipo upload")
-                filepath = self.obtener_ruta_archivo(paquete)
+                filepath = self.obtener_ruta_archivo_upload(paquete)
                 file = open(filepath, 'wb')
                 self.recibir_archivo(file)
                 #lógica para el upload
         else :
                 print("Es de tipo download")
-                #lógica para el download
+                #filepath,tipo = self.obtener_ruta_archivo_download(paquete)
+                #if(tipo == "stopAndWait"):
+                #
+                #else:
+                #
+                
+                #lógica para el download        
                 #cargaPaquete = paquete.obtenerMensaje
                 #Aca llamo a las funciones del cliente para manejo de paquetes y le paso el paquete OJO QUE HAY QUE GUARDAR LA RUTA EN LA CONEXION"""
     
@@ -129,7 +137,22 @@ class Conexion(threading.Thread):
         print("entre a procesar handshake apropiado")
         return (paquete.esDownload() or paquete.esUpload())
 
-    def obtener_ruta_archivo(self,paquete):
+    def obtener_ruta_archivo_download(self,paquete):
+        nombre_archivo,tipo_envio = paquete.obtenerMensaje()
+        path = os.getcwd()
+        new_path = path + "/lib"
+        #print("Path de archivos",new_path)
+        filepath= new_path + "/" + nombre_archivo
+        return filepath
+
+    def obtenerNombreYTipo(self, paquete):
+        mensaje = paquete.obtenerMensaje()
+        if paquete.esDownload() :
+            nombre, tipo = str(mensaje, "ascii").split("-")
+            return nombre, tipo
+        return str(mensaje, "ascii"), 0
+
+    def obtener_ruta_archivo_upload(self,paquete):
         nombre_archivo , tam = self.obtenerNombreYTamanio(paquete)
         path = os.getcwd()
         new_path = path + "/lib"
@@ -198,5 +221,5 @@ class Conexion(threading.Thread):
                     return
                 self.imprimir_mensaje(paqueteBytes)
                 self.procesar_mensaje(paqueteBytes,file)
-                print("Volvi de procesar_mensaje, el paqueteBytes era: ", paqueteBytes)
+                #print("Volvi de procesar_mensaje, el paqueteBytes era: ", paqueteBytes)
                 print("\n\n")

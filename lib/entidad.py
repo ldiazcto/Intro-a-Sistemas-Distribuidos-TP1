@@ -38,10 +38,7 @@ class Entidad(ABC):
                 i = 0
                 env = stopAndWait.StopAndWait()
                 while i <= MAX_TRIES:
-                        #VER COMO RESOLVER PORQUE EL HANDSHAKE NO SE MANDA EN STOP AND WAIT
-                        #LINEA DE ABAJO ES UN BUUUGGGG !!!!!
-                        #env.enviarPaqueteHandshake(self, paqueteBytes)
-                        self.enviarPaquete(paqueteBytes) #MANDO HANDSHAKE DE FORMA COMUN 
+                        self.enviarPaquete(paqueteBytes)
                         paqueteRecibido = self.recibirPaquete()
                         esPaqueteOrdenado = self.gestorPaquetes.verificarACK(paqueteRecibido)
                         if (esPaqueteOrdenado) :

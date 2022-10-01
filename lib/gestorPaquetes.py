@@ -27,7 +27,7 @@ class Gestor_Paquete:
 
     #cuando creas un paquete de tipo ACK
     def crearPaqueteACK(self, agregado):
-        self.seq_number_receiver += agregado
+        self.seq_number_receiver += agregado #no se usa en ningun lugar
         self.ack_number_receiver += agregado
         return paquete.Paquete(self.ack_number_receiver, ACK, None)
 
@@ -58,7 +58,8 @@ class Gestor_Paquete:
         paqueteBytes += ack
 
         if (mensaje != None):
-            #mensajeBytes =  bytes(mensaje, 'utf-8')
+            if pck.esUpload() or pck.esDownload():
+                mensaje =  bytes(mensaje, 'utf-8')
             paqueteBytes += mensaje
 
         print("paqueteBytes: ", paqueteBytes)
@@ -74,17 +75,25 @@ class Gestor_Paquete:
             return False
         if (pck.esACK() == True): #es ack entonces me fijo si coincide el numero de ack con el global para saber si llego todo ok
             if(pck.obtenerSeqNumber() == self.ack_number_sender):
-                self.ack_number_sender += 1
                 return True #llego bien el paquete
         return False
 
+    def actualizarACK(self, pck):
+        verificacion = self.verificarACK(pck)
+        if(verificacion == True):
+            self.ack_number_sender += 1
+        return verificacion
+        
     def verificarRefused(self, pck):
         if pck == None:
             return False
         return pck.esRefused()
+
 #nombre raro, mejor verificarPaqueteOrdenado o algo así, para explicitar que estoy chequeando si llegó el paquete con el seq number apropiado
-    def verificar_mensaje_recibido(self,paquete):
-        return (paquete.obtenerSeqNumber() == self.seq_number_receiver)
+    def verificarPaqueteOrdenado(self,paquete):
+        if (paquete == None):
+            return False
+        return (paquete.obtenerSeqNumber() == self.seq_number)
     
 
     """
