@@ -13,9 +13,9 @@ class Server(threading.Thread,entidad.Entidad):
         threading.Thread.__init__(self)
         entidad.Entidad.__init__(self,'',12000)
         self.conexiones = {}
-        serverPort = 12000
+        serverPort = 12000 #puerto por donde escucha el server, el puerto publico
         self.serverSocket = socket(AF_INET, SOCK_DGRAM)
-        self.serverSocket.bind(('',serverPort))
+        self.serverSocket.bind(('',serverPort)) #''  es para que escuche a todos --- serverPort es por d'onde escucha el server
         self.serverSocket.setblocking(False)
         self.socket_cerrado = False
         self.numero_hilos = 0

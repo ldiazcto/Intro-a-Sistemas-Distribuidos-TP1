@@ -49,7 +49,7 @@ class GoBackNNuevo(enviador.Enviador):
                     if(pck <= pck_recibido.obtenerSeqNumber()):
                         self.paquetesEnVuelo.remove(self.paquetesEnVuelo[pck])
             if(pck_recibido == None): #SI PCK RECIBIDO ES NONE SIGNIFICA QUE SALTO TIMEOUT, ENTONCES PERDI UN PAQUETE Y POR ENDE TENGO 
-                                    #QUE VOLVER A INICIAR EL TIMER Y ENVIAR LOS PAQUETES QUE ME QUEDARON EN LA LISTA DE PAQUETES EN VUELO
+                                      #QUE VOLVER A INICIAR EL TIMER Y ENVIAR LOS PAQUETES QUE ME QUEDARON EN LA LISTA DE PAQUETES EN VUELO
                 timeout_start = time.time()
                 for pck in range(len(self.paquetesEnVuelo)):
                     if(pck > len(self.acksRecibidos)):

@@ -25,7 +25,7 @@ class Conexion(threading.Thread):
         self.nombre = numero_hilo
         self.conexion_cliente = conexion_cliente
         self.ip_cliente = conexion_cliente[0]
-        self.puerto_cliente = conexion_cliente[1]
+        self.puerto_cliente = conexion_cliente[1] #por ac'a escribe o escucha el cliente? --> 
         self.skt = socket(AF_INET,SOCK_DGRAM)
         self.queue = []
         self.hay_data = False
@@ -38,11 +38,9 @@ class Conexion(threading.Thread):
         self.hay_data = True
 
     def run(self):
-        print("Entre al run de conexiones_hilo")
         while True:
             if self.hay_data: #verifico si me pasaron nueva data
                 break
-        print("hay data en el hilo")
         #este pop y procesamiento inicial est'a bien, pero tiene que mandar esa tira inicial en el handshake, sino se pierde ese paquete
         #tiraBytes = self.queue.pop(0)
         #if len(self.queue) == 0:
@@ -50,23 +48,15 @@ class Conexion(threading.Thread):
         #paqueteBytes = self.gestor_paquete.pasarBytesAPaquete(tiraBytes)
         #self.procesarHandshake(paqueteBytes)
         time_start = time.time()
-        print(" Empez'o el timer")
         while time.time() <= time_start + MAX_WAIT_SERVIDOR:
-            print("Entre al while")
             if self.conexion_activa == False:
-                print(" Conexion inactiva, me voy de conexiones_hilo")
                 return
             if self.hay_data: #verifico si me pasaron nueva data
-                print(" Hay data, vamos bien")
                 paqueteBytes = self.queue.pop(0) #obtengo la data
-                print(" Le hizo un poco a la queue")
                 if len(self.queue) == 0:
-                    print(" El len de la queue es 0, no hay m'as data")
                     self.hay_data = False #si la cola queda vacia establezco que no hay mas data, por ahora
                 if paqueteBytes is None:   # If you send `None`, the thread will exit.
-                    print("el paquete bytes es None, me voy de conexiones_hilo")
                     return
-                print(" Estoy a punto de imprimir el mensaje")
                 self.imprimir_mensaje(paqueteBytes)
                 self.procesar_mensaje(paqueteBytes)
                 #self.enviar_mensaje()
