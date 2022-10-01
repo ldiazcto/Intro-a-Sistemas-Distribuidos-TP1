@@ -23,7 +23,7 @@ class GoBackNNuevo(enviador.Enviador):
     def enviarPaquete(self,file,entidad):
         mensaje = file.read(MSJ_SIZE)
         i=0
-        while True:
+        while (len(mensaje) > 0):
             #si el numero de sequencia del siguiente paquete a enviar es menor al numero de seq del primer paquete que envie __
             if(self.new_seq_number < self.older_seq_number + N):
                 pck = self.gestorPaquetes.crearPaquete(mensaje)
@@ -34,32 +34,33 @@ class GoBackNNuevo(enviador.Enviador):
                     timeout_start = time.time()
                 pck_recibido = entidad.recibirPaqueteBackN() #salgo del continue y obtengo el ultimo paquete recibido
                 #me llegó ack, lo revisamos
-                print("pck recibido es ", pck_recibido)
+                print("pck_recibido: ",pck_recibido)
                 ackEsperado = self.gestorPaquetes.actualizarACK(pck_recibido)
-                if (ackEsperado) : #SI RECIBO UN ACK, SIGNIFICA QUE RECIBI EL ACK DEL ULTIMO PAQUETE QUE LLEGO BIEN
-                                    # (ES DECIR QUE, TODOS LOS PAQUETES ANTERIORES TMB LLEGARON BIEN)
-                    #muevo el older_seq_number a la posicion siguiente al new_seq_number
-                    self.older_seq_number = pck_recibido.obtenerSeqNumber()+1 
-                    if(self.older_seq_number == pck_recibido.obtenerSeqNumber()): 
-                        timeout_start = 0 #reinicio el timer porque los paquetes me llegaron bien, corro el older porque tengo que mandar paquetes nuevos 
-                    for pck in range(len(self.paquetesEnVuelo)): #borro los paquetes anteriores al ack que recibi, porque llegaron bien
-                        if(pck <= pck_recibido.obtenerSeqNumber()):
-                            self.paquetesEnVuelo.remove(self.paquetesEnVuelo[pck])
-                if(timeout_start == 0): #SI SALTA TIMEOUT SIGNIFICA QUE PERDI UN PAQUETE Y POR ENDE TENGO QUE VOLVER A INICIAR EL TIMER Y
-                                        # ENVIAR LOS PAQUETES QUE ME QUEDARON EN LA LISTA DE PAQUETES EN VUELO
-                    timeout_start = time.time()
-                    for pck in self.paquetesEnVuelo:
-                        entidad.enviarPaquete(self.gestorPaquetes.pasarPaqueteABytes(pck))
+            #Quiero el ultimo ack nomas, si es True es porque los anteriores hasta ese llegaron bien
+            print("ultimo pck recibido: ",pck_recibido)
+            if (ackEsperado) : #SI RECIBO UN ACK, SIGNIFICA QUE RECIBI EL ACK DEL ULTIMO PAQUETE QUE LLEGO BIEN
+                                # (ES DECIR QUE, TODOS LOS PAQUETES ANTERIORES TMB LLEGARON BIEN)
+                #muevo el older_seq_number a la posicion siguiente al new_seq_number
+                self.older_seq_number = pck_recibido.obtenerSeqNumber()+1 
+                if(self.older_seq_number == pck_recibido.obtenerSeqNumber()): 
+                    timeout_start = 0 #reinicio el timer porque los paquetes me llegaron bien, corro el older porque tengo que mandar paquetes nuevos 
+                for pck in range(len(self.paquetesEnVuelo)): #borro los paquetes anteriores al ack que recibi, porque llegaron bien
+                    if(pck <= pck_recibido.obtenerSeqNumber()):
+                        self.paquetesEnVuelo.remove(self.paquetesEnVuelo[pck])
+            if(timeout_start == 0): #SI SALTA TIMEOUT SIGNIFICA QUE PERDI UN PAQUETE Y POR ENDE TENGO QUE VOLVER A INICIAR EL TIMER Y
+                                    # ENVIAR LOS PAQUETES QUE ME QUEDARON EN LA LISTA DE PAQUETES EN VUELO
+                timeout_start = time.time()
+                for pck in self.paquetesEnVuelo:
+                    entidad.enviarPaquete(self.gestorPaquetes.pasarPaqueteABytes(pck))
 
-                mensaje = file.read(MSJ_SIZE)
-                if(len(mensaje) > 0):
-                    print("older ",self.older_seq_number)
-                    print("iteracion: ",i)
-                    i += 1
-                    continue
+            mensaje = file.read(MSJ_SIZE)
+            """if(len(mensaje) > 0):
+                print("older ",self.older_seq_number)
+                print("iteracion: ",i)
+                i += 1
+                continue"""
 
-            print("\n sali del while \n ")
-            break
+        print("\n sali del while \n ")
         
             #falta código
 
