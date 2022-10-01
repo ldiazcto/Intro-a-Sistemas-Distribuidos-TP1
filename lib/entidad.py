@@ -13,11 +13,11 @@ MAX_WAIT_RESPONSE = 10
 
 class Entidad(ABC):
 
-        def __init__(self,name,port):
+        def __init__(self,name, miPuerto, puertoEntradaContrario):
                 self.name = name #el nombre de a quien le envía esta entidad
-                self.port = port #el port de entrada del contrario (si por ejemplo est'as instanciando un cliente, este es el puerto por donde escucha el servidor)
+                self.puertoEntradaContrario = puertoEntradaContrario #el port de entrada del contrario (si por ejemplo est'as instanciando un cliente, este es el puerto por donde escucha el servidor)
                 self.entidadSocket = socket(AF_INET,SOCK_DGRAM)
-                self.entidadSocket.bind('',port)
+                self.entidadSocket.bind(('',miPuerto))
 
 
 
@@ -55,7 +55,7 @@ class Entidad(ABC):
 
 
         def enviarPaquete(self,pckBytes):
-                self.entidadSocket.sendto(pckBytes ,(self.name,self.port))
+                self.entidadSocket.sendto(pckBytes ,(self.name,self.puertoEntradaContrario))
         
         def enviarArchivo(self, file, enviador):
             enviador.enviarPaquete(file, self)

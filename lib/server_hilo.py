@@ -11,9 +11,9 @@ import gestorPaquetes
 class Server(threading.Thread,entidad.Entidad):
     def __init__(self):
         threading.Thread.__init__(self)
-        entidad.Entidad.__init__(self,'',12000)
+        entidad.Entidad.__init__(self,'',12001, 8081) #no me sirven estos sockets
         self.conexiones = {}
-        serverPort = 12000 #puerto por donde escucha el server, el puerto publico
+        serverPort = 12000 #los dos puertos del servidor 
         self.serverSocket = socket(AF_INET, SOCK_DGRAM)
         self.serverSocket.bind(('',serverPort)) #''  es para que escuche a todos --- serverPort es por d'onde escucha el server
         self.serverSocket.setblocking(False)

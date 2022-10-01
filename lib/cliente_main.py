@@ -101,7 +101,7 @@ def main():
     
     # logger.info("Se inicio el logger")
     
-    cliente_prueba = cliente.Cliente("localhost", 8080)
+    cliente_prueba = cliente.Cliente("localhost", 8080, 12000) #los dos puertos del cliente son 8080 y el server escucha del 12000
     stopWait = stopAndWait.StopAndWait()
     #backN = goBackNNuevo.GoBackNNuevo() #llamo a la clase, y me ejecuta el constructor
     print("Se creo el cliente con exito")

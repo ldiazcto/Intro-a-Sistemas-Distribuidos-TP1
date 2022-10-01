@@ -16,8 +16,8 @@ BLOCKING = 1
 
 class Cliente(entidad.Entidad):
     
-    def __init__(self, name, port):
-        super(Cliente,self).__init__(name,port)
+    def __init__(self, name, miPuerto, puertoEntradaContrario):
+        super(Cliente,self).__init__(name, miPuerto, puertoEntradaContrario)
         self.gestorPaquetes = gestorPaquetes.Gestor_Paquete()
         
         #logger.info("Llegue al cliente")
