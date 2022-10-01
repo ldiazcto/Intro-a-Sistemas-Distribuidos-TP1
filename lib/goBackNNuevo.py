@@ -14,7 +14,7 @@ class GoBackNNuevo(enviador.Enviador):
         self.older_seq_number = 1
         self.new_seq_number = 0
         self.paquetesEnVuelo = []
-        self.paquetesRecibidos = []
+        self.acksRecibidos = []
         super(GoBackNNuevo,self).__init__()
 
     def enviar(self,mensaje,entidad):
@@ -35,10 +35,12 @@ class GoBackNNuevo(enviador.Enviador):
                 pck_recibido = entidad.recibirPaqueteBackN(timeout_start) #salgo del continue y obtengo el ultimo paquete recibido
                 #me llegó ack, lo revisamos
                 print("pck_recibido: ",pck_recibido)
-                ackEsperado = self.gestorPaquetes.actualizarACK(pck_recibido)
+                ackRecibido = self.gestorPaquetes.actualizarACK(pck_recibido)
+                if(ackRecibido):
+                    self.acksRecibidos.append(ackRecibido)
             #Quiero el ultimo ack nomas, si es True es porque los anteriores hasta ese llegaron bien
             print("ultimo pck recibido: ",pck_recibido)
-            if (ackEsperado) : #SI RECIBO UN ACK, SIGNIFICA QUE RECIBI EL ACK DEL ULTIMO PAQUETE QUE LLEGO BIEN
+            if (ackRecibido) : #SI RECIBO UN ACK, SIGNIFICA QUE RECIBI EL ACK DEL ULTIMO PAQUETE QUE LLEGO BIEN
                                 # (ES DECIR QUE, TODOS LOS PAQUETES ANTERIORES TMB LLEGARON BIEN)
                 #muevo el older_seq_number a la posicion siguiente al new_seq_number
                 self.older_seq_number = pck_recibido.obtenerSeqNumber()+1 
@@ -51,7 +53,7 @@ class GoBackNNuevo(enviador.Enviador):
                                     # ENVIAR LOS PAQUETES QUE ME QUEDARON EN LA LISTA DE PAQUETES EN VUELO
                 timeout_start = time.time()
                 for pck in range(len(self.paquetesEnVuelo)):
-                    if(pck > pck_recibido.obtenerSeqNumber()):
+                    if(pck > len(self.acksRecibidos)):
                         entidad.enviarPaquete(self.gestorPaquetes.pasarPaqueteABytes(self.paquetesEnVuelo[pck]))
 
             mensaje = file.read(MSJ_SIZE)
