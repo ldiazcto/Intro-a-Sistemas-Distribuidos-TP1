@@ -1,5 +1,5 @@
 import os
-import cliente, stopAndWait, goBackNNuevo #nombre del archivo
+import cliente, stopAndWait, goBackN #nombre del archivo
 import getopt
 import sys
 import logging
@@ -105,7 +105,7 @@ def main():
     
     cliente_prueba = cliente.Cliente("localhost", 8080, 12000) #los dos puertos del cliente son 8080 y el server escucha del 12000
     #stopWait = stopAndWait.StopAndWait()
-    backN = goBackNNuevo.GoBackNNuevo() #llamo a la clase, y me ejecuta el constructor
+    backN = goBackN.GoBackN() #llamo a la clase, y me ejecuta el constructor
     print("Se creo el cliente con exito")
 
     ruta = "./lib/hola.txt"
@@ -116,7 +116,7 @@ def main():
     print("----------------------------El resultado de mi handshake es: ", resultado)
     
     file = abrirArchivo("./lib/hola.txt")
-    if resultado == True : cliente_prueba.enviarArchivo(file,stopWait)
+    if resultado == True : cliente_prueba.enviarArchivo(file, backN)
     return 0
 main()
     # opciones, argumentos = obtenerArgumentos()
