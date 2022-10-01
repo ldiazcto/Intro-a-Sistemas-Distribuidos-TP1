@@ -67,7 +67,7 @@ class Conexion(threading.Thread):
         print ("paqueteBytes: ",paqueteBytes)
         print("\n")
 
-    def procesar_mensaje(self,paqueteBytes):
+    def procesar_mensaje(self,paqueteBytes,file):
         if paqueteBytes == "FIN":
             print ("CIERRO CONEXION")
             self.conexion_activa = False
@@ -110,6 +110,8 @@ class Conexion(threading.Thread):
         """
         if (self.gestor_paquete.verificar_mensaje_recibido(paquete) == True):
             paquete_ack = self.gestor_paquete.crearPaqueteACK(1)
+            print("Escribo en el archivo")
+            file.write(paquete.obtenerMensaje())
             print("mando ack verificado")
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
         else:
@@ -157,7 +159,9 @@ class Conexion(threading.Thread):
 
         if self.esHandshakeUpload(paquete) :
                 print("Es de tipo upload")
-                self.recibir_archivo()
+                filepath = self.obtener_ruta_archivo(paquete)
+                file = open(file, 'ab')
+                self.recibir_archivo(file)
                 #lógica para el upload
         else :
                 x=2
@@ -170,7 +174,13 @@ class Conexion(threading.Thread):
         print("entre a procesar handshake apropiado")
         return (paquete.esDownload() or paquete.esUpload())
 
-
+    def obtener_ruta_archivo(self,paquete):
+        nombre_archivo , tam = self.obtenerNombreYTamanio(paquete)
+        path = os.getcwd()
+        new_path = path + "/lib"
+        #print("Path de archivos",new_path)
+        filepath= new_path + "/" + nombre_archivo
+        return filepath
 
     def obtenerNombreYTamanio(self, paquete):
         mensaje = paquete.obtenerMensaje()
@@ -235,7 +245,7 @@ class Conexion(threading.Thread):
         self.skt.sendto(pckBytes,(self.ip_cliente,self.puerto_cliente))
     
 
-    def recibir_archivo(self):
+    def recibir_archivo(self,file):
         time_start = time.time()
         while time.time() <= time_start + MAX_WAIT_SERVIDOR:
             if self.conexion_activa == False:
@@ -247,5 +257,5 @@ class Conexion(threading.Thread):
                 if paqueteBytes is None:   # If you send `None`, the thread will exit.
                     return
                 self.imprimir_mensaje(paqueteBytes)
-                self.procesar_mensaje(paqueteBytes)
+                self.procesar_mensaje(paqueteBytes,file)
             
