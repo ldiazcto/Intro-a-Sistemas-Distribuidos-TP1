@@ -22,7 +22,6 @@ class GoBackNNuevo(enviador.Enviador):
 
     def enviarPaquete(self,file,entidad):
         mensaje = file.read(MSJ_SIZE)
-        i=0
         while (len(mensaje) > 0):
             #si el numero de sequencia del siguiente paquete a enviar es menor al numero de seq del primer paquete que envie __
             if(self.new_seq_number < self.older_seq_number + N):
@@ -49,8 +48,8 @@ class GoBackNNuevo(enviador.Enviador):
                 for pck in range(len(self.paquetesEnVuelo)): #borro los paquetes anteriores al ack que recibi, porque llegaron bien
                     if(pck <= pck_recibido.obtenerSeqNumber()):
                         self.paquetesEnVuelo.remove(self.paquetesEnVuelo[pck])
-            if(timeout_start == 0): #SI SALTA TIMEOUT SIGNIFICA QUE PERDI UN PAQUETE Y POR ENDE TENGO QUE VOLVER A INICIAR EL TIMER Y
-                                    # ENVIAR LOS PAQUETES QUE ME QUEDARON EN LA LISTA DE PAQUETES EN VUELO
+            if(pck_recibido == None): #SI PCK RECIBIDO ES NONE SIGNIFICA QUE SALTO TIMEOUT, ENTONCES PERDI UN PAQUETE Y POR ENDE TENGO 
+                                    #QUE VOLVER A INICIAR EL TIMER Y ENVIAR LOS PAQUETES QUE ME QUEDARON EN LA LISTA DE PAQUETES EN VUELO
                 timeout_start = time.time()
                 for pck in range(len(self.paquetesEnVuelo)):
                     if(pck > len(self.acksRecibidos)):
