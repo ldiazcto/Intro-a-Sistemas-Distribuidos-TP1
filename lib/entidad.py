@@ -76,15 +76,21 @@ class Entidad(ABC):
                         return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
 
         def recibirPaqueteBackN(self):
-                self.entidadSocket.setblocking(NOT_BLOCKING)
+                self.entidadSocket.setblocking(False)
+                lista_sockets_listos = select.select([self.entidadSocket], [], [], 0)
+                if not lista_sockets_listos[0]:
+                        return None
+                paqueteString, sourceAddress = self.entidadSocket.recvfrom(2048)
+                print("recibirPaquete: el string del paquete es: ", paqueteString)
+                return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
+                """
                 try :
                         paqueteString, sourceAddress = self.entidadSocket.recvfrom(2048)
                         self.entidadSocket.setblocking(BLOCKING)
                         return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
                 except BlockingIOError:
                         return None
-                
-      
+                """
 
         def recibirArchivo(self, ruta):
             #pensarla, tal vez puede ser genérica

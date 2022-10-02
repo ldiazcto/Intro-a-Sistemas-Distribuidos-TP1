@@ -74,12 +74,14 @@ class Conexion(threading.Thread):
             paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_CORRECT)
             file.write(paquete.obtenerMensaje())
             print("El paquete ACK que voy a mandar por haber entrado a True es: ", self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
+            #time.sleep(2)
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
             print("Envié el paquete ACK positivo a esta ip y puerto ", (self.ip_cliente,self.puerto_cliente))
         else:
             print("Al verificar el paquete, resulta que es False")
             paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_INCORRECT)
             print(self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
+            #time.sleep(2)
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
         
     def esta_activa(self):
@@ -219,8 +221,9 @@ class Conexion(threading.Thread):
             if self.conexion_activa == False:
                 return
             if self.hay_data: #verifico si me pasaron nueva data
+                time_start = time.time()
                 paqueteBytes = self.queue.pop(0) #obtengo la data
-                print("\n\n-- En recibi_archivo, el paqueteBytes recien recibido es: ", paqueteBytes)
+                #print("\n\n-- En recibi_archivo, el paqueteBytes recien recibido es: ", paqueteBytes)
                 if len(self.queue) == 0:
                     self.hay_data = False #si la cola queda vacia establezco que no hay mas data, por ahora
                 if paqueteBytes is None:   # If you send `None`, the thread will exit.
@@ -228,4 +231,4 @@ class Conexion(threading.Thread):
                 self.imprimir_mensaje(paqueteBytes)
                 self.procesar_mensaje(paqueteBytes,file)
                 #print("Volvi de procesar_mensaje, el paqueteBytes era: ", paqueteBytes)
-                print("\n\n")
+                #print("\n\n")

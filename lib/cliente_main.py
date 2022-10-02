@@ -104,20 +104,22 @@ def main():
     # logger.info("Se inicio el logger")
     
     cliente_prueba = cliente.Cliente("localhost", 8080, 12000) #los dos puertos del cliente son 8080 y el server escucha del 12000
-    #stopWait = stopAndWait.StopAndWait()
+    stopWait = stopAndWait.StopAndWait()
     backN = goBackN.GoBackN() #llamo a la clase, y me ejecuta el constructor
     print("Se creo el cliente con exito")
 
-    ruta = "/Users/abrildiazmiguez/Desktop/Intro_a_Distr/Intro-a-Sistemas-Distribuidos-TP1/lib/foto_prueba.png"
+    ruta = "/home/fede/Desktop/distribuidos/alternativa/Intro-a-Sistemas-Distribuidos-TP1/lib/foto_prueba.png"
     file_name = "nueva_foto_prueba_GBN.png"
+    ruta2 = "/home/fede/Desktop/distribuidos/alternativa/Intro-a-Sistemas-Distribuidos-TP1/lib/hola.txt"
+
     #file_size = os.path.getsize(ruta)
     #print("El tam de mi archivo es: ", file_size)
 
-    resultado = cliente_prueba.entablarHandshake(file_name, 166997, UPLOAD)
+    resultado = cliente_prueba.entablarHandshake("hola3.txt", 166997, UPLOAD)
     print("----------------------------El resultado de mi handshake es: ", resultado)
     
-    file = abrirArchivo(ruta)
-    if resultado == True : cliente_prueba.enviarArchivo(file, backN)
+    file = abrirArchivo(ruta2)
+    if resultado == True : cliente_prueba.enviarArchivo(file,backN)
     return 0
 
 main()
