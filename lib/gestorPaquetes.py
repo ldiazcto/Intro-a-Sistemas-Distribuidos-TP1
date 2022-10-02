@@ -89,7 +89,7 @@ class Gestor_Paquete:
             return False
         return pck.esRefused()
 
-#nombre raro, mejor verificarPaqueteOrdenado o algo así, para explicitar que estoy chequeando si llegó el paquete con el seq number apropiado
+    #antes verificar_mensaje_recibido o algo así, aclaro por las dudas
     def verificarPaqueteOrdenado(self,paquete):
         if (paquete == None):
             return False
@@ -97,59 +97,3 @@ class Gestor_Paquete:
         print("En verificarPaqueteOrdenado, el seq number global del gestor es = ", self.seq_number)
         return (paquete.obtenerSeqNumber() == self.seq_number)
     
-
-    """
-    def obtener_data(self,mensaje):
-        return mensaje[self.COMIENZA_DATA:]
-
-    def verificar_mensaje(self,mensaje):
-        seq_number_recibido = int.from_bytes(mensaje[self.COMIENZA_SEQ_NUMBER:self.FIN_SEQ_NUMBER],"big")
-        if(seq_number_recibido == self.seq_number):
-            self.seq_number += 1
-            return True
-    
-    def verificar_ack(self,mensaje):
-        seq_number_recibido = int.from_bytes(mensaje[self.COMIENZA_SEQ_NUMBER:self.FIN_SEQ_NUMBER],"big")
-        ack_recibido = int.from_bytes(mensaje[self.COMIENZA_ACK:self.FIN_ACK],"big")
-        if(seq_number_recibido == self.seq_number and ack_recibido == 1):
-            self.seq_number += 1
-            return True
-    
-    def verificar_paquete_ack(self,paquete):
-        seqNumberObtenido = paquete.obtenerSeqNumber()
-        return (seqNumberObtenido == self.seq_number - 1)
-
-    """
-
-"""
----Para enviar mensaje---
-leer_archivo -> mensaje_bytes
-gestor -> crea_paquete
-gestor-> devolver_tira_bytes
-enviar -> tira_bytes
-recibir->ack (continuar de acuerdo a esto)
-
-leo del archivo -> mensaje_bytes -> paquete -> paqueteBytes -> lo envío
-                
-leo del archivo -> mensaje_bytes -> gestor.crear_paquete(mensaje_bytes) -> gestor.obtener_tira_bytes(paquete) -> enviar_paquete(tira_bytes)
-
-
-
----Recibir mensaje---
-recibir->tira_bytes (con recevfrom o lo que sea, del socket)
-(Listo) - gestor-> pasar_bytes_a_paquete (creamos entidad paquete y laburamos con el paquete)
-gestor-> verificar_paquete (si el paquete esperao era el correcto o se perdió uno en el camino)
-    si llego bien el paquete -> escribir_el_archivo -> mensaje
-gestor -> crear_ack (ya sea positivo o negativo)
-enviar-> ack (por socket)
-
-"""
-"""
-CODIGO:
-0 DATA
-1 ES ACK
-2 Upload
-    mensaje = filename-tamaño
-3 DOWNLOAD
-    mensaje = filename
-"""

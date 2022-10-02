@@ -3,8 +3,7 @@ from socket import *
 import time
 import enviador
 
-MSJ_SIZE = 5
-MAX_WAIT = 1
+MSJ_SIZE = 150
 
 
 class StopAndWait(enviador.Enviador):

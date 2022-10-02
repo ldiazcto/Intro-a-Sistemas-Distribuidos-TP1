@@ -108,17 +108,18 @@ def main():
     backN = goBackN.GoBackN() #llamo a la clase, y me ejecuta el constructor
     print("Se creo el cliente con exito")
 
-    ruta = "./lib/hola.txt"
-    file_name = "hola2.txt"
-    file_size = os.path.getsize(ruta)
-    print("El tam de mi archivo es: ", file_size)
+    ruta = "/Users/abrildiazmiguez/Desktop/Intro_a_Distr/Intro-a-Sistemas-Distribuidos-TP1/lib/foto_prueba.png"
+    file_name = "nueva_foto_prueba_GBN.png"
+    #file_size = os.path.getsize(ruta)
+    #print("El tam de mi archivo es: ", file_size)
 
-    resultado = cliente_prueba.entablarHandshake(file_name, file_size, UPLOAD)
+    resultado = cliente_prueba.entablarHandshake(file_name, 166997, UPLOAD)
     print("----------------------------El resultado de mi handshake es: ", resultado)
     
-    file = abrirArchivo("./lib/hola.txt")
+    file = abrirArchivo(ruta)
     if resultado == True : cliente_prueba.enviarArchivo(file, backN)
     return 0
+
 main()
     # opciones, argumentos = obtenerArgumentos()
     # print("OPCIONES: ",opciones)

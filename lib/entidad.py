@@ -6,7 +6,7 @@ import select
 
 UPLOAD = 2
 MAX_TRIES = 2
-MAX_WAIT = 1
+MAX_WAIT = 20
 NOT_BLOCKING= 0 
 BLOCKING = 1
 MAX_WAIT_RESPONSE = 10
@@ -29,6 +29,9 @@ class Entidad(ABC):
                 mensaje = fileName
                 if (operador == UPLOAD) :
                         mensaje = mensaje + caracterSeparador + str(fileSize)
+                else:
+                        x=1
+                        #falta la lógica donde se agrega lo necesario para el download
                 return self.gestorPaquetes.crearPaqueteHandshake(operador, mensaje)
 
 
@@ -69,6 +72,7 @@ class Entidad(ABC):
                         if not lista_sockets_listos[0]:
                                 continue
                         paqueteString, sourceAddress = self.entidadSocket.recvfrom(2048)
+                        print("recibirPaquete: el string del paquete es: ", paqueteString)
                         return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
 
         def recibirPaqueteBackN(self):

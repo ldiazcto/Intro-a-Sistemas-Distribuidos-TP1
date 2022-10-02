@@ -19,8 +19,8 @@ ACK_CORRECT = 1
 ACK_INCORRECT = 0
 
 MAX_WAIT_HANDSHAKE = 30
-MAX_TAMANIO_PERMITIDO = 500 #en bytes
-MAX_WAIT_SERVIDOR = 10 #30 segs
+MAX_TAMANIO_PERMITIDO = 5000000 #en bytes
+MAX_WAIT_SERVIDOR = 300 #PELIGRO! TIMEOUT DEL SERVER!!
 
 class Conexion(threading.Thread):
     def __init__(self,numero_hilo, conexion_cliente):
@@ -82,12 +82,6 @@ class Conexion(threading.Thread):
             print(self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
         
-    
-    #POSIBLE BORRADO
-    """def enviar_mensaje(self):
-        self.skt.sendto("Respuesta".encode(),(self.ip_cliente,self.puerto_cliente))
-    """
-
     def esta_activa(self):
         return self.conexion_activa
 
@@ -128,7 +122,7 @@ class Conexion(threading.Thread):
         else :
                 print("Es de tipo download")
                 """
-                filepath,tipo = self.obtener_ruta_archivo_download(paquete)
+                filepath, tipo = self.obtener_ruta_archivo_download(paquete)
                 if(tipo == "stopAndWait"):
                     env = stopAndWait.StopAndWait()
                     env.enviarPaquete(filepath)
@@ -146,8 +140,11 @@ class Conexion(threading.Thread):
         print("entre a procesar handshake apropiado")
         return (paquete.esDownload() or paquete.esUpload())
 
+
+  
+
     def obtener_ruta_archivo_download(self,paquete):
-        nombre_archivo,tipo_envio = paquete.obtenerMensaje()
+        nombre_archivo, tipo_envio = self.obtenerNombreYTipo(paquete)
         path = os.getcwd()
         new_path = path + "/lib"
         #print("Path de archivos",new_path)
