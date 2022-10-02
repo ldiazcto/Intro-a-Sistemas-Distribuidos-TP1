@@ -27,7 +27,7 @@ class Gestor_Paquete:
 
     #cuando creas un paquete de tipo ACK
     def crearPaqueteACK(self, agregado):
-        self.seq_number_receiver += agregado #no se usa en ningun lugar
+        self.seq_number += agregado #antes er seq_number_receiver, lo cambié para probar
         self.ack_number_receiver += agregado
         return paquete.Paquete(self.ack_number_receiver, ACK, None)
 
