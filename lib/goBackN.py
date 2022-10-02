@@ -60,7 +60,7 @@ class GoBackN(enviador.Enviador):
                     
 
             # -- REENVIAR PCKS EN CASO DE ERROR --
-            timer_actual = (time.time() - timeout_start)  >= MAX_WAIT_GOBACKN )
+            timer_actual = (time.time() - timeout_start)  >= MAX_WAIT_GOBACKN
             print("EGoBackN: El timer saltó? ", timer_actual)
             print("El timeout_start + MAXWAIT, que es el timer = ", timeout_start + MAX_WAIT_GOBACKN)
             if(ackRecibido == False and  timer_actual): #SI SALTO TIMEOUT, ENTONCES PERDI UN PAQUETE Y POR ENDE TENGO 
