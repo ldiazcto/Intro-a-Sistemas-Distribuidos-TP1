@@ -27,7 +27,7 @@ class MenuCliente:
         self.parser = parser.Parser()
         self.filename = ""
         self.filepath = "" # -s para upload -d para download
-        self.port = 12000
+        self.port = 8080
         self.serverAdress = "" # --host/ -H
         self.transferencia = ""
         self.protocolo = stopAndWait.StopAndWait()
@@ -81,8 +81,10 @@ class MenuCliente:
                 
                 if(opt in ('-n','--name')):
                     self.filename = arg
-                    self.transferencia = UPLOAD
-
+                
+                if(opt in ('-o','--option')):
+                    self.protocolo = self.parser.cambiarProtocolo()
+                    
                 # ---------------------------------UPLOAD
                 if(sys.argv[1] == "--upload"):
                     if(opt in ('-s','--src')):
@@ -109,19 +111,20 @@ class MenuCliente:
 
         #Ya parsie, setie, se la transferencia, ahora procedo a intentar hacerla, handhshake
 
-        cliente_prueba = cliente.Cliente("localhost", self.port)
+        cliente = cliente.Cliente("localhost", self.port, 12000) #server adress Ip adress,  puertoEntradaContrario
         if(sys.argv[1] == "--upload"):
             ruta = self.filepath + "/" + self.filename
             print("Mi file es: ", ruta)
             file = self.abrirArchivo(ruta)
-            file_size = os.path.getsize(ruta)
-            handshakeExitoso = cliente_prueba.entablarHandshake(ruta, file_size, UPLOAD)
-            if handshakeExitoso == True: cliente_prueba.enviarArchivo(file,self.protocolo)
+            filesize = os.path.getsize(ruta)
+            handshakeExitoso = cliente.entablarHandshake(self.filename, filesize, UPLOAD)
+            if handshakeExitoso == True: cliente.enviarArchivo(file,self.protocolo)
             self.cerrarArchivo(file)
         else:
             print("Para el download")
-            # handshakeExitoso = cliente.entablarHandshake(ruta, tamanio_archivo, DOWNLOAD)
-            # if handshakeExitoso == True : cliente_prueba.recibirArchivo(FILEPATH,FILENAME, PROTOCOLO)
+            #falta logica para handshake download
+            #handshakeExitoso = cliente.entablarHandshake(ruta, tamanio_archivo, DOWNLOAD)
+            #if handshakeExitoso == True : cliente.recibirArchivo(self.filepath,self.filename, self.protocolo)
 
         return 0
 

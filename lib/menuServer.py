@@ -25,7 +25,6 @@ class MenuServer:
 
     def __init__(self):    
         self.parser = parser.Parser()
-        self.filename = ""
         self.filepath = "" # -s para upload -d para download
         self.port = 12000
         self.serverAdress = "" # --host/ -H
@@ -72,55 +71,31 @@ class MenuServer:
                                         + "-s, --storage              storage dir path\n"
                                         + "-o  --option               protocol")
                                 sys.exit(0)
-            if sys.argv[1] == "start-server":
+            if sys.argv[1] == "--start-server":
                 print("Entro a elegir mis opciones: ", opt)
 
                 self.parser.definirVerbosidad(opt, logger)
                 self.port, self.serverAdress = self.parser.definirPuertoYHost(opt, arg, self.port, self.serverAdress)
-                
-                if(opt in ('-n','--name')):
-                    self.filename = arg
-                    self.transferencia = UPLOAD
 
-                # ---------------------------------UPLOAD
-                if(sys.argv[1] == "--upload"):
-                    if(opt in ('-s','--src')):
-                        self.filepath = arg
-                        self.transferencia = UPLOAD
+                if(opt in ('-o','--option')):
+                    self.protocolo = self.parser.cambiarProtocolo()
 
-                #---------------------------------DOWNLOAD
-                if(sys.argv[1] == "--download"):
-                    if(opt in ('-d','--dst')):
-                        self.filepath = arg
-                        self.transferencia = DOWNLOAD   
+                if(opt in ('-s','--storage')):
+                    self.filepath = arg
             else: 
-                logger.error("Debe ingresar una acción a realizar [--upload]/[--download]")
+                logger.error("Debe iniciar el server [--start-server]")
                 sys.exit(2)
 
-        #Si termine de recorrer mis argumentos y nunca tuve el path para el up o download
+        #Si termine de recorrer mis argumentos y nunca ingreso el path donde almacena los archivos 
         if(self.filepath == ""):
-            logger.error("Debe indicar una ruta de archivo [-s/--src] o [-d/--dst]")
-            sys.exit(2)
-        if (self.filename == ""):
-            logger.error("Debe ingresar el nombre del archivo [-n/--name]")
+            logger.error("Debe indicar una ruta de archivo [-s/--storage]")
             sys.exit(2)
 
-
-        #Ya parsie, setie, se la transferencia, ahora procedo a intentar hacerla, handhshake
-
-        cliente_prueba = cliente.Cliente("localhost", self.port)
-        if(sys.argv[1] == "--upload"):
-            ruta = self.filepath + "/" + self.filename
-            print("Mi file es: ", ruta)
-            file = self.abrirArchivo(ruta)
-            file_size = os.path.getsize(ruta)
-            handshakeExitoso = cliente_prueba.entablarHandshake(ruta, file_size, UPLOAD)
-            if handshakeExitoso == True: cliente_prueba.enviarArchivo(file,self.protocolo)
-            self.cerrarArchivo(file)
-        else:
-            print("Para el download")
-            # handshakeExitoso = cliente.entablarHandshake(ruta, tamanio_archivo, DOWNLOAD)
-            # if handshakeExitoso == True : cliente_prueba.recibirArchivo(FILEPATH,FILENAME, PROTOCOLO)
+        #Si llegue aca, entonces puedo levantar el server 
+        #
+        #
+        #
+        #
 
         return 0
 

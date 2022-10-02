@@ -65,7 +65,5 @@ class Parser:
             
         return port, host
 
-    def definirProtocolo(self, opt, arg, protocolo):
-        if(opt in ('-o','--option')):
-            protocolo = goBackN.GoBackN()
-            
+    def cambiarProtocolo(self):
+           return goBackN.GoBackN()            
