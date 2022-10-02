@@ -28,7 +28,7 @@ class Conexion(threading.Thread):
         self.nombre = numero_hilo
         self.conexion_cliente = conexion_cliente
         self.ip_cliente = conexion_cliente[0]
-        self.puerto_cliente = conexion_cliente[1] #por ac'a escribe o escucha el cliente? --> 
+        self.puerto_cliente = conexion_cliente[1] #por ac'a escribe o escucha el cliente? --> ambos 
         self.skt = socket(AF_INET,SOCK_DGRAM)
         self.queue = []
         self.hay_data = False
@@ -66,14 +66,18 @@ class Conexion(threading.Thread):
         
         paquete = self.gestor_paquete.pasarBytesAPaquete(paqueteBytes)
 
-        print("El paquete recibido en procesar_mensaje es = ", paquete)
+        print("El paqueteBytes recibido en procesar_mensaje es = ", paqueteBytes)
+        print("El mensaje es recibido en procesar_mensaje es = ", paquete.obtenerMensaje())
 
         if (self.gestor_paquete.verificarPaqueteOrdenado(paquete) == True):
+            print("Al verificar el paquete, resulta que es True")
             paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_CORRECT)
             file.write(paquete.obtenerMensaje())
-            print(self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
+            print("El paquete ACK que voy a mandar por haber entrado a True es: ", self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
+            print("Envié el paquete ACK positivo a esta ip y puerto ", (self.ip_cliente,self.puerto_cliente))
         else:
+            print("Al verificar el paquete, resulta que es False")
             paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_INCORRECT)
             print(self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))

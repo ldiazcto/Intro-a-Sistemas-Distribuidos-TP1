@@ -108,7 +108,7 @@ def main():
     backN = goBackN.GoBackN() #llamo a la clase, y me ejecuta el constructor
     print("Se creo el cliente con exito")
 
-    ruta = "./lib/hola2.txt"
+    ruta = "./lib/hola.txt"
     file_name = "hola2.txt"
     file_size = os.path.getsize(ruta)
     print("El tam de mi archivo es: ", file_size)

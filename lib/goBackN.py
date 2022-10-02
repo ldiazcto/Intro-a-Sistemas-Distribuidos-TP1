@@ -33,34 +33,37 @@ class GoBackN(enviador.Enviador):
             #si el numero de sequencia del siguiente paquete a enviar es menor al numero de seq del primer paquete que envie
             # -- ENVIAR ACK --
             if(self.new_seq_number < self.older_seq_number + N):
+                print("---\nGoBackN: puedo enviar un nuevo paquete")
                 if(self.older_seq_number == self.new_seq_number): #entrás cuando corriste la ventana entera
                     timeout_start = time.time()         
                 pck = self.gestorPaquetes.crearPaquete(mensaje)
                 self.paquetesEnVuelo.append(pck)
                 entidad.enviarPaquete(self.gestorPaquetes.pasarPaqueteABytes(pck))
-                print("Mensaje que acabo de enviar: ", mensaje)
+                print("GoBackN: Mensaje que acabo de enviar: ", mensaje)
                 self.new_seq_number = pck.obtenerSeqNumber()
             
             # -- RECIBIR ACK --
             pck_recibido = entidad.recibirPaqueteBackN() #obtengo el ultimo paquete recibido
+            print("GoBackN: El pack_recibido es ", pck_recibido)
             ackRecibido = self.gestorPaquetes.actualizarACK(pck_recibido)
-            print("El ack recibido es ", ackRecibido)
+            print("GoBackN: actualizarACK devolvió ", ackRecibido)
             print("\n")
-            #ackRecibido = True
+
             # -- VERIFICACION DE ACK --
             if (ackRecibido == True) : #SI RECIBO UN ACK, SIGNIFICA QUE RECIBI EL ACK DEL ULTIMO PAQUETE QUE LLEGO BIEN
                                         # (ES DECIR QUE, TODOS LOS PAQUETES ANTERIORES TMB LLEGARON BIEN)
                 #muevo el older_seq_number a la posicion siguiente al new_seq_number
-                print("recibi un nuevo ack positivo")
+                print("GoBackN: Recibi un nuevo ack positivo!")
                 self.older_seq_number = pck_recibido.obtenerSeqNumber()+1 
                 timeout_start = time.time() #reinicio el timer porque los paquetes me llegaron bien, corro el older porque tengo que mandar paquetes nuevos 
                 self.paquetesEnVuelo.pop(0) #borro el paquete que llego bien (voy borrando de a uno)
                     
 
             # -- REENVIAR PCKS EN CASO DE ERROR --
-            print("El time actual: ", time.time())
+            timer_actual = (time.time() - timeout_start)  >= MAX_WAIT_GOBACKN )
+            print("EGoBackN: El timer saltó? ", timer_actual)
             print("El timeout_start + MAXWAIT, que es el timer = ", timeout_start + MAX_WAIT_GOBACKN)
-            if(ackRecibido == False and  (time.time() - timeout_start)  >= MAX_WAIT_GOBACKN ): #SI SALTO TIMEOUT, ENTONCES PERDI UN PAQUETE Y POR ENDE TENGO 
+            if(ackRecibido == False and  timer_actual): #SI SALTO TIMEOUT, ENTONCES PERDI UN PAQUETE Y POR ENDE TENGO 
                                     #QUE VOLVER A INICIAR EL TIMER Y ENVIAR LOS PAQUETES QUE ME QUEDARON EN LA LISTA DE PAQUETES EN VUELO
                 timeout_start = time.time()
                 for pck in range(len(self.paquetesEnVuelo)):
