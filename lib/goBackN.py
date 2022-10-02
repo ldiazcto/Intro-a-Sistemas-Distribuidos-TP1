@@ -84,40 +84,8 @@ class GoBackN(enviador.Enviador):
      
 
             mensaje = file.read(MSJ_SIZE)
-        
 
-    """"
-        # -- NO TENGO M'AS PARA LEER, SOLO RECIBO Y REENVIO --
-        while time.time() <= timeout_start + MAX_WAIT_GOBACKN and len(self.paquetesEnVuelo) != 0:
-            # -- RECIBIR ACK --
-            print("\n Entre al ultimo while")
-            pck_recibido = entidad.recibirPaqueteBackN() #obtengo el ultimo paquete recibido
-            print("pck_recibido: ", pck_recibido)
-            ackRecibido = self.gestorPaquetes.actualizarACK(pck_recibido)
-            
-            # -- VERIFICACION DE ACK --
-            if (ackRecibido == True) : #SI RECIBO UN ACK, SIGNIFICA QUE RECIBI EL ACK DEL ULTIMO PAQUETE QUE LLEGO BIEN
-                                        # (ES DECIR QUE, TODOS LOS PAQUETES ANTERIORES TMB LLEGARON BIEN)
-                #muevo el older_seq_number a la posicion siguiente al new_seq_number
-                print(" -------Entre al primer if-------")
-                self.older_seq_number = pck_recibido.obtenerSeqNumber()+1 
-                timeout_start = time.time() #reinicio el timer porque los paquetes me llegaron bien, corro el older porque tengo que mandar paquetes nuevos 
-                self.paquetesEnVuelo.pop(0) #borro el paquete que llego bien (voy borrando de a uno)
-                    
-            # -- REENVIAR PCKS EN CASO DE ERROR --
-            if(ackRecibido == False and timeout_start + MAX_WAIT_GOBACKN <= time.time() ): #SI SALTO TIMEOUT, ENTONCES PERDI UN PAQUETE Y POR ENDE TENGO 
-                                    #QUE VOLVER A INICIAR EL TIMER Y ENVIAR LOS PAQUETES QUE ME QUEDARON EN LA LISTA DE PAQUETES EN VUELO
-                print(" \nEntre al segundo if\n")
-                timeout_start = time.time()
-                for pck in range(len(self.paquetesEnVuelo)):
-                    entidad.enviarPaquete(self.gestorPaquetes.pasarPaqueteABytes(self.paquetesEnVuelo[pck]))
-
-
-
-        print("\n sali de los dos whiles, todo deber'ia haber sido procesado \n ")
-    
-        return 1
-        """
+   
 
 """
 El cliente solo va a necesitar un solo timer del paquete en vuelo mas antiguo, cuando se agota el tiempo de espera el cliente
