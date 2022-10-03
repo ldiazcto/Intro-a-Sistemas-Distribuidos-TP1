@@ -1,7 +1,9 @@
+import os
 from socket import *
 import time
 import enviador
-import paquete
+import gestorPaquetes
+import select
 
 MSJ_SIZE = 1500
 TAM_VENTANA = 50 #tamanio de la ventana
@@ -9,79 +11,79 @@ MAX_WAIT_GOBACKN = 5
 MAX_TRIES = 3
 MAX_WAIT_ACKS = 5
 MAX_WAIT_FIN = 10
+MAX_WAIT = 10
+UPLOAD = 2
 
-class GoBackN(enviador.Enviador):
-
-    # GO BACK N TIENE ACK ACUMULATIVOS, SI SE PIERDE UN PAQUETE ME VA A DEVOLVER EL ACK DEL ANTERIOR YA QUE VA A DESCARTAR LOS PAQUETES SIGUIENTES AL QUE PERDIO
-
-    def __init__(self):
+class GoBackN():
+    def __init__(self,sender_ip,sender_port,receiver_ip,receiver_port):
+        self.sender_socekt = socket(AF_INET,SOCK_DGRAM)
+        self.sender_socekt.bind((sender_ip,sender_port)) #''  es para que escuche a todos --- serverPort es por d'onde escucha el server
+        self.sender_socekt.setblocking(False)
+        self.sender_ip = sender_ip
+        self.sender_port = sender_port
+        self.receiver_ip = receiver_ip
+        self.receiver_port = receiver_port
+        self.gestorPaquetes = gestorPaquetes.Gestor_Paquete()
         self.older_seq_number = 1
         self.new_seq_number = 0
         self.paquetesEnVuelo = []
-        super(GoBackN,self).__init__()
-
-    def enviar(self,mensaje,entidad):
-        return 1
 
 
-    def recibirPaqueteACK(self, entidad) :
-        pckRecibido = entidad.recibirPaqueteBackN() #obtengo el ultimo paquete recibido
+    def enviar_archivo(self,filename):
+        path = os.getcwd()
+        new_path = path + "/lib"
+        #print("Path de archivos",new_path)
+        filepath= new_path + "/" + filename
+        file_stats = os.stat(filepath)
+        file_size = file_stats.st_size
+        handshake_establecido = self.entablarHandshake("foto_pruebaGBN.png",file_size)
+        if(handshake_establecido):
+            file = open(filepath,'rb')
+            self.enviarPaquetes(file)
+            file.close()
+        else:
+            print("FALLO EL HANDSHAKE")
+            return
+
+    def entablarHandshake(self, fileName, fileSize):
+        paquete = self.crearPaqueteHandshake_upload(fileName, fileSize)
+        paqueteBytes = self.gestorPaquetes.pasarPaqueteABytes(paquete)
+        i = 0
+        while i <= MAX_TRIES:
+                self.sender_socekt.sendto(paqueteBytes,(self.receiver_ip,self.receiver_port))
+                paqueteRecibido = self.recibirPaquete()
+                #TIMEOUTEA VUELVO A ENVIAR EL HANDSHAKE
+                if (paqueteRecibido == None):
+                        print(i)
+                        i += 1
+                        continue
+                esPaqueteOrdenado = self.gestorPaquetes.verificarACK(paqueteRecibido)
+                if (esPaqueteOrdenado) :
+                        return True
+                esPaqueteRefused = self.gestorPaquetes.verificarRefused(paqueteRecibido)
+                if (esPaqueteRefused) :
+                        return False
+                i +=1
+
+        return False
+
+
+    def recibirPaqueteACK(self) :
+        pckRecibido = self.recibirPaqueteBackN() #obtengo el ultimo paquete recibido
         ackRecibido = self.gestorPaquetes.actualizarACK(pckRecibido)
         return pckRecibido, ackRecibido
+    
+
+    def recibirPaqueteBackN(self):
+                lista_sockets_listos = select.select([self.sender_socekt], [], [], 0)
+                if not lista_sockets_listos[0]:
+                        return None
+                paqueteString, sourceAddress = self.sender_socekt.recvfrom(2048)
+                print("recibirPaquete: el string del paquete es: ", paqueteString)
+                return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
 
 
-    def enviarPaquete(self,file,entidad):
-        #SACAR EL LLAMADO A FUNCION Y EL RETURN
-        self.enviarPaqueteFede(file,entidad)
-        return
-        mensaje = file.read(MSJ_SIZE)
-        timeout_start = 0
-        while (len(mensaje) > 0):
-            
-            #si el numero de sequencia del siguiente paquete a enviar es menor al numero de seq del primer paquete que envie
-            # -- ENVIAR ACK --
-            if(self.new_seq_number < self.older_seq_number + TAM_VENTANA):
-                if(self.older_seq_number == self.new_seq_number): #entrás cuando corriste la ventana entera
-                    timeout_start = time.time()         
-                pck = self.gestorPaquetes.crearPaquete(mensaje)
-                self.paquetesEnVuelo.append(pck)
-                entidad.enviarPaquete(self.gestorPaquetes.pasarPaqueteABytes(pck))
-                self.new_seq_number = pck.obtenerSeqNumber()
-            
-            
-            # -- Espero un poquito de tiempo, porque los paquetes son lentos -- 
-            timerEsperaACKs = time.time()
-            esACKEsperado= False
-            pckRecibido = None
-            print("Envie 1")
-            while(time.time() < timerEsperaACKs + MAX_WAIT_ACKS) and esACKEsperado == False:
-                print("Recibi 1")
-                pckRecibido, esACKEsperado = self.recibirPaqueteACK(entidad)
-                #agrego esta línea porque antes de continuar intentando enviar, sí o sí me tiene que haber llegado algo
-            
-
-            # -- VERIFICACION DE ACK --
-            if (esACKEsperado) : #SI RECIBO UN ACK, SIGNIFICA QUE RECIBI EL ACK DEL ULTIMO PAQUETE QUE LLEGO BIEN
-                                        # (ES DECIR QUE, TODOS LOS PAQUETES ANTERIORES TMB LLEGARON BIEN)
-                #muevo el older_seq_number a la posicion siguiente al new_seq_number
-                self.older_seq_number = pckRecibido.obtenerSeqNumber()+1 
-                timeout_start = time.time() #reinicio el timer porque los paquetes me llegaron bien, corro el older porque tengo que mandar paquetes nuevos 
-                self.paquetesEnVuelo.pop(0) #borro el paquete que llego bien (voy borrando de a uno)
-                    
-
-            # -- REENVIAR PCKS EN CASO DE ERROR --
-            saltoTimerReenvio = (time.time() - timeout_start)  >= MAX_WAIT_GOBACKN
-            if(esACKEsperado == False and  saltoTimerReenvio): #SI SALTO TIMEOUT, ENTONCES PERDI UN PAQUETE Y POR ENDE TENGO 
-                                                            #QUE VOLVER A INICIAR EL TIMER Y ENVIAR LOS PAQUETES QUE ME QUEDARON EN LA LISTA DE PAQUETES EN VUELO
-                timeout_start = time.time()
-                for pck in range(len(self.paquetesEnVuelo)):
-                    entidad.enviarPaquete(self.gestorPaquetes.pasarPaqueteABytes(self.paquetesEnVuelo[pck]))
-     
-
-            mensaje = file.read(MSJ_SIZE)
-
-
-    def enviarPaqueteFede(self,file,entidad):
+    def enviarPaquetes(self,file):
             mensaje = "entrar en ciclo"
             timeout_start = 0
             while (True):
@@ -93,7 +95,8 @@ class GoBackN(enviador.Enviador):
                     if(len(mensaje) != 0):
                         pck = self.gestorPaquetes.crearPaquete(mensaje)
                         self.paquetesEnVuelo.append(pck)
-                        entidad.enviarPaquete(self.gestorPaquetes.pasarPaqueteABytes(pck))
+                        
+                        self.sender_socekt.sendto(self.gestorPaquetes.pasarPaqueteABytes(pck),(self.receiver_ip,self.receiver_port))
                         #print ("Envio Mensaje: ",self.gestorPaquetes.pasarPaqueteABytes(pck))
                         self.new_seq_number = pck.obtenerSeqNumber()
                         if(self.older_seq_number == self.new_seq_number): #entrás cuando corriste la ventana entera
@@ -105,7 +108,7 @@ class GoBackN(enviador.Enviador):
                     break
                 #print("ME QUEDO DANDO VUELTAS")
                 #-- IMPLEMENTACION FEDE
-                pckRecibido, esACKEsperado = self.recibirPaqueteACK(entidad)
+                pckRecibido, esACKEsperado = self.recibirPaqueteACK()
                 #print(esACKEsperado)
                 #if(len(self.paquetesEnVuelo) == TAM_VENTANA and esACKEsperado == False):
                     #continu
@@ -139,29 +142,32 @@ class GoBackN(enviador.Enviador):
                     print("\n\n SALTO EL TIMER \n\n")
                     timeout_start = time.time()
                     for pck in self.paquetesEnVuelo:
-                        entidad.enviarPaquete(self.gestorPaquetes.pasarPaqueteABytes(pck))
+                        self.sender_socekt.sendto(self.gestorPaquetes.pasarPaqueteABytes(pck),(self.receiver_ip,self.receiver_port))
             print("Cantidad paquetes en vuelo: ", len(self.paquetesEnVuelo))
-            self.enviar_fin(entidad)
-            conexion_cerrada,pck_recibido = self.enviar_fin(entidad)
+            conexion_cerrada,pck_recibido = self.enviar_fin()
             if(conexion_cerrada == True):
                 print("CONEXION CERRADO CON EXITO")
             return
+
+
+
     
-    def enviar_fin(self,entidad):
+    def enviar_fin(self):
         pck = self.gestorPaquetes.crearPaqueteFin()
         pckBytes = self.gestorPaquetes.pasarPaqueteABytes(pck)
         print("Mensaje de fin es: ",pckBytes)
-        entidad.enviarPaquete(pckBytes)
+        #entidad.enviarPaquete(pckBytes)
+        self.sender_socekt.sendto(pckBytes,(self.receiver_ip,self.receiver_port))
         cantidad_intentos = 1
         print("\n--El mensaje a enviar es: ", "FIN")
         print("\n-cantidad intentos es ", cantidad_intentos)
 
-        paqueteRecibido = entidad.recibirPaquete()
+        paqueteRecibido = self.recibirPaquete()
         print("Recibi: ",paqueteRecibido)
         while(paqueteRecibido == None and cantidad_intentos <= 3):
             print("\n\n El paquete recibido es de tipo ", paqueteRecibido)
-            entidad.enviarPaquete(pckBytes)
-            paqueteRecibido = entidad.recibirPaquete()
+            #entidad.enviarPaquete(pckBytes)
+            paqueteRecibido = self.recibirPaquete()
             cantidad_intentos += 1
             print("\n--El mensaje a enviar es: ", "FIN")
             print("\n-cantidad intentos es ", cantidad_intentos)
@@ -170,16 +176,23 @@ class GoBackN(enviador.Enviador):
             return (False,None)
         return (True,paqueteRecibido)
 
-        
+
+    def recibirPaquete(self):
+        timeout_start = time.time()
+        while True:
+                lista_sockets_listos = select.select([self.sender_socekt], [], [], 0)
+                var = time.time()
+                if ((var - timeout_start) >= (MAX_WAIT)):
+                        return None
+                if not lista_sockets_listos[0]:
+                        continue
+                paqueteString, sourceAddress = self.sender_socekt.recvfrom(2048)
+                print("recibirPaquete: el string del paquete es: ", paqueteString)
+                return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
 
 
-   
-
-"""
-El cliente solo va a necesitar un solo timer del paquete en vuelo mas antiguo, cuando se agota el tiempo de espera el cliente
-retransmite el paquete N y todos los sucesivos a el. 
-
-Cada vez que recibe un paquete, va a enviar un ACK de los paquetes recibidos correctamente hasta el momento que tiene 
-el numero de secuencia mas alto.
-
-"""
+    def crearPaqueteHandshake_upload(self, fileName, fileSize):
+        caracterSeparador = "-"
+        mensaje = fileName
+        mensaje = mensaje + caracterSeparador + str(fileSize)
+        return self.gestorPaquetes.crearPaqueteHandshake(UPLOAD, mensaje)

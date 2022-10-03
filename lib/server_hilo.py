@@ -28,6 +28,7 @@ class Server(threading.Thread,entidad.Entidad):
                 return
             lista_sokcets_listos = select.select([self.serverSocket], [], [], 1)
             if not lista_sokcets_listos[0]:
+                self.limpiar_conexiones_sin_usar()
                 continue
             message, clientAdress = self.serverSocket.recvfrom(2048) #tamanio buffer para 1 paquete
             #print ("\nEl mensaje recibido por el socket del server es: ", message)
@@ -40,14 +41,17 @@ class Server(threading.Thread,entidad.Entidad):
                 #print(" Vuelvo de iniciar el hilo")
                 self.numero_hilos += 1
             self.conexiones[clientAdress].pasar_data(message) #le paso la data al hilo
-            for conexion in self.conexiones.copy():
+            self.limpiar_conexiones_sin_usar
+                
+    
+    def limpiar_conexiones_sin_usar(self):
+        for conexion in self.conexiones.copy():
                 #print(" Entre a un for de server_hilo")
                 if self.conexiones[conexion].esta_activa() == False:
                     #print(" Entre al if del for")
+                    print("MATO LA CONEXION")
                     self.conexiones[conexion].join() 
-                    self.conexiones.pop(conexion)   
-                
-                
+                    self.conexiones.pop(conexion) 
 
     def cerrar_socket(self):
         self.socket_cerrado = True

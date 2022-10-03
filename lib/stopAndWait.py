@@ -17,17 +17,48 @@ class StopAndWait(enviador.Enviador):
         print("\n-cantidad intentos es ", cantidad_intentos)
 
         paqueteRecibido = entidad.recibirPaquete()
+        print("1 Paquete recibido es de tipo:",paqueteRecibido)
         
         while(paqueteRecibido == None and cantidad_intentos <= 3):
-            print("\n\n El paquete recibido es de tipo ", paqueteRecibido)
+            print("Reenvio mensaje:", mensaje)
             entidad.enviarPaquete(pckBytes)
             paqueteRecibido = entidad.recibirPaquete()
             cantidad_intentos += 1
-            print("\n--El mensaje a enviar es: ", mensaje)
+            print("\n El paquete recibido es de tipo ", paqueteRecibido)
+            if(paqueteRecibido != None): #agrego caso 4 INTENTOS HACEMOS
+                return (True,paqueteRecibido)
+            #print("\n--El mensaje a enviar es: ", mensaje)
+            print("-cantidad intentos es ", cantidad_intentos)
+            print("\n")
+        if(cantidad_intentos > 3):
+            return (False,None)
+        return (True,paqueteRecibido)
+    
+    def enviar_fin(self,entidad):
+        pck = self.gestorPaquetes.crearPaqueteFin()
+        pckBytes = self.gestorPaquetes.pasarPaqueteABytes(pck)
+        entidad.enviarPaquete(pckBytes)
+        cantidad_intentos = 1
+        print("\n--El mensaje a enviar es: ", "FIN")
+        print("\n-cantidad intentos es ", cantidad_intentos)
+
+        paqueteRecibido = entidad.recibirPaquete()
+        
+        while(paqueteRecibido == None and cantidad_intentos <= 3):
+            
+            entidad.enviarPaquete(pckBytes)
+            paqueteRecibido = entidad.recibirPaquete()
+            print("\n\n El paquete recibido es de tipo ", paqueteRecibido)
+            if(paqueteRecibido != None): #agrego caso borde
+                break
+            cantidad_intentos += 1
+            print("\n--El mensaje a enviar es: ", "FIN")
             print("\n-cantidad intentos es ", cantidad_intentos)
         if(cantidad_intentos > 3):
             return (False,None)
         return (True,paqueteRecibido)
+
+
 
 #STOP AND WAIT
     def enviarPaquete(self, file, entidad):
@@ -57,5 +88,8 @@ class StopAndWait(enviador.Enviador):
                 print ("\n intentar mandar ack es False, return")
                 return
             mensaje = file.read(MSJ_SIZE)
+        conexion_cerrada,pck_recibido = self.enviar_fin(entidad)
+        if(conexion_cerrada == True):
+            print("CONEXION CERRADO CON EXITO")
         return
        

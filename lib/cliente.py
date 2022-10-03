@@ -27,6 +27,7 @@ class Cliente(entidad.Entidad):
 #PARA CLIENTE
        
     def enviarArchivo(self, file, enviador):
+        #time.sleep(100)
         enviador.enviarPaquete(file, self)
 
 

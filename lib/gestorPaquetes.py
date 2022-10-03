@@ -62,7 +62,7 @@ class Gestor_Paquete:
                 mensaje =  bytes(mensaje, 'utf-8')
             paqueteBytes += mensaje
 
-        print("paqueteBytes: ", paqueteBytes)
+        #print("paqueteBytes: ", paqueteBytes)
         return paqueteBytes
     
     
@@ -74,7 +74,10 @@ class Gestor_Paquete:
         if (pck == None):
             return False
         if (pck.esACK() == True): #es ack entonces me fijo si coincide el numero de ack con el global para saber si llego todo ok
-            if(pck.obtenerSeqNumber() == self.ack_number_sender):
+            print("ACK RECIBIDO ES: ",pck.obtenerSeqNumber())
+            print("MI SEQ NUMBER ES: ", self.ack_number_sender)
+            if(pck.obtenerSeqNumber() >= self.ack_number_sender):
+                self.ack_number_sender = pck.obtenerSeqNumber()
                 return True #llego bien el paquete
         return False
 

@@ -6,7 +6,7 @@ import select
 
 UPLOAD = 2
 MAX_TRIES = 2
-MAX_WAIT = 20
+MAX_WAIT = 10
 NOT_BLOCKING= 0 
 BLOCKING = 1
 MAX_WAIT_RESPONSE = 10
@@ -43,6 +43,11 @@ class Entidad(ABC):
                 while i <= MAX_TRIES:
                         self.enviarPaquete(paqueteBytes)
                         paqueteRecibido = self.recibirPaquete()
+                        #TIMEOUTEA VUELVO A ENVIAR EL HANDSHAKE
+                        if (paqueteRecibido == None):
+                                print(i)
+                                i += 1
+                                continue
                         esPaqueteOrdenado = self.gestorPaquetes.verificarACK(paqueteRecibido)
                         if (esPaqueteOrdenado) :
                                 return True
