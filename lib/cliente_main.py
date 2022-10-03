@@ -90,7 +90,7 @@ def abrirArchivo(ruta):
 
 
 def main():
-
+    """
     file_handler = logging.FileHandler(filename='tmp.log')
     stdout_handler = logging.StreamHandler(stream=sys.stdout)
     handlers = [file_handler, stdout_handler]
@@ -104,13 +104,14 @@ def main():
     logger = logging.getLogger()
     
     logger.info("Se inicio el logger")
+    """
 
-    #sender_stop = sender_stop_wait.StopWait("localhost", 8080,"localhost", 12000)
-    #sender_stop.enviar_archivo("hola.txt")
-    sender_goback = sender_gobackn.GoBackN("localhost", 8080,"localhost", 12000)
-    sender_goback.enviar_archivo("foto_prueba.png")
-    #receiver_aux = receiver.Receiver("localhost", 8080,"localhost", 12000)
-    #receiver_aux.recibir_archivo("hola.txt")
+    #sender_stop = sender_stop_wait.StopWait("localhost", 12000,"hola.txt", "/home/fede/Desktop/distribuidos/alternativa/Intro-a-Sistemas-Distribuidos-TP1/lib")
+    #sender_stop.enviar_archivo()
+    #sender_goback = sender_gobackn.GoBackN("localhost", 8080,"localhost", 12000)
+    #sender_goback.enviar_archivo("foto_prueba.png")
+    receiver_aux = receiver.Receiver("localhost", 8080,"localhost", 12000)
+    receiver_aux.recibir_archivo("hola.txt")
     """
     cliente_prueba = cliente.Cliente("localhost", 8090, 12000, logger) #los dos puertos del cliente son 8080 y el server escucha del 12000
     stopWait = stopAndWait.StopAndWait()

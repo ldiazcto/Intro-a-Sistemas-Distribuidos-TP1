@@ -40,12 +40,13 @@ class GoBackN(threading.Thread):
         self.hay_data = True
     
     def enviar_archivo(self):
-        filepath= self.filePath + "/" + self.filename
-        print("Path de archivos",filepath)
-        file_stats = os.stat(filepath)
+        #filepath= self.filePath + "/" + self.filename
+        print("Path de archivos",self.filePath)
+        file_stats = os.stat(self.filePath)
         file_size = file_stats.st_size
-        file = open(filepath,'rb')
+        file = open(self.filePath,'rb')
         self.enviarPaquetes(file)
+        self.Termino = True
         file.close()
 
     def entablarHandshake(self, fileName, fileSize):
@@ -151,6 +152,7 @@ class GoBackN(threading.Thread):
             conexion_cerrada,pck_recibido = self.enviar_fin()
             if(conexion_cerrada == True):
                 print("CONEXION CERRADO CON EXITO")
+            self.Termino = True
             return
 
 

@@ -36,11 +36,11 @@ class StopWait(threading.Thread):
         self.hay_data = True
 
     def enviar_archivo(self):
-        filepath= self.filePath + self.filename
-        print("Path de archivos",filepath)
-        file_stats = os.stat(filepath)
-        file_size = file_stats.st_size
-        file = open(filepath,'rb')
+        #filepath= self.filePath + self.filename
+        print("Path de archivos",self.filePath)
+        #file_stats = os.stat(self.filePath)
+        #file_size = file_stats.st_size
+        file = open(self.filePath,'rb')
         self.enviarPaquetes(file)
         self.Termino = True
         file.close()

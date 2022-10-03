@@ -1,3 +1,4 @@
+from fileinput import filename
 import os
 import threading
 import time
@@ -10,6 +11,7 @@ import goBackN
 from pathlib import Path
 import sender_stop_wait_server
 import sender_gobackn_server
+import receiver_server
 
 
 DATA = 0 #a veces llamado NOT_ACK
@@ -128,14 +130,14 @@ class Conexion(threading.Thread):
 
         if self.esHandshakeUpload(paquete) :
                 print("Es de tipo upload")
-                filepath = self.obtener_ruta_archivo_upload(paquete,self.filePath)
-                file = open(filepath, 'wb')
-                self.recibir_archivo(file)
+                filepath,filename = self.obtener_ruta_y_nombre(paquete)
+                self.recibir_archivo(filename,filepath)
                 #lógica para el uploadobtenerNombreYTipo
         else :
                 print("Es de tipo download")
+                filepath,filename = self.obtener_ruta_y_nombre(paquete)
                 file_name = self.obtenerNombreYTamanio(paquete)
-                self.enviar_archivo(file_name[0],self.filePath)
+                self.enviar_archivo(file_name,filepath)
                 #lógica para el download        
                 #cargaPaquete = paquete.obtenerMensaje
                 #Aca llamo a las funciones del cliente para manejo de paquetes y le paso el paquete OJO QUE HAY QUE GUARDAR LA RUTA EN LA CONEXION"""
@@ -147,23 +149,10 @@ class Conexion(threading.Thread):
         return (paquete.esDownload() or paquete.esUpload())
 
 
-  
-    """
-    def obtener_ruta_archivo_download(self,paquete):
-        nombre_archivo, tipo_envio = self.obtenerNombreYTipo(paquete)
-        path = os.getcwd()
-        new_path = path + "/lib"
-        #print("Path de archivos",new_path)
-        filepath= new_path + "/" + nombre_archivo
-        return filepath
-
-    def obtenerNombreYTipo(self, paquete):
-        mensaje = paquete.obtenerMensaje()
-        if paquete.esDownload() :
-            nombre, tipo = str(mensaje, "ascii").split("-")
-            return nombre, tipo
-        return str(mensaje, "ascii"), 0
-    """
+    def obtener_ruta_y_nombre(self,paquete):
+        nombre_archivo , tam = self.obtenerNombreYTamanio(paquete)
+        filepath= self.ruta_archivo + "/" + nombre_archivo
+        return (filepath,nombre_archivo)
 
     def obtener_ruta_archivo_upload(self,paquete,starterPath):
         nombre_archivo , tam = self.obtenerNombreYTamanio(paquete)
@@ -218,7 +207,27 @@ class Conexion(threading.Thread):
         self.skt.sendto(pckBytes,(self.ip_cliente,self.puerto_cliente))
     
 
-    def recibir_archivo(self,file):
+    def recibir_archivo(self,file_name,filepath):
+        print("File name es:", file_name)
+        print("EL file path es: ", filepath)
+    
+        receiver = receiver_server.Receiver(self.ip_cliente,self.puerto_cliente,filepath,file_name)
+        receiver.start()
+        while True:
+            if self.hay_data: #verifico si me pasaron nueva data
+                paqueteBytes = self.queue.pop(0) #obtengo la data
+                receiver.pasar_data(paqueteBytes)
+                #print("\n\n-- En recibi_archivo, el paqueteBytes recien recibido es: ", paqueteBytes)
+                if len(self.queue) == 0:
+                    self.hay_data = False #si la cola queda vacia establezco que no hay mas data, por ahora
+                if paqueteBytes is None:   # If you send `None`, the thread will exit.
+                    return
+            if(receiver.Termino == True):
+                print("TERMINO EL SENDER")
+                receiver.join()
+                self.conexion_activa = False
+                return
+        """
         time_start = time.time()
         while time.time() - time_start <=   MAX_WAIT_SERVIDOR:
             #print(time.time() - time_start)
@@ -238,13 +247,17 @@ class Conexion(threading.Thread):
                 #print("\n\n")
         print("ESPERE SUFICIENTE NO ME MANDASTE NADA")
         self.conexion_activa = False
+        """
     
-    def enviar_archivo(self,file_name):
+    def enviar_archivo(self,file_name,filepath):
         print("File name es:", file_name)
+        print("EL file path es: ", filepath)
         if(self.protocolo == "GN"):
-            sender = sender_gobackn_server.GoBackN(self.ip_cliente,self.puerto_cliente,file_name)
+            print("Soy GOBACKN")
+            sender = sender_gobackn_server.GoBackN(self.ip_cliente,self.puerto_cliente,file_name,filepath)
         else:
-            sender = sender_stop_wait_server(self.ip_cliente,self.puerto_cliente,file_name)
+            print("SoY STOP AND WAIT")
+            sender = sender_stop_wait_server.StopWait(self.ip_cliente,self.puerto_cliente,file_name,filepath)
             
         sender.start()
         while True:
@@ -259,4 +272,5 @@ class Conexion(threading.Thread):
             if(sender.Termino == True):
                 print("TERMINO EL SENDER")
                 sender.join()
+                self.conexion_activa = False
                 return

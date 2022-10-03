@@ -14,24 +14,26 @@ MAX_WAIT_RESPONSE = 10
 import select
 
 class StopWait():
-    def __init__(self,sender_ip,sender_port,receiver_ip,receiver_port):
+    def __init__(self,server_ip,server_port,filename,filepath):
         self.sender_socekt = socket(AF_INET,SOCK_DGRAM)
-        self.sender_socekt.bind((sender_ip,sender_port)) #''  es para que escuche a todos --- serverPort es por d'onde escucha el server
+        #self.sender_socekt.bind((sender_ip,sender_port)) #''  es para que escuche a todos --- serverPort es por d'onde escucha el server
         self.sender_socekt.setblocking(False)
-        self.sender_ip = sender_ip
-        self.sender_port = sender_port
-        self.receiver_ip = receiver_ip
-        self.receiver_port = receiver_port
+        #self.sender_ip = sender_ip
+        #self.sender_port = sender_port
+        self.receiver_ip = server_ip
+        self.receiver_port = server_port
+        self.filePath = filepath
+        self.filename = filename
         self.gestorPaquetes = gestorPaquetes.Gestor_Paquete()
 
-    def enviar_archivo(self,filename):
-        path = os.getcwd()
-        new_path = path + "/lib"
+    def enviar_archivo(self):
+        #path = os.getcwd()
+        #new_path = path + "/lib"
         #print("Path de archivos",new_path)
-        filepath= new_path + "/" + "hola_2.txt"
+        filepath= self.filePath + "/" + self.filename
         file_stats = os.stat(filepath)
         file_size = file_stats.st_size
-        handshake_establecido = self.entablarHandshake("hola.txt",file_size)
+        handshake_establecido = self.entablarHandshake("pepe_mujica",file_size)
         if(handshake_establecido):
             file = open(filepath,'rb')
             self.enviarPaquetes(file)

@@ -41,11 +41,11 @@ class Receiver():
 
     def recibir_archivo(self,filename):
         path = os.getcwd()
-        new_path = path + "/lib/" + "hola4.txt"
+        new_path = path + "/lib/" + "hola13.txt"
         #print("Path de archivos",new_path)
         filepath= new_path 
-        file_stats = os.stat(filepath)
-        file_size = file_stats.st_size
+        #file_stats = os.stat(filepath)
+        #file_size = file_stats.st_size
         handshake_establecido = self.entablarHandshake("hola.txt")
         if(handshake_establecido):
             file = open(filepath,'wb')

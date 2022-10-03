@@ -2,7 +2,7 @@ import server_hilo
 
 
 def main():
-    server_prueba = server_hilo.Server()
+    server_prueba = server_hilo.Server("localhost",12000,"/home/fede/Desktop/distribuidos/alternativa/Intro-a-Sistemas-Distribuidos-TP1/lib","GN")
     server_prueba.start()
     while True:
         print ("Para detener el servidor ingrese la palabra FIN")
