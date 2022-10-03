@@ -15,7 +15,7 @@ MAX_WAIT_RESPONSE = 10
 import select
 
 class StopWait(threading.Thread):
-    def __init__(self,receiver_ip,receiver_port,filename):
+    def __init__(self,receiver_ip,receiver_port,filename,filePath):
         threading.Thread.__init__(self)
         self.sender_socekt = socket(AF_INET,SOCK_DGRAM)
         self.sender_socekt.setblocking(False)
@@ -26,6 +26,7 @@ class StopWait(threading.Thread):
         self.filename = filename
         self.hay_data = False
         self.Termino = False
+        self.filePath = filePath
 
     def run(self):
         self.enviar_archivo()
@@ -35,10 +36,8 @@ class StopWait(threading.Thread):
         self.hay_data = True
 
     def enviar_archivo(self):
-        path = os.getcwd()
-        new_path = path + "/lib"
-        #print("Path de archivos",new_path)
-        filepath= new_path + "/" + self.filename
+        filepath= self.filePath + self.filename
+        print("Path de archivos",filepath)
         file_stats = os.stat(filepath)
         file_size = file_stats.st_size
         file = open(filepath,'rb')
