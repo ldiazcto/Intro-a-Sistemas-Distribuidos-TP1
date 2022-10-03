@@ -26,7 +26,7 @@ MAX_TAMANIO_PERMITIDO = 5000000 #en bytes
 MAX_WAIT_SERVIDOR = 50 #PELIGRO! TIMEOUT DEL SERVER!!
 
 class Conexion(threading.Thread):
-    def __init__(self,numero_hilo, conexion_cliente):
+    def __init__(self,numero_hilo, conexion_cliente,protocolo,filePath):
         threading.Thread.__init__(self)
         self.nombre = numero_hilo
         self.conexion_cliente = conexion_cliente
@@ -37,7 +37,8 @@ class Conexion(threading.Thread):
         self.hay_data = False
         self.conexion_activa = True
         self.gestor_paquete = gestorPaquetes.Gestor_Paquete()
-        #self.ruta_archivo = ""
+        self.protocolo = protocolo
+        self.ruta_archivo = filePath
 
     def pasar_data(self, paquete= b""):
         self.queue.append(paquete)
@@ -127,23 +128,14 @@ class Conexion(threading.Thread):
 
         if self.esHandshakeUpload(paquete) :
                 print("Es de tipo upload")
-                filepath = self.obtener_ruta_archivo_upload(paquete)
+                filepath = self.obtener_ruta_archivo_upload(paquete,self.filePath)
                 file = open(filepath, 'wb')
                 self.recibir_archivo(file)
                 #lógica para el uploadobtenerNombreYTipo
         else :
                 print("Es de tipo download")
                 file_name = self.obtenerNombreYTamanio(paquete)
-                self.enviar_archivo(file_name[0])
-                """
-                filepath, tipo = self.obtener_ruta_archivo_download(paquete)
-                if(tipo == "stopAndWait"):
-                    env = stopAndWait.StopAndWait()
-                    env.enviarPaquete(filepath)
-                else:
-                    env = goBackN.GoBackN()
-                    env.enviarPaquete(filepath)
-                """
+                self.enviar_archivo(file_name[0],self.filePath)
                 #lógica para el download        
                 #cargaPaquete = paquete.obtenerMensaje
                 #Aca llamo a las funciones del cliente para manejo de paquetes y le paso el paquete OJO QUE HAY QUE GUARDAR LA RUTA EN LA CONEXION"""
@@ -173,12 +165,10 @@ class Conexion(threading.Thread):
         return str(mensaje, "ascii"), 0
     """
 
-    def obtener_ruta_archivo_upload(self,paquete):
+    def obtener_ruta_archivo_upload(self,paquete,starterPath):
         nombre_archivo , tam = self.obtenerNombreYTamanio(paquete)
-        path = os.getcwd()
-        new_path = path + "/lib"
         #print("Path de archivos",new_path)
-        filepath= new_path + "/" + nombre_archivo
+        filepath= starterPath + "/" + nombre_archivo
         return filepath
 
     def obtenerNombreYTamanio(self, paquete):
@@ -251,7 +241,11 @@ class Conexion(threading.Thread):
     
     def enviar_archivo(self,file_name):
         print("File name es:", file_name)
-        sender = sender_gobackn_server.GoBackN(self.ip_cliente,self.puerto_cliente,file_name)
+        if(self.protocolo == "GN"):
+            sender = sender_gobackn_server.GoBackN(self.ip_cliente,self.puerto_cliente,file_name)
+        else:
+            sender = sender_stop_wait_server(self.ip_cliente,self.puerto_cliente,file_name)
+            
         sender.start()
         while True:
             if self.hay_data: #verifico si me pasaron nueva data
