@@ -91,19 +91,19 @@ def abrirArchivo(ruta):
 
 def main():
 
-    # file_handler = logging.FileHandler(filename='tmp.log')
-    # stdout_handler = logging.StreamHandler(stream=sys.stdout)
-    # handlers = [file_handler, stdout_handler]
+    file_handler = logging.FileHandler(filename='tmp.log')
+    stdout_handler = logging.StreamHandler(stream=sys.stdout)
+    handlers = [file_handler, stdout_handler]
 
-    # logging.basicConfig(
-    #     level=logging.DEBUG, 
-    #     format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s',
-    #     handlers=handlers
-    # )
-
-    # logger = logging.getLogger()
+    logging.basicConfig(
+        level=logging.DEBUG, 
+        format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s',
+        handlers=handlers
+    )
     
-    # logger.info("Se inicio el logger")
+    logger = logging.getLogger()
+    
+    logger.info("Se inicio el logger")
 
     #sender_stop = sender_stop_wait.StopWait("localhost", 8080,"localhost", 12000)
     #sender_stop.enviar_archivo("hola.txt")
@@ -112,7 +112,7 @@ def main():
     #receiver_aux = receiver.Receiver("localhost", 8080,"localhost", 12000)
     #receiver_aux.recibir_archivo("hola.txt")
     """
-    cliente_prueba = cliente.Cliente("localhost", 8090, 12000) #los dos puertos del cliente son 8080 y el server escucha del 12000
+    cliente_prueba = cliente.Cliente("localhost", 8090, 12000, logger) #los dos puertos del cliente son 8080 y el server escucha del 12000
     stopWait = stopAndWait.StopAndWait()
     backN = goBackN.GoBackN() #llamo a la clase, y me ejecuta el constructor
     print("Se creo el cliente con exito")
