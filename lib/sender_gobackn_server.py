@@ -29,6 +29,7 @@ class GoBackN(threading.Thread):
         self.older_seq_number = 1
         self.new_seq_number = 0
         self.paquetesEnVuelo = []
+        self.Termino = False
 
     def run(self):
         self.enviar_archivo()

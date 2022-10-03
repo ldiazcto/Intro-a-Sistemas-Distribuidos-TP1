@@ -251,7 +251,7 @@ class Conexion(threading.Thread):
     
     def enviar_archivo(self,file_name):
         print("File name es:", file_name)
-        sender = sender_gobackn_server.GoBackN(self.ip_cliente,self.puerto_cliente,file_name)
+        sender = sender_stop_wait_server.StopWait(self.ip_cliente,self.puerto_cliente,file_name)
         sender.start()
         while True:
             if self.hay_data: #verifico si me pasaron nueva data
@@ -262,3 +262,7 @@ class Conexion(threading.Thread):
                     self.hay_data = False #si la cola queda vacia establezco que no hay mas data, por ahora
                 if paqueteBytes is None:   # If you send `None`, the thread will exit.
                     return
+            if(sender.Termino == True):
+                print("TERMINO EL SENDER")
+                sender.join()
+                return

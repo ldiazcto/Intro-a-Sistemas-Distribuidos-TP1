@@ -1,3 +1,4 @@
+from ast import Break
 import os
 from socket import *
 import time
@@ -86,6 +87,7 @@ class GoBackN():
     def enviarPaquetes(self,file):
             mensaje = "entrar en ciclo"
             timeout_start = 0
+            cantidad_intentos = 0
             while (True):
                 
                 #si el numero de sequencia del siguiente paquete a enviar es menor al numero de seq del primer paquete que envie
@@ -104,8 +106,8 @@ class GoBackN():
                         #self.new_seq_number += 1  
                         continue
                     
-                if(len(self.paquetesEnVuelo) == 0):
-                    break
+                #if(len(self.paquetesEnVuelo) == 0):
+                    #break
                 #print("ME QUEDO DANDO VUELTAS")
                 #-- IMPLEMENTACION FEDE
                 pckRecibido, esACKEsperado = self.recibirPaqueteACK()
@@ -127,11 +129,13 @@ class GoBackN():
                     if(self.older_seq_number == self.new_seq_number):
                         #STOP_TIMER QUE SERA ???
                         print("STOP TIMER")
-                    else:    
+                        break
+                    else: 
+                        cantidad_intentos = 0   
                         timeout_start = time.time() #reinicio el timer porque los paquetes me llegaron bien, corro el older porque tengo que mandar paquetes nuevos 
                     
-                        
-
+                if(cantidad_intentos >= 3):
+                    break
                 # -- REENVIAR PCKS EN CASO DE ERROR --
                 var = time.time()
                 saltoTimerReenvio = (var - timeout_start)  >= MAX_WAIT_GOBACKN
@@ -139,6 +143,7 @@ class GoBackN():
                 #print(var - timeout_start)
                 if(saltoTimerReenvio and timeout_start != 0): #SI SALTO TIMEOUT, ENTONCES PERDI UN PAQUETE Y POR ENDE TENGO 
                                                                 #QUE VOLVER A INICIAR EL TIMER Y ENVIAR LOS PAQUETES QUE ME QUEDARON EN LA LISTA DE PAQUETES EN VUELO
+                    cantidad_intentos +=1
                     print("\n\n SALTO EL TIMER \n\n")
                     timeout_start = time.time()
                     for pck in self.paquetesEnVuelo:

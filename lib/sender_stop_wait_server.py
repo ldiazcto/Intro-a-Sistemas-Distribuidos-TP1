@@ -25,6 +25,7 @@ class StopWait(threading.Thread):
         self.cola = []
         self.filename = filename
         self.hay_data = False
+        self.Termino = False
 
     def run(self):
         self.enviar_archivo()
@@ -42,6 +43,7 @@ class StopWait(threading.Thread):
         file_size = file_stats.st_size
         file = open(filepath,'rb')
         self.enviarPaquetes(file)
+        self.Termino = True
         file.close()
 
 
@@ -71,6 +73,7 @@ class StopWait(threading.Thread):
             print("-cantidad intentos es ", cantidad_intentos)
             print("\n")
         if(cantidad_intentos > 3):
+            self.Termino = True
             return (False,None)
         return (True,paqueteRecibido)
     
@@ -97,6 +100,7 @@ class StopWait(threading.Thread):
             print("\n--El mensaje a enviar es: ", "FIN")
             print("\n-cantidad intentos es ", cantidad_intentos)
         if(cantidad_intentos > 3):
+            self.Termino = True
             return (False,None)
         return (True,paqueteRecibido)
 
@@ -118,6 +122,7 @@ class StopWait(threading.Thread):
             
             if (intentar_mandar == False):
                 print(" \n intentar mandar es False, return ")
+                self.Termino =  True
                 return
             verificar_ack = self.gestorPaquetes.actualizarACK(paquete_recibido) #lo cambi;e a verificarACK
             intentar_mandar_ack = True
@@ -128,11 +133,13 @@ class StopWait(threading.Thread):
                     cant_max_envios += 1
             if (intentar_mandar_ack == False):
                 print ("\n intentar mandar ack es False, return")
+                self.Termino =  True
                 return
             mensaje = file.read(MSJ_SIZE)
         conexion_cerrada,pck_recibido = self.enviar_fin()
         if(conexion_cerrada == True):
             print("CONEXION CERRADO CON EXITO")
+            self.Termino = True
         return
     
 
@@ -158,33 +165,3 @@ class StopWait(threading.Thread):
                 print("recibirPaquete: el string del paquete es: ", paqueteString)
                 return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
 
-
-    def crearPaqueteHandshake_upload(self, fileName, fileSize):
-        caracterSeparador = "-"
-        mensaje = fileName
-        mensaje = mensaje + caracterSeparador + str(fileSize)
-        return self.gestorPaquetes.crearPaqueteHandshake(UPLOAD, mensaje)
-
-
-
-    def entablarHandshake(self, fileName, fileSize):
-                paquete = self.crearPaqueteHandshake_upload(fileName, fileSize)
-                paqueteBytes = self.gestorPaquetes.pasarPaqueteABytes(paquete)
-                i = 0
-                while i <= MAX_TRIES:
-                        self.sender_socekt.sendto(paqueteBytes,(self.receiver_ip,self.receiver_port))
-                        paqueteRecibido = self.recibirPaquete()
-                        #TIMEOUTEA VUELVO A ENVIAR EL HANDSHAKE
-                        if (paqueteRecibido == None):
-                                print(i)
-                                i += 1
-                                continue
-                        esPaqueteOrdenado = self.gestorPaquetes.verificarACK(paqueteRecibido)
-                        if (esPaqueteOrdenado) :
-                                return True
-                        esPaqueteRefused = self.gestorPaquetes.verificarRefused(paqueteRecibido)
-                        if (esPaqueteRefused) :
-                                return False
-                        i +=1
-
-                return False

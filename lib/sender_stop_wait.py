@@ -4,7 +4,7 @@ import time
 import enviador
 import gestorPaquetes
 
-MSJ_SIZE = 150
+MSJ_SIZE = 15
 UPLOAD = 2
 MAX_TRIES = 2
 MAX_WAIT = 10
@@ -28,10 +28,10 @@ class StopWait():
         path = os.getcwd()
         new_path = path + "/lib"
         #print("Path de archivos",new_path)
-        filepath= new_path + "/" + filename
+        filepath= new_path + "/" + "hola_2.txt"
         file_stats = os.stat(filepath)
         file_size = file_stats.st_size
-        handshake_establecido = self.entablarHandshake("foto_pruebaSAW.png",file_size)
+        handshake_establecido = self.entablarHandshake("hola.txt",file_size)
         if(handshake_establecido):
             file = open(filepath,'rb')
             self.enviarPaquetes(file)
@@ -49,6 +49,7 @@ class StopWait():
         self.sender_socekt.sendto(pckBytes ,(self.receiver_ip,self.receiver_port))
         cantidad_intentos = 1
         print("\n--El mensaje a enviar es: ", mensaje)
+        print("Bytes a enviar son: ",pckBytes)
         print("\n-cantidad intentos es ", cantidad_intentos)
 
         paqueteRecibido = self.recibirPaquete()
@@ -60,11 +61,12 @@ class StopWait():
             self.sender_socekt.sendto(pckBytes ,(self.receiver_ip,self.receiver_port))
             paqueteRecibido = self.recibirPaquete()
             cantidad_intentos += 1
+            print("-cantidad intentos es ", cantidad_intentos)
             print("\n El paquete recibido es de tipo ", paqueteRecibido)
             if(paqueteRecibido != None): #agrego caso 4 INTENTOS HACEMOS
                 return (True,paqueteRecibido)
             #print("\n--El mensaje a enviar es: ", mensaje)
-            print("-cantidad intentos es ", cantidad_intentos)
+            
             print("\n")
         if(cantidad_intentos > 3):
             return (False,None)

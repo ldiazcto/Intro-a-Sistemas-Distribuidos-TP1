@@ -36,16 +36,17 @@ class Receiver():
         self.older_seq_number = 1
         self.new_seq_number = 0
         self.paquetesEnVuelo = []
+        self.Termino = False
 
 
     def recibir_archivo(self,filename):
         path = os.getcwd()
         new_path = path + "/lib"
         #print("Path de archivos",new_path)
-        filepath= new_path + "/" + "hola4.txt"
+        filepath= new_path + "/" + "hola_2.txt"
         file_stats = os.stat(filepath)
         file_size = file_stats.st_size
-        handshake_establecido = self.entablarHandshake("hola2.txt")
+        handshake_establecido = self.entablarHandshake("hola.txt")
         if(handshake_establecido):
             file = open(filepath,'wb')
             self.recibir_Paquetes(file)
@@ -53,26 +54,16 @@ class Receiver():
         else:
             print("FALLO EL HANDSHAKE")
             return
+        return
 
 
     def recibir_Paquetes(self,file):
 
         time_start = time.time()
         while time.time() - time_start <=   MAX_WAIT_SERVIDOR:
-            """
-            #print(time.time() - time_start)
-            if self.conexion_activa == False:
-                return
-            if self.hay_data: #verifico si me pasaron nueva data
-                time_start = time.time()
-                paqueteBytes = self.queue.pop(0) #obtengo la data
-                #print("\n\n-- En recibi_archivo, el paqueteBytes recien recibido es: ", paqueteBytes)
-                if len(self.queue) == 0:
-                    self.hay_data = False #si la cola queda vacia establezco que no hay mas data, por ahora
-                if paqueteBytes is None:   # If you send `None`, the thread will exit.
-                    return
-                """
             lista_sockets_listos = select.select([self.receiver_socekt], [], [], 0)
+            if(self.Termino == True):
+                return
             if not lista_sockets_listos[0]:
                 continue
             paqueteBytes, sourceAddress = self.receiver_socekt.recvfrom(2048)
@@ -93,7 +84,8 @@ class Receiver():
         if (self.gestor_paquete.verificarPaqueteOrdenado(paquete) == True):
             if(paquete.esFin()):
                 
-                print("ES PAQUETE FIN: ")
+                print("ES PAQUETE FIN")
+                self.Termino = True
                 paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_CORRECT)
                 print("El paquete ACK que voy a mandar por haber entrado a True es: ", self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
                 #time.sleep(10)
@@ -131,7 +123,7 @@ class Receiver():
         i = 0
         while i <= MAX_TRIES:
                 self.receiver_socekt.sendto(paqueteBytes,(self.sender_ip,self.sender_port))
-                paqueteRecibido = self.recibirPaquete()
+                paqueteRecibido = self.recibirAckHandshake()
                 #TIMEOUTEA VUELVO A ENVIAR EL HANDSHAKE
                 if (paqueteRecibido == None):
                         print(i)
@@ -148,13 +140,15 @@ class Receiver():
         return False
 
     
-    def recibirPaquete(self):
+    def recibirAckHandshake(self):
         timeout_start = time.time()
         while True:
                 lista_sockets_listos = select.select([self.receiver_socekt], [], [], 0)
                 var = time.time()
                 if ((var - timeout_start) >= (MAX_WAIT)):
                         return None
+                if (self.Termino == True):
+                    return
                 if not lista_sockets_listos[0]:
                         continue
                 paqueteString, sourceAddress = self.receiver_socekt.recvfrom(2048)

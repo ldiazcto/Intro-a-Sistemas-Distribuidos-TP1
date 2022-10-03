@@ -106,11 +106,11 @@ def main():
     # logger.info("Se inicio el logger")
 
     #sender_stop = sender_stop_wait.StopWait("localhost", 8080,"localhost", 12000)
-    #sender_stop.enviar_archivo("foto_prueba.png")
-    #sender_goback = sender_gobackn.GoBackN("localhost", 8080,"localhost", 12000)
-    #sender_goback.enviar_archivo("nueva_foto_prueba_GBN.png")
-    receiver_aux = receiver.Receiver("localhost", 8080,"localhost", 12000)
-    receiver_aux.recibir_archivo("hola.txt")
+    #sender_stop.enviar_archivo("hola.txt")
+    sender_goback = sender_gobackn.GoBackN("localhost", 8080,"localhost", 12000)
+    sender_goback.enviar_archivo("foto_prueba.png")
+    #receiver_aux = receiver.Receiver("localhost", 8080,"localhost", 12000)
+    #receiver_aux.recibir_archivo("hola.txt")
     """
     cliente_prueba = cliente.Cliente("localhost", 8090, 12000) #los dos puertos del cliente son 8080 y el server escucha del 12000
     stopWait = stopAndWait.StopAndWait()
