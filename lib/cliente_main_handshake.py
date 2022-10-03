@@ -20,7 +20,19 @@ def iniciaHandshakeUPLOAD():
         #como estoy en upload, creo paquete de handshake
         #se lo envío al server llamando a cliente.entablarHandshake()
         #si funciona devuelve True, es porque el paquete se envió al server, el server lo recibió y se recibió un ack de respuesta
+        file_handler = logging.FileHandler(filename='tmp.log')
+        stdout_handler = logging.StreamHandler(stream=sys.stdout)
+        handlers = [file_handler, stdout_handler]
 
+        logging.basicConfig(
+                level=logging.DEBUG, 
+                format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s',
+                handlers=handlers
+        )
+    
+        logger = logging.getLogger()
+    
+        logger.info("Se inicio el logger")
         receiverPort = 12000
         receiverName = "localhost"
         

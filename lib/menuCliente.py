@@ -110,21 +110,31 @@ class MenuCliente:
 
 
         #Ya parsie, setie, se la transferencia, ahora procedo a intentar hacerla, handhshake
-
+        sender = sender
         cliente = cliente.Cliente("localhost", self.port, 12000) #server adress Ip adress,  puertoEntradaContrario
         if(sys.argv[1] == "--upload"):
             ruta = self.filepath + "/" + self.filename
             print("Mi file es: ", ruta)
             file = self.abrirArchivo(ruta)
             filesize = os.path.getsize(ruta)
-            handshakeExitoso = cliente.entablarHandshake(self.filename, filesize, UPLOAD)
-            if handshakeExitoso == True: cliente.enviarArchivo(file,self.protocolo)
+            #handshakeExitoso = cliente.entablarHandshake(self.filename, filesize, UPLOAD)
+            handshakeExitoso = sender.entablarHandshake(self.filename, filesize, UPLOAD)
+            if handshakeExitoso == True:
+                logger.info("El handshake resulto exitoso")
+                logger.info("Se envia el archivo...")
+                cliente.enviarArchivo(file,self.protocolo)
+            else:
+                logger.debug("El handshake fallo")
             self.cerrarArchivo(file)
         else:
-            print("Para el download")
-            #falta logica para handshake download
-            #handshakeExitoso = cliente.entablarHandshake(ruta, tamanio_archivo, DOWNLOAD)
-            #if handshakeExitoso == True : cliente.recibirArchivo(self.filepath,self.filename, self.protocolo)
+            #Para el download
+            handshakeExitoso = cliente.entablarHandshake(ruta, tamanio_archivo, DOWNLOAD)
+            if handshakeExitoso == True : 
+                logger.info("El handshake resulto exitoso")
+                logger.info("Se envia el archivo...")
+                cliente.recibirArchivo(self.filepath,self.filename, self.protocolo)
+            else:
+                logger.debug("El handshake fallo")
 
         return 0
 

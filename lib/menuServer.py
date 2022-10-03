@@ -30,7 +30,7 @@ class MenuServer:
         self.port = 12000   # --->service port
         self.host = "" # --host ->service IP address
         self.transferencia = ""
-        self.protocolo = stopAndWait.StopAndWait()
+        self.protocolo = "sw"
 
     def abrirArchivo(self, ruta):
         try:
@@ -79,7 +79,7 @@ class MenuServer:
                 self.port, self.serverAdress = self.parser.definirPuertoYHost(opt, arg, self.port, self.serverAdress)
 
                 if(opt in ('-o','--option')):
-                    self.protocolo = self.parser.cambiarProtocolo()
+                    self.protocolo = "GN" #GN PARA GO BACK N SI NO VALE SW
 
                 if(opt in ('-s','--storage')):
                     self.filepath = arg
@@ -98,7 +98,7 @@ class MenuServer:
         #
         # Le tengo que pasar por parametro la info que me pasaron por comando
         # el host (Service IP adress), Service port, filepath, y protocolo
-        server_main.main()
+        server_main.main(self.host,self.port,self.filepath,self.protocolo)
         return 0
 
 if __name__ == "__main__":

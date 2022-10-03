@@ -4,6 +4,7 @@ import gestorPaquetes
 import time
 import os
 import logging
+import sender_stop_wait
 #import cliente_main
 
 MAX_WAIT = 0.5
@@ -16,16 +17,26 @@ BLOCKING = 1
 
 class Cliente(entidad.Entidad):
     
-    def __init__(self, name, miPuerto, puertoEntradaContrario):
-        super(Cliente,self).__init__(name, miPuerto, puertoEntradaContrario)
-        self.gestorPaquetes = gestorPaquetes.Gestor_Paquete()
-        
+    def __init__(self, miIP, miPuerto,IP_contrario, puertoEntradaContrario, logger):
+        #super(Cliente,self).__init__(name, miPuerto, puertoEntradaContrario)
+        #self.gestorPaquetes = gestorPaquetes.Gestor_Paquete()
+        self.mi_IP = miIP
+        self.mi_puerto = miPuerto
+        self.IP_server = IP_contrario
+        self.Puerto_Server = puertoEntradaContrario
+        self.logger = logger
         #logger.info("Llegue al cliente")
  
 #para la subida
 
 #PARA CLIENTE
        
+    
+    def enviar_stop_wait(self):
+        sender = sender_stop_wait.StopWait(self.mi_IP,self.mi_puerto,self.IP_server,self.Puerto_Server)
+        sender.enviar_archivo()
+
+
     def enviarArchivo(self, file, enviador):
         #time.sleep(100)
         enviador.enviarPaquete(file, self)

@@ -8,17 +8,18 @@ import conexiones_hilo
 import gestorPaquetes
 
 
-class Server(threading.Thread,entidad.Entidad):
-    def __init__(self):
+class Server(threading.Thread):
+    def __init__(self,serverIP,serverPort,pathSave,protocolo):
         threading.Thread.__init__(self)
-        entidad.Entidad.__init__(self,'',12001, 8081) #no me sirven estos sockets
         self.conexiones = {}
-        serverPort = 12000 #los dos puertos del servidor 
+        #serverPort = 12000 #los dos puertos del servidor 
         self.serverSocket = socket(AF_INET, SOCK_DGRAM)
-        self.serverSocket.bind(('',serverPort)) #''  es para que escuche a todos --- serverPort es por d'onde escucha el server
+        self.serverSocket.bind((serverIP,serverPort)) #''  es para que escuche a todos --- serverPort es por d'onde escucha el server
         self.serverSocket.setblocking(False)
         self.socket_cerrado = False
         self.numero_hilos = 0
+        self.protocolo = protocolo
+        self.pathSave = pathSave
         
         
 
@@ -35,7 +36,7 @@ class Server(threading.Thread,entidad.Entidad):
             #modifiedMessage = message.decode() #decoder paquete
             if(clientAdress not in self.conexiones): #verifico si ya existe la direccion de donde recibi el paquete
                 #print(" -- El clientAddress NO es una de las conexiones conocidas")
-                self.conexiones[clientAdress] = conexiones_hilo.Conexion(self.numero_hilos,clientAdress) #guardo el hilo que se encarga de esa direccion
+                self.conexiones[clientAdress] = conexiones_hilo.Conexion(self.numero_hilos,clientAdress,self.protocolo,self.pathSave) #guardo el hilo que se encarga de esa direccion
                 #print(" Me creo el hilo")
                 self.conexiones[clientAdress].start() #inicio el hilo
                 #print(" Vuelvo de iniciar el hilo")

@@ -20,7 +20,19 @@ def main():
    
     receiverPort = 12000
     receiverName = "localhost"
+    file_handler = logging.FileHandler(filename='tmp.log')
+    stdout_handler = logging.StreamHandler(stream=sys.stdout)
+    handlers = [file_handler, stdout_handler]
+
+    logging.basicConfig(
+        level=logging.DEBUG, 
+        format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s',
+        handlers=handlers
+    )
     
+    logger = logging.getLogger()
+    
+    logger.info("Se inicio el logger")   
     cliente_prueba = cliente.Cliente(receiverName, receiverPort)
     cliente_prueba.entidadSocket.bind((receiverName,receiverPort)) #el cliente escucha el serverPort y serverName del server
 
