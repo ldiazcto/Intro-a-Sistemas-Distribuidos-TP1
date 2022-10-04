@@ -110,22 +110,22 @@ class Conexion(threading.Thread):
         self.logger.info("Procesando el handshake...")
         handshakeApropiado = self.chequearHandshakeApropiado(paquete)
         if (not handshakeApropiado) :
-            self.logger.info("Se envió un paquete que no es handshake, me voy")
+            self.logger.error("✗ Se envió un paquete que no es handshake, me voy")
             paqueteRefused = self.gestor_paquete.crearPaqueteRefused()
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paqueteRefused),(self.ip_cliente,self.puerto_cliente))
             return False
         
         tamanioApropiado = self.chequearTamanio(paquete)
         if (not tamanioApropiado) :
-            self.logger.debug("El tamaño pasado no es apropiado, mando ack de refused y me voy")
+            self.logger.error("✗ El tamaño pasado no es apropiado, mando ack de refused y me voy")
             paqueteRefused = self.gestor_paquete.crearPaqueteRefused()
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paqueteRefused),(self.ip_cliente,self.puerto_cliente))
             return False
 
         archivoExiste = self.chequearExistenciaArchivo(paquete)
-        self.logger.info(f"Archivo existente y es: {archivoExiste}")
+        self.logger.info(f"✓ Archivo existente y es: {archivoExiste}")
         if (not archivoExiste and paquete.esDownload()) :
-                self.logger.error("El archivo pedido no existe, me voy")
+                self.logger.error("✗ El archivo pedido no existe")
                 paqueteRefused = self.gestor_paquete.crearPaqueteRefused()
                 self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paqueteRefused),(self.ip_cliente,self.puerto_cliente))
                 return False
@@ -133,11 +133,11 @@ class Conexion(threading.Thread):
         self.enviarACKHandshake(ACK_CORRECT)
 
         if self.esHandshakeUpload(paquete) :
-                self.logger.info("Handshake de tipo UPLOAD")
+                self.logger.debug("Handshake de tipo UPLOAD")
                 filepath,filename = self.obtener_ruta_y_nombre(paquete)
                 self.recibir_archivo(filename,filepath)
         else :
-                self.logger.info("Handshake de tipo DOWNLOAD")
+                self.logger.debug("Handshake de tipo DOWNLOAD")
                 filepath,filename = self.obtener_ruta_y_nombre(paquete)
                 self.enviar_archivo(filename,filepath)
                 

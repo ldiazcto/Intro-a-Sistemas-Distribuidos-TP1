@@ -4,8 +4,6 @@ import gestorPaquetes
 import select
 import sender
 
-BLOCKING = 1
-
 class GoBackN(sender.Sender):
     def __init__(self,server_ip,server_port,filename,filepath,logger):
         self.sender_socekt = socket(AF_INET,SOCK_DGRAM)
@@ -20,7 +18,7 @@ class GoBackN(sender.Sender):
         self.fileName = filename
         self.logger = logger
         self.MSJ_SIZE = 2000
-        self.MAX_TRIES = 2
+        self.MAX_TRIES = 3
         self.MAX_WAIT = 10
         self.MAX_WAIT_GOBACKN = 5
         self.TAM_VENTANA = 150
@@ -68,7 +66,7 @@ class GoBackN(sender.Sender):
                     else: 
                         cantidad_intentos = 0   
                         timeout_start = time.time()
-                if(cantidad_intentos >= 3):
+                if(cantidad_intentos >= self.MAX_TRIES):
                     break
                 var = time.time()
                 saltoTimerReenvio = (var - timeout_start)  >= self.MAX_WAIT_GOBACKN
@@ -79,7 +77,7 @@ class GoBackN(sender.Sender):
                         self.sender_socekt.sendto(self.gestorPaquetes.pasarPaqueteABytes(pck),(self.receiver_ip,self.receiver_port))
             conexion_cerrada, pck_recibido = self.enviar_fin()
             if(conexion_cerrada == True):
-                self.logger.info("Se ha cerrado la conexion con el protocolo GoBackN con exito")
+                self.logger.info("✓ Se ha cerrado la conexion con el protocolo GoBackN con exito")
             return
 
 

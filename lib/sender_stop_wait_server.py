@@ -35,7 +35,6 @@ class StopWait(threading.Thread,sender_server.Sender_Server):
         pckBytes = self.gestorPaquetes.pasarPaqueteABytes(pck)
         self.sender_socekt.sendto(pckBytes ,(self.receiver_ip,self.receiver_port))
         cantidad_intentos = 1
-        # self.logger.debug(f"\n-La cantidad intentos es {cantidad_intentos}")
         paqueteRecibido = self.recibirPaquete()
 
         while(paqueteRecibido == None and cantidad_intentos <= self.MAX_TRIES):

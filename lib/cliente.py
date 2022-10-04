@@ -9,12 +9,15 @@ class Cliente():
                 self.logger = logger
 
         def enviar_archivo(self, sender):
-                self.logger.info("Se intenta enviar el archivo...")
+                self.logger.info("Se intenta hacer upload...")
                 sender.enviar_archivo(self.logger)
+                self.logger.info("✓ Se realizó el upload con éxito")
 
 
         def recibir_archivo(self, receiver):
-                receiver.recibir_archivo(self.logger)
+                self.logger.info("Se intenta hacer download...")
+                receiver.recibir_archivo()
+                self.logger.info("✓ Se realizó el download con éxito")
 
 
  
