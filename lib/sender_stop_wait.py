@@ -41,7 +41,7 @@ class StopWait(sender.Sender):
             try:
                 self.sender_socekt.sendto(pckBytes ,(self.receiver_ip,self.receiver_port))
             except SendfileNotAvailableError:
-                self.logger.error("-- El archivo no esta disponible --")
+                self.logger.error("✗ El archivo no esta disponible ")
             paqueteRecibido = self.recibirPaquete()
             cantidad_intentos += 1
             if(paqueteRecibido != None):

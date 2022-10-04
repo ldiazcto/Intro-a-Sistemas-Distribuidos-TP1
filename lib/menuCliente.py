@@ -7,12 +7,6 @@ import sender_gobackn
 import receiver
 import cliente
 
-SERVER_ADDR = ""
-SERVER_PORT = 12000
-FILEPATH = ""
-FILENAME = ""
-UPLOAD = 2
-DOWNLOAD = 3
 
 #NIVELES DE LOGS
 NOTSET = 0
@@ -72,11 +66,9 @@ class MenuCliente:
                 if(sys.argv[1] == "--upload"):
                     if(opt in ('-s','--src')):
                         self.filepath = arg
-                        self.transferencia = UPLOAD
                 if(sys.argv[1] == "--download"):
                     if(opt in ('-d','--dst')):
                         self.filepath = arg
-                        self.transferencia = DOWNLOAD   
             else: 
                 logger.error("Debe ingresar una acción a realizar [--upload]/[--download]")
                 sys.exit(2)

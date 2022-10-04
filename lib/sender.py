@@ -10,13 +10,14 @@ import select
 class Sender(metaclass=abc.ABCMeta):
         def enviar_archivo(self,logger):
                 filepath= self.filePath + "/" + self.fileName
-                file_stats = os.stat(filepath)
-                file_size = file_stats.st_size
                 try:
                         file = open(filepath,'rb')
-                except SendfileNotAvailableError:
-                        logger.error("-- El archivo no esta disponible --")
-                        file.close()
+                except FileNotFoundError:
+                        logger.error("✗ El archivo no esta disponible ")
+                        return
+                
+                file_stats = os.stat(filepath)
+                file_size = file_stats.st_size
                 handshake_establecido = self.entablarHandshake(self.fileName,file_size)
                 if(handshake_establecido):
                         self.enviarPaquetes(file)                

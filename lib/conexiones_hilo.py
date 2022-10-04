@@ -116,7 +116,7 @@ class Conexion(threading.Thread):
             try:
                 self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paqueteRefused),(self.ip_cliente,self.puerto_cliente))
             except SendfileNotAvailableError:
-                self.logger.error("-- El archivo no esta disponible --")
+                self.logger.error("✗ El archivo no esta disponible ")
             return False
         
         tamanioApropiado = self.chequearTamanio(paquete)

@@ -11154,3 +11154,4 @@
 [2022-10-04 16:59:36,316] {conexiones_hilo.py:101} INFO - Se ha terminado el envio
 [2022-10-04 16:59:37,295] {server_hilo.py:44} INFO - Se ha cerrado la conexion.
 [2022-10-04 17:00:49,395] {server_main.py:14} INFO - Se ha finalizado la conexión
+[2022-10-04 17:38:03,114] {server_main.py:9} INFO - Para detener el servidor ingrese la palabra FIN

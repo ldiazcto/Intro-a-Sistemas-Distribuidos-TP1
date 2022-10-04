@@ -3,12 +3,6 @@ import logging
 import parser
 import server_main
 
-SERVER_ADDR = ""
-SERVER_PORT = 12000
-FILEPATH = ""
-FILENAME = ""
-UPLOAD = 2
-DOWNLOAD = 3
 
 #NIVELES DE LOGS
 NOTSET = 0
