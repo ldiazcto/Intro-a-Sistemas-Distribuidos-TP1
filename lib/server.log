@@ -11155,3 +11155,277 @@
 [2022-10-04 16:59:37,295] {server_hilo.py:44} INFO - Se ha cerrado la conexion.
 [2022-10-04 17:00:49,395] {server_main.py:14} INFO - Se ha finalizado la conexión
 [2022-10-04 17:38:03,114] {server_main.py:9} INFO - Para detener el servidor ingrese la palabra FIN
+[2022-10-04 18:00:17,085] {server_main.py:9} INFO - Para detener el servidor ingrese la palabra FIN
+[2022-10-04 18:01:27,261] {server_main.py:14} INFO - Se ha finalizado la conexión
+[2022-10-04 18:02:02,758] {server_main.py:9} INFO - Para detener el servidor ingrese la palabra FIN
+[2022-10-04 18:02:33,742] {conexiones_hilo.py:119} INFO - Procesando el handshake...
+[2022-10-04 18:07:34,736] {server_main.py:9} INFO - Para detener el servidor ingrese la palabra FIN
+[2022-10-04 18:07:36,885] {server_main.py:14} INFO - Se ha finalizado la conexión
+[2022-10-04 18:09:21,389] {server_main.py:9} INFO - Para detener el servidor ingrese la palabra FIN
+[2022-10-04 18:09:30,122] {conexiones_hilo.py:119} INFO - Procesando el handshake...
+[2022-10-04 18:09:30,122] {conexiones_hilo.py:199} ERROR - El Path que le pasaron al servidor no existe
+[2022-10-04 18:09:30,122] {conexiones_hilo.py:138} INFO - Archivo existente y es: False
+[2022-10-04 18:09:30,123] {conexiones_hilo.py:151} INFO - Handshake de tipo UPLOAD
+[2022-10-04 18:09:30,123] {conexiones_hilo.py:91} INFO - File name es: libro_ya_subido.pdf
+[2022-10-04 18:09:30,123] {conexiones_hilo.py:92} INFO - EL file path es: /home/fede/Desktop/distribuidos/main/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Server
+[2022-10-04 18:09:44,936] {server_main.py:14} INFO - Se ha finalizado la conexión
+[2022-10-04 18:09:45,129] {conexiones_hilo.py:119} INFO - Procesando el handshake...
+[2022-10-04 18:09:45,131] {conexiones_hilo.py:122} INFO - Se envió un paquete que no es handshake, me voy
+[2022-10-04 18:09:55,995] {server_main.py:9} INFO - Para detener el servidor ingrese la palabra FIN
+[2022-10-04 18:09:59,707] {conexiones_hilo.py:119} INFO - Procesando el handshake...
+[2022-10-04 18:09:59,708] {conexiones_hilo.py:138} INFO - Archivo existente y es: False
+[2022-10-04 18:09:59,708] {conexiones_hilo.py:151} INFO - Handshake de tipo UPLOAD
+[2022-10-04 18:09:59,708] {conexiones_hilo.py:91} INFO - File name es: libro_ya_subido.pdf
+[2022-10-04 18:09:59,708] {conexiones_hilo.py:92} INFO - EL file path es: /home/fede/Desktop/distribuidos/main/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Servidor
+[2022-10-04 18:09:59,725] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,725] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,726] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,726] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,726] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,726] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,733] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,743] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,744] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,744] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,744] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,744] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,745] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,745] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,745] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,745] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,746] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,746] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,746] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,746] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,746] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,747] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,747] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,747] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,758] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,759] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,759] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,759] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,759] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,762] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,762] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,762] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,762] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,763] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,763] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,763] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,763] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,764] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,764] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,764] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,764] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,765] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,765] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,765] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,765] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,766] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,766] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,766] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,766] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,767] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,794] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,805] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,830] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,855] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,859] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,859] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:09:59,859] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 53300
+[2022-10-04 18:11:33,960] {server_main.py:14} INFO - Se ha finalizado la conexión
+[2022-10-04 18:11:39,450] {server_main.py:9} INFO - Para detener el servidor ingrese la palabra FIN
+[2022-10-04 18:11:44,965] {conexiones_hilo.py:119} INFO - Procesando el handshake...
+[2022-10-04 18:11:44,966] {conexiones_hilo.py:138} INFO - Archivo existente y es: True
+[2022-10-04 18:11:44,966] {conexiones_hilo.py:151} INFO - Handshake de tipo UPLOAD
+[2022-10-04 18:11:44,966] {conexiones_hilo.py:91} INFO - File name es: libro_ya_subido.pdf
+[2022-10-04 18:11:44,966] {conexiones_hilo.py:92} INFO - EL file path es: /home/fede/Desktop/distribuidos/main/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Servidor
+[2022-10-04 18:11:44,979] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:44,996] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:44,996] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:44,996] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:44,997] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:44,997] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:44,997] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:44,997] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:44,998] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:44,999] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,000] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,000] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,000] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,000] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,001] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,001] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,001] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,002] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,002] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,002] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,002] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,003] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,003] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,003] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,003] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,004] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,025] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,026] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,026] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,026] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,027] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,027] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,027] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,027] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,031] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,031] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,031] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,032] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,032] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,032] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,032] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,033] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,033] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,044] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,044] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,045] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,045] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,045] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,045] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,046] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,046] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,046] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,046] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,046] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,047] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,047] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,047] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:45,047] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,070] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,071] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,088] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,093] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,109] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,115] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,131] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,141] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,157] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,163] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,163] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,163] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,163] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,163] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,179] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,185] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,185] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,185] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,185] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,185] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,185] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,186] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,202] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,218] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,230] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,230] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,230] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,231] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,231] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,231] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,231] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,232] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,232] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,232] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,232] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,233] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,233] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,233] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,233] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,234] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,234] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,234] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,235] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,235] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,235] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,235] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,236] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,236] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:50,236] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,247] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,247] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,259] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,259] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,260] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,260] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,260] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,261] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,261] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,261] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,261] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,264] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,264] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,265] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,265] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,275] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,275] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,276] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,276] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,276] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,276] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,276] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,276] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,276] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,276] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,276] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,277] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,277] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,277] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,277] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,280] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,280] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,280] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,281] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,281] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,281] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,281] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,282] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,282] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,282] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,282] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,282] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,283] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,283] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,283] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,283] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,283] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,284] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:55,284] {receiver_server.py:76} INFO - Envié el paquete ACK positivo a esta ip 127.0.0.1 y puerto: 42909
+[2022-10-04 18:11:58,999] {server_main.py:14} INFO - Se ha finalizado la conexión
+[2022-10-04 18:12:26,833] {server_main.py:9} INFO - Para detener el servidor ingrese la palabra FIN
+[2022-10-04 18:13:03,747] {conexiones_hilo.py:119} INFO - Procesando el handshake...
+[2022-10-04 18:13:03,799] {conexiones_hilo.py:199} ERROR - El Path que le pasaron al servidor no existe
+[2022-10-04 18:13:03,800] {conexiones_hilo.py:138} INFO - Archivo existente y es: False
+[2022-10-04 18:13:03,800] {conexiones_hilo.py:151} INFO - Handshake de tipo UPLOAD
+[2022-10-04 18:13:03,800] {conexiones_hilo.py:91} INFO - File name es: libro_ya_subido.pdf
+[2022-10-04 18:13:03,801] {conexiones_hilo.py:92} INFO - EL file path es: /home/fede/Desktop/distribuidos/main/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Server
+[2022-10-04 18:15:44,305] {server_main.py:14} INFO - Se ha finalizado la conexión
+[2022-10-04 18:15:47,137] {server_main.py:9} INFO - Para detener el servidor ingrese la palabra FIN
+[2022-10-04 18:15:53,444] {conexiones_hilo.py:119} INFO - Procesando el handshake...
+[2022-10-04 18:15:53,445] {conexiones_hilo.py:199} ERROR - El Path que le pasaron al servidor no existe
+[2022-10-04 18:15:53,445] {conexiones_hilo.py:138} INFO - Archivo existente y es: False
+[2022-10-04 18:15:53,445] {conexiones_hilo.py:151} INFO - Handshake de tipo UPLOAD
+[2022-10-04 18:15:53,446] {conexiones_hilo.py:91} INFO - File name es: libro_ya_subido.pdf
+[2022-10-04 18:15:53,446] {conexiones_hilo.py:92} INFO - EL file path es: /home/fede/Desktop/distribuidos/main/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Server
+[2022-10-04 18:16:21,310] {server_main.py:14} INFO - Se ha finalizado la conexión
+[2022-10-04 18:16:28,496] {server_main.py:9} INFO - Para detener el servidor ingrese la palabra FIN
+[2022-10-04 18:16:41,715] {conexiones_hilo.py:119} INFO - Procesando el handshake...
+[2022-10-04 18:16:41,715] {conexiones_hilo.py:199} ERROR - El Path que le pasaron al servidor no existe
+[2022-10-04 18:16:41,716] {conexiones_hilo.py:138} INFO - Archivo existente y es: False
+[2022-10-04 18:16:41,716] {conexiones_hilo.py:151} INFO - Handshake de tipo UPLOAD
+[2022-10-04 18:16:41,716] {conexiones_hilo.py:91} INFO - File name es: libro_ya_subido.pdf
+[2022-10-04 18:16:41,716] {conexiones_hilo.py:92} INFO - EL file path es: /home/fede/Desktop/distribuidos/main/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Server
+[2022-10-04 18:16:41,723] {receiver_server.py:55} ERROR - El path pasado al server no existe No se puede subir
+[2022-10-04 18:16:41,734] {conexiones_hilo.py:110} INFO - Se ha terminado el envio
+[2022-10-04 18:16:42,735] {server_hilo.py:44} INFO - Se ha cerrado la conexion.
+[2022-10-04 18:16:46,722] {conexiones_hilo.py:119} INFO - Procesando el handshake...
+[2022-10-04 18:16:46,723] {conexiones_hilo.py:122} INFO - Se envió un paquete que no es handshake, me voy
+[2022-10-04 18:16:56,061] {server_main.py:14} INFO - Se ha finalizado la conexión
+[2022-10-04 18:16:56,722] {conexiones_hilo.py:119} INFO - Procesando el handshake...
+[2022-10-04 18:16:56,723] {conexiones_hilo.py:122} INFO - Se envió un paquete que no es handshake, me voy

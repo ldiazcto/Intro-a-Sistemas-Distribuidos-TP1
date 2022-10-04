@@ -68,6 +68,10 @@ class Conexion(threading.Thread):
             
         sender.start()
         while True:
+            if(self.conexion_activa == False):
+                sender.conexion_activa = False
+                sender.join()
+                return
             if self.hay_data:
                 paqueteBytes = self.queue.pop(0)
                 sender.pasar_data(paqueteBytes)
@@ -90,6 +94,10 @@ class Conexion(threading.Thread):
         receiver = receiver_server.Receiver(self.ip_cliente,self.puerto_cliente,filepath,file_name,self.logger)
         receiver.start()
         while True:
+            if(self.conexion_activa == False):
+                receiver.conexion_activa = False
+                receiver.join()
+                return
             if self.hay_data:
                 paqueteBytes = self.queue.pop(0)
                 receiver.pasar_data(paqueteBytes)
@@ -185,10 +193,13 @@ class Conexion(threading.Thread):
         self.logger.debug("Se chequea la existencia de archivo...")
         nombre, tamanio = self.obtenerNombreYTamanio(paquete)
         i = 0
-        
-        listOfFiles = os.listdir(self.ruta_archivo ) 
-        if nombre in listOfFiles :
-            return True
+        try:
+            listOfFiles = os.listdir(self.ruta_archivo ) 
+        except:
+            self.logger.error("El Path que le pasaron al servidor no existe")
+        else:
+            if nombre in listOfFiles :
+                return True
         return False
 
 

@@ -50,6 +50,7 @@ class Server(threading.Thread):
 
     def finalizar(self):
         for conexion in self.conexiones.copy():
+            self.conexiones[conexion].conexion_activa = False
             self.conexiones[conexion].join()
             self.conexiones.pop(conexion)
 

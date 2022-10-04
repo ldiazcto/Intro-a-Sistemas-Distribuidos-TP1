@@ -49,7 +49,12 @@ class Receiver(threading.Thread):
 
     def run(self):
         fileCompleto = self.filePath + "/" + self.fileName
-        file = open(fileCompleto,'wb')
+        try:
+            file = open(fileCompleto,'wb')
+        except:
+            self.logger.error("El path pasado al server no existe No se puede subir")
+            self.Termino = True
+            return
         self.recibir_archivo(file)
         self.Termino = True
         file.close()
@@ -75,7 +80,7 @@ class Receiver(threading.Thread):
                 self.logger.error("✗ El archivo no esta disponible")
             self.logger.info(f"Envié el paquete ACK positivo a esta ip {self.ip_cliente} y puerto: {self.puerto_cliente}")
         else:
-            self.looger.debug(":( El paquete ACK a enviar es negativo")
+            self.logger.debug(":( El paquete ACK a enviar es negativo")
             paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_INCORRECT)
             try:
                 self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))

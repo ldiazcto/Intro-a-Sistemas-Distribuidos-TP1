@@ -34,7 +34,7 @@ class GoBackN(threading.Thread,sender_server.Sender_Server):
         self.MAX_WAIT = 3
         self.MSJ_SIZE = 2000
         self.logger = logger
-
+        self.conexion_activa == True
 
 
     def run(self):
@@ -45,6 +45,8 @@ class GoBackN(threading.Thread,sender_server.Sender_Server):
         mensaje = "entrar en ciclo"
         timeout_start = 0
         while (True):
+            if(self.conexion_activa == False):
+                return
             if(self.new_seq_number < self.older_seq_number + TAM_VENTANA):
                 mensaje = file.read(self.MSJ_SIZE)
                 if(len(mensaje) != 0):

@@ -1,3 +1,4 @@
+from ast import Return
 from asyncio import SendfileNotAvailableError
 from socket import *
 import time
@@ -26,6 +27,7 @@ class StopWait(threading.Thread,sender_server.Sender_Server):
         self.MAX_WAIT = 3
         self.MSJ_SIZE = 2000
         self.logger = logger
+        self.conexion_activa = True
 
 
     def run(self):
@@ -80,6 +82,8 @@ class StopWait(threading.Thread,sender_server.Sender_Server):
 
         mensaje = file.read(self.MSJ_SIZE)
         while(len(mensaje) > 0):
+            if(self.conexion_activa == False):
+                return
             intentar_mandar,paquete_recibido = self.enviar(mensaje)
             
             if (intentar_mandar == False):
