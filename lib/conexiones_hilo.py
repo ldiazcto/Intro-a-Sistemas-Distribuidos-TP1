@@ -123,7 +123,6 @@ class Conexion(threading.Thread):
             return False
 
         archivoExiste = self.chequearExistenciaArchivo(paquete)
-        self.logger.info(f"✓ Archivo existente y es: {archivoExiste}")
         if (not archivoExiste and paquete.esDownload()) :
                 self.logger.error("✗ El archivo pedido no existe")
                 paqueteRefused = self.gestor_paquete.crearPaqueteRefused()

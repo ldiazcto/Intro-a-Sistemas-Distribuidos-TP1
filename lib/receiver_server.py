@@ -87,7 +87,6 @@ class Receiver(threading.Thread):
                     self.hay_data = False 
                 if paqueteBytes is None:   
                     return
-                self.imprimir_mensaje(paqueteBytes)
                 self.procesar_mensaje(paqueteBytes,file)
         self.logger.error("Timeout...")
         self.conexion_activa = False

@@ -1,22 +1,22 @@
 # Intro-a-Sistemas-Distribuidos-TP1
 Trabajo Práctico N°1 de la materia Introducción a los Sistemas Distribuidos
 
-### Ejecutar
+## Ejecutar
 
 Por default el protocolo seteado es StopAndWait para Cliente y servidor 
 
-## Start-Server
+### Start-Server
 
 ```
 python3 -u menuServer.py --start-server  -s <path de la ruta /lib/BDD_Servidor> -H localhost -p 9000 -o GN
 ```
 
-## DOWNLOAD 
+### Download 
 ```
 python3 -u menuCliente.py --download -d <path de la ruta /lib/BDD_Cliente> -n <nombre del archivo a descargar> -H localhost -p 9000
 ```
 
-## UPLOAD 
+### Upload 
 ```
 python3 -u menuCliente.py --upload -s  <path de la ruta /lib/BDD_Cliente> -n <nombre del archivo a subir> -H localhost -p 9000 -o gbn
 ```
@@ -54,7 +54,7 @@ optional arguments :
 -d, --dst destination file path
 -n, --name file name
 ```
-### Server
+## Server
 
 ```
 > python start - server -h
