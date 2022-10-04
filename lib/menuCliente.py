@@ -7,6 +7,7 @@ import parser
 import sender_stop_wait
 import sender
 import sender_gobackn
+import receiver
 SERVER_ADDR = ""
 SERVER_PORT = 12000
 FILEPATH = ""
@@ -115,8 +116,8 @@ class MenuCliente:
             client.enviar_archivo(protocolo)
         else:
             #Para el download
-            receiver = receiver.Receiver(self.serverAdress, int(self.port), self.filename, self.filepath, logger)
-            client.recibir_archivo(receiver)
+            rec = receiver.Receiver(self.serverAdress, int(self.port), self.filepath,self.filename,  logger)
+            client.recibir_archivo(rec)
 
         return 0
 

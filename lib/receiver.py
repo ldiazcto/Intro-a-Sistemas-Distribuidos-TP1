@@ -19,7 +19,7 @@ MAX_WAIT_SERVIDOR = 50 #PELIGRO! TIMEOUT DEL SERVER!!
 
 class Receiver():  
     
-    def __init__(self, sender_ip, sender_port, file_path, file_name):
+    def __init__(self, sender_ip, sender_port, file_path, file_name, logger ):
         self.receiver_socekt = socket(AF_INET,SOCK_DGRAM)
         self.receiver_socekt.setblocking(False)
         self.sender_ip = sender_ip
@@ -28,6 +28,7 @@ class Receiver():
         self.Termino = False
         self.file_path = file_path
         self.file_name = file_name
+        self.logger = logger
 
 
     # Dados el path y el file name enviados al constructor, se entabla el handshake y se recibe el archivo

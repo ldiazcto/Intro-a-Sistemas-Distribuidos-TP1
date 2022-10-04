@@ -44,7 +44,7 @@ class MenuServer:
 
     def main(self):
 
-        file_handler = logging.FileHandler(filename='tmp.log')
+        file_handler = logging.FileHandler(filename='server.log')
         stdout_handler = logging.StreamHandler(stream=sys.stdout)
         handlers = [file_handler, stdout_handler]
         logging.basicConfig(
