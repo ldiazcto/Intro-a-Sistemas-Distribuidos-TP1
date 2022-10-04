@@ -26,7 +26,7 @@ class Sender(metaclass=abc.ABCMeta):
                         self.enviarPaquetes(file)
                         file.close()
                 else:
-                        logger.debug("Fallo el handshake")
+                        logger.error("Fallo el handshake")
 
 
         def crearPaqueteHandshake_upload(self, fileName, fileSize):
@@ -55,6 +55,8 @@ class Sender(metaclass=abc.ABCMeta):
                 paqueteBytes = self.gestorPaquetes.pasarPaqueteABytes(paquete)
                 i = 0
                 while i <= MAX_TRIES:
+                        print("le paso el receiver_ip", self.receiver_ip)
+                        print("LE PASO el Receiver PORT", self.receiver_port)
                         self.sender_socekt.sendto(paqueteBytes,(self.receiver_ip,self.receiver_port))
                         paqueteRecibido = self.recibirPaquete()
                         #TIMEOUTEA VUELVO A ENVIAR EL HANDSHAKE

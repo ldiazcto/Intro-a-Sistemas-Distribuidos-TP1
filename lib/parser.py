@@ -60,7 +60,7 @@ class Parser:
         if(opt in ('-p','--port')):
             port = arg #puerto del servidor
             
-        if(opt in ('-n','--name')):
+        if(opt in ('-H','--host')):
             print("ENTRE AL IFFFFFFFFFFFFF")
             host = arg #nombre del paquete
             
