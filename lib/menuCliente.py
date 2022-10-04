@@ -27,9 +27,9 @@ class MenuCliente:
     def __init__(self):    
         self.parser = parser.Parser()
         self.filename = ""
-        self.filepath = "" # -s para upload -d para download
+        self.filepath = "" 
         self.port = 8080
-        self.serverAdress = "" # --host/ -H
+        self.serverAdress = "" 
         self.transferencia = ""
         self.cambiar_protocolo = False
 
@@ -57,9 +57,8 @@ class MenuCliente:
         logger = logging.getLogger()
         
         opciones, argumentos = self.parser.obtenerArgumentos()
-        print("OPCIONES: ",opciones , argumentos)
 
-        for opt,arg in opciones: #para entrar en las tuplas de opciones y analizar
+        for opt,arg in opciones: 
             if (opt in ('-h','--help')):
                                 print("usage : upload [-h] [-v | -q] [-H ADDR ] [-p PORT ] [-s FILEPATH ] [-n FILENAME ]\n" 
                                             + "<command description >\n "
@@ -77,20 +76,14 @@ class MenuCliente:
 
                 self.parser.definirVerbosidad(opt, logger)
                 self.port, self.serverAdress = self.parser.definirPuertoYHost(opt, arg, self.port, self.serverAdress)
-                
                 if(opt in ('-n','--name')):
                     self.filename = arg
-                
                 if(opt in ('-o','--option')):
                     self.cambiar_protocolo = self.parser.cambiarProtocolo()
-
-                # ---------------------------------UPLOAD
                 if(sys.argv[1] == "--upload"):
                     if(opt in ('-s','--src')):
                         self.filepath = arg
                         self.transferencia = UPLOAD
-
-                #---------------------------------DOWNLOAD
                 if(sys.argv[1] == "--download"):
                     if(opt in ('-d','--dst')):
                         self.filepath = arg
@@ -98,8 +91,6 @@ class MenuCliente:
             else: 
                 logger.error("Debe ingresar una acción a realizar [--upload]/[--download]")
                 sys.exit(2)
-
-        #Si termine de recorrer mis argumentos y nunca tuve el path para el up o download
         if(self.filepath == ""):
             logger.error("Debe indicar una ruta de archivo [-s/--src] o [-d/--dst]")
             sys.exit(2)
@@ -107,15 +98,14 @@ class MenuCliente:
             logger.error("Debe ingresar el nombre del archivo [-n/--name]")
             sys.exit(2)
 
-        client = cliente.Cliente(self.serverAdress, self.port, logger) #server adress Ip adress,  puertoEntradaContrario
+        client = cliente.Cliente(self.serverAdress, self.port, logger) 
         if(sys.argv[1] == "--upload"):
             ruta = self.filepath + "/" + self.filename
             protocolo = sender_stop_wait.StopWait(self.serverAdress, int(self.port), self.filename, self.filepath, logger)
             if self.cambiar_protocolo == True : protocolo = sender_gobackn.GoBackN(self.serverAdress, int(self.port), self.filename, self.filepath,logger)
             client.enviar_archivo(protocolo)
         else:
-            #Para el download
-            rec = receiver.Receiver(self.serverAdress, int(self.port), self.filepath,self.filename,  logger)
+            rec = receiver.Receiver(self.serverAdress, int(self.port), self.filepath,self.filename, logger)
             client.recibir_archivo(rec)
 
         return 0

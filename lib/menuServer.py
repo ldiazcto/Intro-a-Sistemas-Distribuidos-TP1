@@ -22,9 +22,9 @@ class MenuServer:
 
     def __init__(self):    
         self.parser = parser.Parser()
-        self.filepath = "" # storage dir path
-        self.port = 12000   # --->service port
-        self.host = "" # --host ->service IP address
+        self.filepath = ""
+        self.port = 12000
+        self.host = "" 
         self.transferencia = ""
         self.protocolo = "sw"
 
@@ -50,11 +50,8 @@ class MenuServer:
             handlers=handlers
         )
         logger = logging.getLogger()
-        
         opciones, argumentos = self.parser.obtenerArgumentos()
-        print("OPCIONES: ",opciones , argumentos)
-
-        for opt,arg in opciones: #para entrar en las tuplas de opciones y analizar
+        for opt,arg in opciones: 
             if (opt in ('-h','--help')):
                                 print("usage : start - server [-h] [-v | -q] [-H ADDR ] [-p PORT ] [-s DIRPATH ]\n" 
                                             + "<command description >\n "
@@ -68,30 +65,18 @@ class MenuServer:
                                         + "-o  --option               protocol")
                                 sys.exit(0)
             if sys.argv[1] == "--start-server":
-
                 self.parser.definirVerbosidad(opt, logger)
                 self.port, self.host = self.parser.definirPuertoYHost(opt, arg, self.port, self.host)
-
                 if(opt in ('-o','--option')):
-                    self.protocolo = "GN" #GN PARA GO BACK N SI NO VALE SW
-
+                    self.protocolo = "GN"
                 if(opt in ('-s','--storage')):
                     self.filepath = arg
             else: 
                 logger.error("Debe iniciar el server [--start-server]")
                 sys.exit(2)
-
-        #Si termine de recorrer mis argumentos y nunca ingreso el path donde almacena los archivos 
         if(self.filepath == ""):
             logger.error("Debe indicar una ruta de archivo [-s/--storage]")
             sys.exit(2)
-
-        #Si llegue aca, entonces puedo levantar el server 
-        #
-        #
-        #
-        # Le tengo que pasar por parametro la info que me pasaron por comando
-        # el host (Service IP adress), Service port, filepath, y protocolo
         server_main.main(self.host,int(self.port),self.filepath,self.protocolo,logger)
         return 0
 
