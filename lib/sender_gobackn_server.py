@@ -71,14 +71,13 @@ class GoBackN(threading.Thread,sender_server.Sender_Server):
             var = time.time()
             saltoTimerReenvio = (var - timeout_start)  >= MAX_WAIT_GOBACKN
             if(saltoTimerReenvio and timeout_start != 0):
-                #print("\n\n SALTO EL TIMER \n\n")
+                self.logger.error("\n\n Timeout... \n\n")
                 timeout_start = time.time()
                 for pck in self.paquetesEnVuelo:
                     self.sender_socekt.sendto(self.gestorPaquetes.pasarPaqueteABytes(pck),(self.receiver_ip,self.receiver_port))
-        #print("Cantidad paquetes en vuelo: ", len(self.paquetesEnVuelo))
         conexion_cerrada,pck_recibido = self.enviar_fin()
         if(conexion_cerrada == True):
-            self.logger.info("Se ha cerrado la conexion con exito")
+            self.logger.info("Se ha cerrado la conexion con el protocolo GoBackN con exito")
         self.Termino = True
         return
 

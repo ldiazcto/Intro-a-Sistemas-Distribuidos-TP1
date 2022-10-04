@@ -21,6 +21,7 @@ ACK_INCORRECT = 0
 MAX_WAIT_HANDSHAKE = 30
 MAX_TAMANIO_PERMITIDO = 6000000 #en bytes
 MAX_WAIT_SERVIDOR = 50 #PELIGRO! TIMEOUT DEL SERVER!!
+CARACTER_SEPARADOR = "-"
 
 class Conexion(threading.Thread):
     def __init__(self,numero_hilo, conexion_cliente,protocolo,filePath,logger):
@@ -28,7 +29,7 @@ class Conexion(threading.Thread):
         self.nombre = numero_hilo
         self.conexion_cliente = conexion_cliente
         self.ip_cliente = conexion_cliente[0]
-        self.puerto_cliente = conexion_cliente[1] #por ac'a escribe o escucha el cliente? --> ambos 
+        self.puerto_cliente = conexion_cliente[1] 
         self.skt = socket(AF_INET,SOCK_DGRAM)
         self.queue = []
         self.hay_data = False
@@ -44,9 +45,8 @@ class Conexion(threading.Thread):
 
     def run(self):
         while True:
-            if self.hay_data: #verifico si me pasaron nueva data
+            if self.hay_data:
                 break
-        #este pop y procesamiento inicial est'a bien, pero tiene que mandar esa tira inicial en el handshake, sino se pierde ese paquete
         tiraBytes = self.queue.pop(0)
         if len(self.queue) == 0:
             self.hay_data = False
@@ -67,19 +67,18 @@ class Conexion(threading.Thread):
             
         sender.start()
         while True:
-            if self.hay_data: #verifico si me pasaron nueva data
-                paqueteBytes = self.queue.pop(0) #obtengo la data
+            if self.hay_data:
+                paqueteBytes = self.queue.pop(0)
                 sender.pasar_data(paqueteBytes)
                 if len(self.queue) == 0:
-                    self.hay_data = False #si la cola queda vacia establezco que no hay mas data, por ahora
-                if paqueteBytes is None:   # If you send `None`, the thread will exit.
+                    self.hay_data = False
+                if paqueteBytes is None:
                     return
             if(sender.Termino == True):
                 self.logger.info("El envio se ha realizado con exito")
                 sender.join()
                 self.conexion_activa = False
                 return
-
 
 
 
@@ -90,13 +89,13 @@ class Conexion(threading.Thread):
         receiver = receiver_server.Receiver(self.ip_cliente,self.puerto_cliente,filepath,file_name,self.logger)
         receiver.start()
         while True:
-            if self.hay_data: #verifico si me pasaron nueva data
-                paqueteBytes = self.queue.pop(0) #obtengo la data
+            if self.hay_data:
+                paqueteBytes = self.queue.pop(0)
                 receiver.pasar_data(paqueteBytes)
-                #print("\n\n-- En recibi_archivo, el paqueteBytes recien recibido es: ", paqueteBytes)
+            
                 if len(self.queue) == 0:
-                    self.hay_data = False #si la cola queda vacia establezco que no hay mas data, por ahora
-                if paqueteBytes is None:   # If you send `None`, the thread will exit.
+                    self.hay_data = False
+                if paqueteBytes is None:
                     return
             if(receiver.Termino == True):
                 self.logger.info("Se ha terminado el envio")
@@ -104,14 +103,8 @@ class Conexion(threading.Thread):
                 self.conexion_activa = False
                 return
     
-
-
-
     def esta_activa(self):
         return self.conexion_activa
-
-
-#-------------PROCESAR HANDSHAKE-----------
 
     def procesarHandshake(self, paquete):
         self.logger.info("Procesando el handshake...")
@@ -120,7 +113,6 @@ class Conexion(threading.Thread):
             self.logger.info("Se envió un paquete que no es handshake, me voy")
             paqueteRefused = self.gestor_paquete.crearPaqueteRefused()
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paqueteRefused),(self.ip_cliente,self.puerto_cliente))
-            #CIERRO LA CONEXION ??
             return False
         
         tamanioApropiado = self.chequearTamanio(paquete)
@@ -134,7 +126,6 @@ class Conexion(threading.Thread):
         self.logger.info(f"Archivo existente y es: {archivoExiste}")
         if (not archivoExiste and paquete.esDownload()) :
                 self.logger.error("El archivo pedido no existe, me voy")
-                #hay que establecer este protocolo
                 paqueteRefused = self.gestor_paquete.crearPaqueteRefused()
                 self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paqueteRefused),(self.ip_cliente,self.puerto_cliente))
                 return False
@@ -152,11 +143,6 @@ class Conexion(threading.Thread):
                 
                 return True
 
-
-
-
-#-------- FUNCIONES AUXILIARES HANDSHAKE-----------
-
     def chequearHandshakeApropiado(self, paquete):
         return (paquete.esDownload() or paquete.esUpload())
 
@@ -173,7 +159,7 @@ class Conexion(threading.Thread):
     def obtenerNombreYTamanio(self, paquete):
         mensaje = paquete.obtenerMensaje()
         if paquete.esUpload() :
-            nombre, tamanio = str(mensaje, "ascii").split("-")
+            nombre, tamanio = str(mensaje, "ascii").split(CARACTER_SEPARADOR)
             return nombre, int(tamanio)
         return str(mensaje, "ascii"), 0
 
@@ -181,7 +167,7 @@ class Conexion(threading.Thread):
         self.logger.debug("Se checkea el tamaño del paquete...")
         if paquete.esDownload() :
             return True
-        MAX_TAMANIO_PERMITIDO
+
         nombre, tamanio = self.obtenerNombreYTamanio(paquete)
         if (tamanio >= MAX_TAMANIO_PERMITIDO):
             return False
@@ -189,7 +175,7 @@ class Conexion(threading.Thread):
         return True
 
     def chequearExistenciaArchivo(self, paquete) :
-        self.logger.debug("Se checkea la existencia de archivo...")
+        self.logger.debug("Se chequea la existencia de archivo...")
         nombre, tamanio = self.obtenerNombreYTamanio(paquete)
         i = 0
         
@@ -203,16 +189,10 @@ class Conexion(threading.Thread):
         return paquete.esUpload()
 
     def enviarACKHandshake(self, agregado):
-        #crear paquete
         gP = gestorPaquetes.Gestor_Paquete()
         pck = gP.crearPaqueteACK(agregado)
         
-        #pasarlo a bytes
         pckBytes = gP.pasarPaqueteABytes(pck)
 
-        self.skt.sendto(pckBytes,(self.ip_cliente,self.puerto_cliente))
-    
-
-    
-    
+        self.skt.sendto(pckBytes,(self.ip_cliente,self.puerto_cliente))    
     

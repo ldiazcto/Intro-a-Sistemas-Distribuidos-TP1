@@ -7,8 +7,6 @@ import select
 
 
 class Sender(metaclass=abc.ABCMeta):
-        #Se establece el handshake y se envía el archivo con el filePath y el fileName pasados durante la creación
-        #Se devuelve True si el enviar fue exitoso y False si no
         def enviar_archivo(self,logger):
                 filepath= self.filePath + "/" + self.fileName
                 file_stats = os.stat(filepath)

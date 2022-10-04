@@ -8,14 +8,13 @@ class Cliente():
                 self.puerto_server = puerto_server
                 self.logger = logger
 
-
         def enviar_archivo(self, sender):
                 self.logger.info("Se intenta enviar el archivo...")
                 sender.enviar_archivo(self.logger)
 
 
         def recibir_archivo(self, receiver):
-                receiver.recibir_archivo()
+                receiver.recibir_archivo(self.logger)
 
 
  

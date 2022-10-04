@@ -79,7 +79,7 @@ class GoBackN(sender.Sender):
                         self.sender_socekt.sendto(self.gestorPaquetes.pasarPaqueteABytes(pck),(self.receiver_ip,self.receiver_port))
             conexion_cerrada, pck_recibido = self.enviar_fin()
             if(conexion_cerrada == True):
-                self.logger.info("Conexion cerrada con exito")
+                self.logger.info("Se ha cerrado la conexion con el protocolo GoBackN con exito")
             return
 
 

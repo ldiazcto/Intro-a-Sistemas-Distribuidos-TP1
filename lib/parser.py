@@ -28,7 +28,7 @@ class Parser:
 
     def obtenerArgumentos(self):
         opcionesCortas = "uhvqH:p:s:d:n:o:" 
-        opcionesLargas = [ "download","upload", "start-server", "help","verbose","quiet","host=","port=","src=","name=","dst=", "option="] #se utilizan con --
+        opcionesLargas = [ "download","upload", "start-server", "help","verbose","quiet","host=","port=","src=","name=","dst=", "option="] 
         listaArgumentos = sys.argv[1:]
         try:
             return getopt.getopt(listaArgumentos,opcionesCortas,opcionesLargas)

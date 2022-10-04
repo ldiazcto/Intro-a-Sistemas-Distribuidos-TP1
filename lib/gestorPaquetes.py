@@ -85,7 +85,5 @@ class Gestor_Paquete:
     def verificarPaqueteOrdenado(self,paquete):
         if (paquete == None):
             return False
-        # print("En verificarPaqueteOrdenado, el seq number del paquete es = ", paquete.obtenerSeqNumber())
-        # print("En verificarPaqueteOrdenado, el seq number global del gestor es = ", self.seq_number)
         return (paquete.obtenerSeqNumber() == self.seq_number)
     

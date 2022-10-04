@@ -37,13 +37,14 @@ class Receiver():
         new_path = self.file_path + "/" + self.file_name
         filepath= new_path
         handshake_establecido = self.entablarHandshake(self.file_name)
+        self.logger.info("✓ El handshake se estableció correctamente")
         if(handshake_establecido):
             file = open(filepath,'wb')
             self.recibir_Paquetes(file)
             file.close()
             return True
         else:
-            self.logger.error("El handshake ha fallado...")
+            self.logger.error("✗ El handshake ha fallado...")
             return False
 
 
@@ -58,7 +59,7 @@ class Receiver():
             paqueteBytes, sourceAddress = self.receiver_socekt.recvfrom(2048)
             time_start = time.time()
             self.procesar_mensaje(paqueteBytes,file)
-        self.logger.error("Timeout...")
+        self.logger.error("✗ Timeout...")
 
     def procesar_mensaje(self,paqueteBytes,file):
         paquete = self.gestor_paquete.pasarBytesAPaquete(paqueteBytes)
@@ -77,6 +78,7 @@ class Receiver():
             file.write(paquete.obtenerMensaje())
             self.receiver_socekt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.sender_ip,self.sender_port))
         else:
+            self.logger.debug("✗ El paquete recibido no está ordenado")
             paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_INCORRECT)
             self.receiver_socekt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.sender_ip,self.sender_port))
 

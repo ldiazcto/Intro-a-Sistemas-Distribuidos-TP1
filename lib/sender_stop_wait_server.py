@@ -35,18 +35,20 @@ class StopWait(threading.Thread,sender_server.Sender_Server):
         pckBytes = self.gestorPaquetes.pasarPaqueteABytes(pck)
         self.sender_socekt.sendto(pckBytes ,(self.receiver_ip,self.receiver_port))
         cantidad_intentos = 1
-        self.logger.debug(f"\n-La cantidad intentos es {cantidad_intentos}")
+        # self.logger.debug(f"\n-La cantidad intentos es {cantidad_intentos}")
         paqueteRecibido = self.recibirPaquete()
+
         while(paqueteRecibido == None and cantidad_intentos <= self.MAX_TRIES):
             self.sender_socekt.sendto(pckBytes ,(self.receiver_ip,self.receiver_port))
             paqueteRecibido = self.recibirPaquete()
             cantidad_intentos += 1
             if(paqueteRecibido != None): 
                 return (True,paqueteRecibido)
-            #print("-cantidad intentos es ", cantidad_intentos)
+
         if(cantidad_intentos > self.MAX_TRIES):
             self.Termino = True
             return (False,None)
+            
         return (True,paqueteRecibido)
 
     def terminar_ejecucion(self, nuevo_estado):
@@ -87,7 +89,7 @@ class StopWait(threading.Thread,sender_server.Sender_Server):
             mensaje = file.read(self.MSJ_SIZE)
         conexion_cerrada,pck_recibido = self.enviar_fin()
         if(conexion_cerrada == True):
-            self.logger.info("Se ha cerrado la conexion con exito")
+            self.logger.info("Se ha cerrado la conexion con el protocolo StopAndWait con exito")
             self.Termino = True
         return
     
