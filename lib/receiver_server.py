@@ -27,10 +27,11 @@ MAX_WAIT_SERVIDOR = 50 #PELIGRO! TIMEOUT DEL SERVER!!
 
 
 class Receiver(threading.Thread):
-    def __init__(self, ip_cliente,port_cliente,filePath,filename):
+
+    def __init__(self, ip_cliente,port_cliente,filePath,filename,logger):
         threading.Thread.__init__(self)
         self.ip_cliente = ip_cliente
-        self.puerto_cliente = port_cliente #por ac'a escribe o escucha el cliente? --> ambos 
+        self.puerto_cliente = port_cliente 
         self.skt = socket(AF_INET,SOCK_DGRAM)
         self.queue = []
         self.hay_data = False
@@ -39,6 +40,7 @@ class Receiver(threading.Thread):
         self.filePath = filePath
         self.Termino = False
         self.fileName = filename
+        self.logger = logger
 
     def pasar_data(self, paquete= b""):
         self.queue.append(paquete)
@@ -51,45 +53,23 @@ class Receiver(threading.Thread):
         self.Termino = True
         file.close()
         
-
-
-
-    def imprimir_mensaje(self, paqueteBytes):
-        #print ("Numero_hilo: ",self.nombre,"conexion:",self.conexion_cliente)
-        print ("paqueteBytes: ",paqueteBytes)
-        print("\n")
-
     def procesar_mensaje(self,paqueteBytes,file):
         paquete = self.gestor_paquete.pasarBytesAPaquete(paqueteBytes)
-
-        print("El paqueteBytes recibido en procesar_mensaje es = ", paqueteBytes)
-        print("El mensaje es recibido en procesar_mensaje es = ", paquete.obtenerMensaje())
-
         if (self.gestor_paquete.verificarPaqueteOrdenado(paquete) == True):
-            if(paquete.esFin()):
-                
-                print("ES PAQUETE FIN: ")
+            if(paquete.esFin()):         
                 paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_CORRECT)
-                print("El paquete ACK que voy a mandar por haber entrado a True es: ", self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
-                #time.sleep(10)
                 self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
-                print("Envié el paquete ACK positivo a esta ip y puerto ", (self.ip_cliente,self.puerto_cliente))
+                self.logger.info(f"Envié el paquete ACK positivo a esta ip y puerto:{self.ip_cliente} {self.puerto_cliente}")
                 self.Termino = True
                 self.conexion_activa = False
                 return
-
-            print("Al verificar el paquete, resulta que es True")
             paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_CORRECT)
             file.write(paquete.obtenerMensaje())
-            print("El paquete ACK que voy a mandar por haber entrado a True es: ", self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
-            #time.sleep(10)
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
-            print("Envié el paquete ACK positivo a esta ip y puerto ", (self.ip_cliente,self.puerto_cliente))
+            self.logger.info(f"Envié el paquete ACK positivo a esta ip y puerto: {self.ip_cliente} {self.puerto_cliente}")
         else:
-            print("Al verificar el paquete, resulta que es False")
             paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_INCORRECT)
             print(self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
-            #time.sleep(2)
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
         
     def esta_activa(self):
@@ -99,22 +79,18 @@ class Receiver(threading.Thread):
     def recibir_archivo(self,file):
         time_start = time.time()
         while time.time() - time_start <=   MAX_WAIT_SERVIDOR:
-            #print(time.time() - time_start)
             if self.conexion_activa == False:
                 return
-            if self.hay_data: #verifico si me pasaron nueva data
+            if self.hay_data:
                 time_start = time.time()
-                paqueteBytes = self.queue.pop(0) #obtengo la data
-                #print("\n\n-- En recibi_archivo, el paqueteBytes recien recibido es: ", paqueteBytes)
+                paqueteBytes = self.queue.pop(0) 
                 if len(self.queue) == 0:
-                    self.hay_data = False #si la cola queda vacia establezco que no hay mas data, por ahora
-                if paqueteBytes is None:   # If you send `None`, the thread will exit.
+                    self.hay_data = False 
+                if paqueteBytes is None:   
                     return
                 self.imprimir_mensaje(paqueteBytes)
                 self.procesar_mensaje(paqueteBytes,file)
-                #print("Volvi de procesar_mensaje, el paqueteBytes era: ", paqueteBytes)
-                #print("\n\n")
-        print("ESPERE SUFICIENTE NO ME MANDASTE NADA")
+        self.logger.error("Timeout...")
         self.conexion_activa = False
         self.Termino = True
         return

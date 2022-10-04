@@ -8,15 +8,11 @@ def main(host, port, filepath, protocolo,logger):
 
     server_prueba.start()
     while True:
-        print ("Para detener el servidor ingrese la palabra FIN")
+        logger.info("Para detener el servidor ingrese la palabra FIN")
         palabra = input()
         if palabra == "FIN":
             server_prueba.cerrar_socket()
             server_prueba.finalizar()
             logger.info("Se ha finalizado la conexión")
             server_prueba.join()
-            print ("LLEGO HASTA ACA")
             return
-
-# main(host, port, filepath, protocolo)
-print ("LLEGO HASTA ACA")

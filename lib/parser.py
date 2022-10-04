@@ -27,14 +27,14 @@ class Parser:
         file.close()
 
     def obtenerArgumentos(self):
-        opcionesCortas = "uhvqH:p:s:d:n:o:" #se utilizan con -. los : esperan su sgte entrada
+        opcionesCortas = "uhvqH:p:s:d:n:o:" 
         opcionesLargas = [ "download","upload", "start-server", "help","verbose","quiet","host=","port=","src=","name=","dst=", "option="] #se utilizan con --
         listaArgumentos = sys.argv[1:]
         try:
-            return getopt.getopt(listaArgumentos,opcionesCortas,opcionesLargas) #par tuplas
+            return getopt.getopt(listaArgumentos,opcionesCortas,opcionesLargas)
         except getopt.error as err:
             print(str(err))
-            sys.exit(2)   #conexion muerta
+            sys.exit(2)   
 
     def definirVerbosidad(self, opt, logger):
         if ((opt in ('-v','--verbose')) and opt in (('-q','--quiet'))):
@@ -49,10 +49,10 @@ class Parser:
 
     def definirPuertoYHost(self, opt, arg, port, host):
         if(opt in ('-p','--port')):
-            port = arg #puerto del servidor
+            port = arg 
             
         if(opt in ('-H','--host')):
-            host = arg #nombre del paquete
+            host = arg 
             
         return port, host
 

@@ -5,3 +5,216 @@
 [2022-10-04 13:45:17,624] {server_hilo.py:44} INFO - MATO LA CONEXION
 [2022-10-04 13:53:45,912] {server_hilo.py:44} INFO - MATO LA CONEXION
 [2022-10-04 13:54:56,072] {server_main.py:16} INFO - Se ha finalizado la conexión
+[2022-10-04 14:16:21,969] {conexiones_hilo.py:118} INFO - Procesando el handshake...
+[2022-10-04 14:16:21,969] {conexiones_hilo.py:162} INFO - entre a procesar handshake apropiado
+[2022-10-04 14:16:21,969] {conexiones_hilo.py:184} INFO - Se checkea el tamaño del paquete...
+[2022-10-04 14:16:21,969] {conexiones_hilo.py:191} INFO - Tamaño valido
+[2022-10-04 14:16:21,969] {conexiones_hilo.py:135} INFO - Archivo existente y es: True
+[2022-10-04 14:16:21,970] {conexiones_hilo.py:146} INFO - Handshake de tipo UPLOAD
+[2022-10-04 14:16:21,970] {conexiones_hilo.py:88} INFO - File name es: hola.txt
+[2022-10-04 14:16:21,970] {conexiones_hilo.py:89} INFO - EL file path es: /Users/abrildiazmiguez/Desktop/Intro_a_Distr/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Servidor
+[2022-10-04 14:16:22,264] {conexiones_hilo.py:103} INFO - Se ha terminado el envio
+[2022-10-04 14:16:23,090] {server_hilo.py:44} INFO - MATO LA CONEXION
+[2022-10-04 14:17:25,955] {conexiones_hilo.py:118} INFO - Procesando el handshake...
+[2022-10-04 14:17:25,955] {conexiones_hilo.py:162} INFO - entre a procesar handshake apropiado
+[2022-10-04 14:17:25,955] {conexiones_hilo.py:184} INFO - Se checkea el tamaño del paquete...
+[2022-10-04 14:17:25,955] {conexiones_hilo.py:191} INFO - Tamaño valido
+[2022-10-04 14:17:25,956] {conexiones_hilo.py:135} INFO - Archivo existente y es: False
+[2022-10-04 14:17:25,956] {conexiones_hilo.py:146} INFO - Handshake de tipo UPLOAD
+[2022-10-04 14:17:25,956] {conexiones_hilo.py:88} INFO - File name es: foto_prueba_server.png
+[2022-10-04 14:17:25,956] {conexiones_hilo.py:89} INFO - EL file path es: /Users/abrildiazmiguez/Desktop/Intro_a_Distr/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Servidor
+[2022-10-04 14:17:37,730] {conexiones_hilo.py:103} INFO - Se ha terminado el envio
+[2022-10-04 14:17:38,436] {server_hilo.py:44} INFO - MATO LA CONEXION
+[2022-10-04 14:17:53,200] {server_main.py:16} INFO - Se ha finalizado la conexión
+[2022-10-04 14:33:16,067] {conexiones_hilo.py:118} INFO - Procesando el handshake...
+[2022-10-04 14:33:16,068] {conexiones_hilo.py:162} INFO - entre a procesar handshake apropiado
+[2022-10-04 14:33:16,068] {conexiones_hilo.py:184} INFO - Se checkea el tamaño del paquete...
+[2022-10-04 14:33:16,068] {conexiones_hilo.py:135} INFO - Archivo existente y es: True
+[2022-10-04 14:33:16,068] {conexiones_hilo.py:150} INFO - Handshake de tipo DOWNLOAD
+[2022-10-04 14:33:16,068] {conexiones_hilo.py:59} INFO - File name del archivo a enviar es: foto_prueba_server.png
+[2022-10-04 14:33:16,069] {conexiones_hilo.py:60} INFO - EL file path del archivo a enviar es: /Users/abrildiazmiguez/Desktop/Intro_a_Distr/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Servidor
+[2022-10-04 14:33:16,069] {conexiones_hilo.py:62} INFO - Se envia via protocolo Go Back N
+[2022-10-04 14:33:16,890] {sender_gobackn_server.py:107} INFO - Se ha cerrado la conexion con exito
+[2022-10-04 14:33:16,892] {conexiones_hilo.py:79} INFO - El envio se ha realizado con exito
+[2022-10-04 14:33:17,895] {server_hilo.py:44} INFO - MATO LA CONEXION
+[2022-10-04 14:34:06,408] {server_main.py:16} INFO - Se ha finalizado la conexión
+[2022-10-04 14:34:25,014] {conexiones_hilo.py:118} INFO - Procesando el handshake...
+[2022-10-04 14:34:25,014] {conexiones_hilo.py:162} INFO - entre a procesar handshake apropiado
+[2022-10-04 14:34:25,014] {conexiones_hilo.py:184} INFO - Se checkea el tamaño del paquete...
+[2022-10-04 14:34:25,014] {conexiones_hilo.py:135} INFO - Archivo existente y es: True
+[2022-10-04 14:34:25,015] {conexiones_hilo.py:150} INFO - Handshake de tipo DOWNLOAD
+[2022-10-04 14:34:25,015] {conexiones_hilo.py:59} INFO - File name del archivo a enviar es: foto_prueba_server.png
+[2022-10-04 14:34:25,015] {conexiones_hilo.py:60} INFO - EL file path del archivo a enviar es: /Users/abrildiazmiguez/Desktop/Intro_a_Distr/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Servidor
+[2022-10-04 14:34:25,015] {conexiones_hilo.py:65} INFO - Se envia via protocolo StopAndWait
+[2022-10-04 14:34:25,049] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,077] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,111] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,121] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,162] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,186] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,204] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,238] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,239] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,293] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,317] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,328] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,356] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,374] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,385] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,409] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,470] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,485] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,525] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,537] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,584] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,600] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,625] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,647] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,665] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,681] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,688] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,711] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,728] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,751] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,764] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,785] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,798] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,809] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,834] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,858] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,904] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,949] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,967] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:25,984] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,009] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,020] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,049] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,054] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,076] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,100] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,111] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,122] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,138] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,160] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,178] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,201] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,218] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,248] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,260] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,295] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,308] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,359] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,401] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,445] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,451] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,509] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,515] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,554] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,571] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,588] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,600] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,623] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,635] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,657] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,679] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,722] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,754] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,775] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,793] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,811] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,830] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,842] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,901] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,912] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,942] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,964] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:26,981] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:27,004] {sender_stop_wait_server.py:38} DEBUG - 
+-cantidad intentos es 1
+[2022-10-04 14:34:27,049] {sender_stop_wait_server.py:90} INFO - Se ha cerrado la conexion con exito
+[2022-10-04 14:34:27,054] {conexiones_hilo.py:79} INFO - El envio se ha realizado con exito
+[2022-10-04 14:34:28,032] {server_hilo.py:44} INFO - MATO LA CONEXION
+[2022-10-04 14:34:41,239] {server_main.py:16} INFO - Se ha finalizado la conexión

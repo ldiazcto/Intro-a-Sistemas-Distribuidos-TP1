@@ -29,19 +29,19 @@ class Server(threading.Thread):
             if not lista_sokcets_listos[0]:
                 self.limpiar_conexiones_sin_usar()
                 continue
-            message, clientAdress = self.serverSocket.recvfrom(BUFFER_RECVFROM) #tamanio buffer para 1 paquete
-            if(clientAdress not in self.conexiones): #verifico si ya existe la direccion de donde recibi el paquete
-                self.conexiones[clientAdress] = conexiones_hilo.Conexion(self.numero_hilos,clientAdress,self.protocolo,self.pathSave) #guardo el hilo que se encarga de esa direccion
-                self.conexiones[clientAdress].start() #inicio el hilo
+            message, clientAdress = self.serverSocket.recvfrom(BUFFER_RECVFROM) 
+            if(clientAdress not in self.conexiones): 
+                self.conexiones[clientAdress] = conexiones_hilo.Conexion(self.numero_hilos,clientAdress,self.protocolo,self.pathSave,self.logger) 
+                self.conexiones[clientAdress].start() 
                 self.numero_hilos += 1
-            self.conexiones[clientAdress].pasar_data(message) #le paso la data al hilo
+            self.conexiones[clientAdress].pasar_data(message) 
             self.limpiar_conexiones_sin_usar
                 
     
     def limpiar_conexiones_sin_usar(self):
         for conexion in self.conexiones.copy():
                 if self.conexiones[conexion].esta_activa() == False:
-                    self.logger.info("MATO LA CONEXION")
+                    self.logger.info("Se ha cerrado la conexion.")
                     self.conexiones[conexion].join() 
                     self.conexiones.pop(conexion) 
 
@@ -50,9 +50,7 @@ class Server(threading.Thread):
 
     def finalizar(self):
         for conexion in self.conexiones.copy():
-            #PREGUNTA
-            #capaz que hay que mandar un mensaje avisando a los clientes pero NO SE
-            self.conexiones[conexion].join() #joineo todos los hilos
+            self.conexiones[conexion].join()
             self.conexiones.pop(conexion)
         print("DO SOMETHING")
 
