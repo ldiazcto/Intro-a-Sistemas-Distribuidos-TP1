@@ -5,7 +5,7 @@ import sys
 import logging
 import parser
 import sender_stop_wait
-
+import sender
 SERVER_ADDR = ""
 SERVER_PORT = 12000
 FILEPATH = ""
@@ -108,17 +108,17 @@ class MenuCliente:
             logger.error("Debe ingresar el nombre del archivo [-n/--name]")
             sys.exit(2)
 
-        cliente = cliente.Cliente(self.serverAdress, self.port, logger) #server adress Ip adress,  puertoEntradaContrario
+        client = cliente.Cliente(self.serverAdress, self.port, logger) #server adress Ip adress,  puertoEntradaContrario
         if(sys.argv[1] == "--upload"):
             ruta = self.filepath + "/" + self.filename
             print("Mi file es: ", ruta)
-            if self.cambiar_protocolo == True : sender = sender.GoBackN(self.serverAdress, self.port, self.filename, self.filepath)
-            sender = sender.StopWait(self.serverAdress, self.port, self.filename, self.filepath, logger)
-            cliente.enviar_archivo(sender)
+            if self.cambiar_protocolo == True : protocolo = sender_stop_wait.GoBackN(self.serverAdress, int(self.port), self.filename, self.filepath)
+            protocolo = sender_stop_wait.StopWait(self.serverAdress, int(self.port), self.filename, self.filepath, logger)
+            client.enviar_archivo(protocolo)
         else:
             #Para el download
-            receiver = receiver.Receiver(self.serverAdress, self.port, self.filename, self.filepath, logger)
-            cliente.recibir_archivo(receiver)
+            receiver = receiver.Receiver(self.serverAdress, int(self.port), self.filename, self.filepath, logger)
+            client.recibir_archivo(receiver)
 
         return 0
 

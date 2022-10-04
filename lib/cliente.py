@@ -10,11 +10,12 @@ class Cliente():
 
 
         def enviar_archivo(self, sender):
-                return sender.enviar_archivo()
+                self.logger.info("Se intenta enviar el archivo...")
+                sender.enviar_archivo(self.logger)
 
 
         def recibir_archivo(self, receiver):
-                return receiver.recibir_archivo()
+                receiver.recibir_archivo(self.logger)
 
 
  
