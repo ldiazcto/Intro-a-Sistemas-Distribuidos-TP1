@@ -52,7 +52,6 @@ class Server(threading.Thread):
         for conexion in self.conexiones.copy():
             self.conexiones[conexion].join()
             self.conexiones.pop(conexion)
-        print("DO SOMETHING")
 
 
     def enviarPaquete(self, mensaje):
