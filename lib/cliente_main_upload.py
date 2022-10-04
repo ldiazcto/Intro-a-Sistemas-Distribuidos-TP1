@@ -33,11 +33,11 @@ def abrirArchivo(ruta):
 
 
 def main():
-    sender_stop = sender_stop_wait.StopWait("localhost", 12000,"foto_prueba.png", "/Users/abrildiazmiguez/Desktop/Intro_a_Distr/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Cliente")
+    #sender_stop = sender_stop_wait.StopWait("localhost", 9000,"lp_desde_cliente.pdf", "/home/fede/Desktop/distribuidos/alternativa_2/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Cliente")
     #sender_stop.enviar_archivo()
-    #sender_goback = sender_gobackn.GoBackN("localhost", 12000,"foto_prueba.png", "/Users/abrildiazmiguez/Desktop/Intro_a_Distr/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Cliente")
-    client = cliente.Cliente("localhost", 12000, None) 
-    rta = client.enviar_archivo(sender_stop)
+    sender_goback = sender_gobackn.GoBackN("localhost", 9000,"lp_desde_cliente.pdf", "/home/fede/Desktop/distribuidos/alternativa_2/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Cliente")
+    client = cliente.Cliente("localhost", 9000, None) 
+    rta = client.enviar_archivo(sender_goback)
  
 main()
    

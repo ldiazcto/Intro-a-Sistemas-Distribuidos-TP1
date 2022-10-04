@@ -1,14 +1,9 @@
 from fileinput import filename
 import os
 import threading
-import time
 import gestorPaquetes
 import receiver
 from socket import *
-import paquete
-import stopAndWait
-import goBackN
-from pathlib import Path
 import sender_stop_wait_server
 import sender_gobackn_server
 import receiver_server
@@ -59,46 +54,64 @@ class Conexion(threading.Thread):
 
 
 
-    def imprimir_mensaje(self, paqueteBytes):
-        print ("Numero_hilo: ",self.nombre,"conexion:",self.conexion_cliente)
-        print ("paqueteBytes: ",paqueteBytes)
-        print("\n")
-
-    def procesar_mensaje(self,paqueteBytes,file):
-        paquete = self.gestor_paquete.pasarBytesAPaquete(paqueteBytes)
-
-        print("El paqueteBytes recibido en procesar_mensaje es = ", paqueteBytes)
-        print("El mensaje es recibido en procesar_mensaje es = ", paquete.obtenerMensaje())
-
-        if (self.gestor_paquete.verificarPaqueteOrdenado(paquete) == True):
-            if(paquete.esFin()):
-                
-                print("ES PAQUETE FIN: ")
-                paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_CORRECT)
-                print("El paquete ACK que voy a mandar por haber entrado a True es: ", self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
-                #time.sleep(10)
-                self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
-                print("Envié el paquete ACK positivo a esta ip y puerto ", (self.ip_cliente,self.puerto_cliente))
-                file.close()
+    def enviar_archivo(self,file_name,filepath):
+        print("File name es:", file_name)
+        print("EL file path es: ", filepath)
+        if(self.protocolo == "GN"):
+            print("Soy GOBACKN")
+            sender = sender_gobackn_server.GoBackN(self.ip_cliente,self.puerto_cliente,file_name,filepath)
+        else:
+            print("SoY STOP AND WAIT")
+            sender = sender_stop_wait_server.StopWait(self.ip_cliente,self.puerto_cliente,file_name,filepath)
+            
+        sender.start()
+        while True:
+            if self.hay_data: #verifico si me pasaron nueva data
+                paqueteBytes = self.queue.pop(0) #obtengo la data
+                sender.pasar_data(paqueteBytes)
+                #print("\n\n-- En recibi_archivo, el paqueteBytes recien recibido es: ", paqueteBytes)
+                if len(self.queue) == 0:
+                    self.hay_data = False #si la cola queda vacia establezco que no hay mas data, por ahora
+                if paqueteBytes is None:   # If you send `None`, the thread will exit.
+                    return
+            if(sender.Termino == True):
+                print("TERMINO EL SENDER")
+                sender.join()
                 self.conexion_activa = False
                 return
 
-            print("Al verificar el paquete, resulta que es True")
-            paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_CORRECT)
-            file.write(paquete.obtenerMensaje())
-            print("El paquete ACK que voy a mandar por haber entrado a True es: ", self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
-            #time.sleep(10)
-            self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
-            print("Envié el paquete ACK positivo a esta ip y puerto ", (self.ip_cliente,self.puerto_cliente))
-        else:
-            print("Al verificar el paquete, resulta que es False")
-            paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_INCORRECT)
-            print(self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
-            #time.sleep(2)
-            self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
-        
+
+
+
+    def recibir_archivo(self,file_name,filepath):
+        print("File name es:", file_name)
+        print("EL file path es: ", filepath)
+    
+        receiver = receiver_server.Receiver(self.ip_cliente,self.puerto_cliente,filepath,file_name)
+        receiver.start()
+        while True:
+            if self.hay_data: #verifico si me pasaron nueva data
+                paqueteBytes = self.queue.pop(0) #obtengo la data
+                receiver.pasar_data(paqueteBytes)
+                #print("\n\n-- En recibi_archivo, el paqueteBytes recien recibido es: ", paqueteBytes)
+                if len(self.queue) == 0:
+                    self.hay_data = False #si la cola queda vacia establezco que no hay mas data, por ahora
+                if paqueteBytes is None:   # If you send `None`, the thread will exit.
+                    return
+            if(receiver.Termino == True):
+                print("TERMINO EL SENDER")
+                receiver.join()
+                self.conexion_activa = False
+                return
+    
+
+
+
     def esta_activa(self):
         return self.conexion_activa
+
+
+#-------------PROCESAR HANDSHAKE-----------
 
     def procesarHandshake(self, paquete):
         print("Entre a procesar Handshake")
@@ -132,16 +145,17 @@ class Conexion(threading.Thread):
                 print("Es de tipo upload")
                 filepath,filename = self.obtener_ruta_y_nombre(paquete)
                 self.recibir_archivo(filename,filepath)
-                #lógica para el uploadobtenerNombreYTipo
         else :
                 print("Es de tipo download")
                 filepath,filename = self.obtener_ruta_y_nombre(paquete)
                 self.enviar_archivo(filename,filepath)
-                #lógica para el download        
-                #cargaPaquete = paquete.obtenerMensaje
-                #Aca llamo a las funciones del cliente para manejo de paquetes y le paso el paquete OJO QUE HAY QUE GUARDAR LA RUTA EN LA CONEXION"""
-    
+                
                 return True
+
+
+
+
+#-------- FUNCIONES AUXILIARES HANDSHAKE-----------
 
     def chequearHandshakeApropiado(self, paquete):
         print("entre a procesar handshake apropiado")
@@ -186,6 +200,8 @@ class Conexion(threading.Thread):
             return True
         return False
 
+
+
     def esHandshakeUpload(self, paquete):
         return paquete.esUpload()
 
@@ -203,70 +219,6 @@ class Conexion(threading.Thread):
         self.skt.sendto(pckBytes,(self.ip_cliente,self.puerto_cliente))
     
 
-    def recibir_archivo(self,file_name,filepath):
-        print("File name es:", file_name)
-        print("EL file path es: ", filepath)
     
-        receiver = receiver_server.Receiver(self.ip_cliente,self.puerto_cliente,filepath,file_name)
-        receiver.start()
-        while True:
-            if self.hay_data: #verifico si me pasaron nueva data
-                paqueteBytes = self.queue.pop(0) #obtengo la data
-                receiver.pasar_data(paqueteBytes)
-                #print("\n\n-- En recibi_archivo, el paqueteBytes recien recibido es: ", paqueteBytes)
-                if len(self.queue) == 0:
-                    self.hay_data = False #si la cola queda vacia establezco que no hay mas data, por ahora
-                if paqueteBytes is None:   # If you send `None`, the thread will exit.
-                    return
-            if(receiver.Termino == True):
-                print("TERMINO EL SENDER")
-                receiver.join()
-                self.conexion_activa = False
-                return
-        """
-        time_start = time.time()
-        while time.time() - time_start <=   MAX_WAIT_SERVIDOR:
-            #print(time.time() - time_start)
-            if self.conexion_activa == False:
-                return
-            if self.hay_data: #verifico si me pasaron nueva data
-                time_start = time.time()
-                paqueteBytes = self.queue.pop(0) #obtengo la data
-                #print("\n\n-- En recibi_archivo, el paqueteBytes recien recibido es: ", paqueteBytes)
-                if len(self.queue) == 0:
-                    self.hay_data = False #si la cola queda vacia establezco que no hay mas data, por ahora
-                if paqueteBytes is None:   # If you send `None`, the thread will exit.
-                    return
-                self.imprimir_mensaje(paqueteBytes)
-                self.procesar_mensaje(paqueteBytes,file)
-                #print("Volvi de procesar_mensaje, el paqueteBytes era: ", paqueteBytes)
-                #print("\n\n")
-        print("ESPERE SUFICIENTE NO ME MANDASTE NADA")
-        self.conexion_activa = False
-        """
     
-    def enviar_archivo(self,file_name,filepath):
-        print("File name es:", file_name)
-        print("EL file path es: ", filepath)
-        if(self.protocolo == "GN"):
-            print("Soy GOBACKN")
-            sender = sender_gobackn_server.GoBackN(self.ip_cliente,self.puerto_cliente,file_name,filepath)
-        else:
-            print("SoY STOP AND WAIT")
-            sender = sender_stop_wait_server.StopWait(self.ip_cliente,self.puerto_cliente,file_name,filepath)
-            
-        sender.start()
-        while True:
-            if self.hay_data: #verifico si me pasaron nueva data
-                paqueteBytes = self.queue.pop(0) #obtengo la data
-                sender.pasar_data(paqueteBytes)
-                #print("\n\n-- En recibi_archivo, el paqueteBytes recien recibido es: ", paqueteBytes)
-                if len(self.queue) == 0:
-                    self.hay_data = False #si la cola queda vacia establezco que no hay mas data, por ahora
-                if paqueteBytes is None:   # If you send `None`, the thread will exit.
-                    return
-            if(sender.Termino == True):
-                print("TERMINO EL SENDER")
-                sender.join()
-                self.conexion_activa = False
-                return
+    

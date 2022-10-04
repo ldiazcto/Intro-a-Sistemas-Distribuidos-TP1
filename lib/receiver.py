@@ -38,6 +38,7 @@ class Receiver():
         handshake_establecido = self.entablarHandshake(self.file_name)
         if(handshake_establecido):
             file = open(filepath,'wb')
+            print("ABRI EL ARCHIVO")
             self.recibir_Paquetes(file)
             file.close()
             return True

@@ -3,12 +3,10 @@ import abc
 import time
 
 MAX_TRIES = 3
-MAX_WAIT = 10
+MAX_WAIT = 3
 
-class Sender_Server(threading.Thread, metaclass=abc.ABCMet):
+class Sender_Server(metaclass=abc.ABCMeta):
         
-        def run(self):
-                self.enviar_archivo()
 
         def pasar_data(self, paquete= b""):
                 self.cola.append(paquete)
@@ -17,6 +15,7 @@ class Sender_Server(threading.Thread, metaclass=abc.ABCMet):
         def enviar_archivo(self):
                 filepath= self.filePath + "/" + self.filename
                 file = open(filepath,'rb')
+                print("VOY A ENVIAR PAQUETES")
                 self.enviarPaquetes(file)
                 self.Termino = True
                 file.close()

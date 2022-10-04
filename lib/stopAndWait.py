@@ -1,12 +1,11 @@
 #from asyncio.windows_events import NULL
 from socket import *
 import time
-import enviador
 
 MSJ_SIZE = 150
 
 
-class StopAndWait(enviador.Enviador):
+class StopAndWait():
 
     def enviar(self,mensaje,entidad):
         pck = self.gestorPaquetes.crearPaquete(mensaje)

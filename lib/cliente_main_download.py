@@ -37,8 +37,8 @@ def abrirArchivo(ruta):
 def main():
 
 
-    receiver_aux = receiver.Receiver("localhost", 12000, "/Users/abrildiazmiguez/Desktop/Intro_a_Distr/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Cliente", "lp_desde_servidor.pdf")
-    client = cliente.Cliente("localhost", 12000, None)
+    receiver_aux = receiver.Receiver("localhost", 9000, "/home/fede/Desktop/distribuidos/alternativa_2/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Cliente", "lp_desde_servidor.pdf")
+    client = cliente.Cliente("localhost", 9000, None)
     rta = client.recibir_archivo(receiver_aux)
   
 main()

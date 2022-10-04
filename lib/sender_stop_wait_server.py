@@ -5,9 +5,9 @@ import threading
 import sender_server
 
 MSJ_SIZE = 2000
-MAX_WAIT = 10
+MAX_WAIT = 3
 
-class StopWait(sender_server.Sender_Server):
+class StopWait(threading.Thread,sender_server.Sender_Server):
     def __init__(self,receiver_ip,receiver_port,filename,filePath):
         threading.Thread.__init__(self)
         self.sender_socekt = socket(AF_INET,SOCK_DGRAM)
@@ -22,19 +22,22 @@ class StopWait(sender_server.Sender_Server):
         self.filePath = filePath
 
 
+    def run(self):
+        self.enviar_archivo()
+
     def enviar(self,mensaje):
         pck = self.gestorPaquetes.crearPaquete(mensaje)
         pckBytes = self.gestorPaquetes.pasarPaqueteABytes(pck)
         self.sender_socekt.sendto(pckBytes ,(self.receiver_ip,self.receiver_port))
         cantidad_intentos = 1
-        print("\n--El mensaje a enviar es: ", mensaje)
+        #print("\n--El mensaje a enviar es: ", mensaje)
         print("\n-cantidad intentos es ", cantidad_intentos)
 
         paqueteRecibido = self.recibirPaquete()
         print("1 Paquete recibido es de tipo:",paqueteRecibido)
         
         while(paqueteRecibido == None and cantidad_intentos <= 3):
-            print("Reenvio mensaje:", mensaje)
+            #print("Reenvio mensaje:", mensaje)
             self.sender_socekt.sendto(pckBytes ,(self.receiver_ip,self.receiver_port))
             paqueteRecibido = self.recibirPaquete()
             cantidad_intentos += 1
@@ -72,7 +75,6 @@ class StopWait(sender_server.Sender_Server):
     def enviarPaquetes(self, file):
 
         mensaje = file.read(MSJ_SIZE)
-        
         while(len(mensaje) > 0):
             intentar_mandar,paquete_recibido = self.enviar(mensaje)
             
@@ -81,6 +83,7 @@ class StopWait(sender_server.Sender_Server):
                 self.Termino =  True
                 return
             verificar_ack = self.gestorPaquetes.actualizarACK(paquete_recibido) #lo cambi;e a verificarACK
+            print("Verificar ack es: ",verificar_ack)
             intentar_mandar_ack = True
             if(verificar_ack == False): #EXTREMA SEGURIDAD --> ACK CORRUPTO
                 cant_max_envios = 0

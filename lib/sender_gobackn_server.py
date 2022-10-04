@@ -14,7 +14,7 @@ MAX_WAIT_FIN = 10
 MAX_WAIT = 10
 UPLOAD = 2
 
-class GoBackN(sender_server.Sender_Server):
+class GoBackN(threading.Thread,sender_server.Sender_Server):
     def __init__(self,receiver_ip,receiver_port,filename, filePath):
         threading.Thread.__init__(self)
         self.sender_socekt = socket(AF_INET,SOCK_DGRAM)
@@ -31,6 +31,10 @@ class GoBackN(sender_server.Sender_Server):
         self.Termino = False
         self.filePath = filePath
 
+
+
+    def run(self):
+        self.enviar_archivo()
 
 
     def enviarPaquetes(self,file):

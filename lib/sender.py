@@ -5,7 +5,7 @@ import abc
 import select
 
 MSJ_SIZE = 2000
-MAX_WAIT = 10
+MAX_WAIT = 5
 
 UPLOAD = 2
 MAX_TRIES = 2

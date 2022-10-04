@@ -2,10 +2,8 @@
 from socket import*
 import select
 import threading
-import time
-import entidad
 import conexiones_hilo
-import gestorPaquetes
+
 
 BUFFER_RECVFROM = 2048
 

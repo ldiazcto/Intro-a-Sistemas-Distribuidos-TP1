@@ -1,6 +1,5 @@
 from socket import *
 import time
-import enviador
 import paquete
 
 MSJ_SIZE = 1500
@@ -10,7 +9,7 @@ MAX_TRIES = 3
 MAX_WAIT_ACKS = 5
 MAX_WAIT_FIN = 10
 
-class GoBackN(enviador.Enviador):
+class GoBackN():
 
     # GO BACK N TIENE ACK ACUMULATIVOS, SI SE PIERDE UN PAQUETE ME VA A DEVOLVER EL ACK DEL ANTERIOR YA QUE VA A DESCARTAR LOS PAQUETES SIGUIENTES AL QUE PERDIO
 

@@ -2,7 +2,7 @@ import server_hilo
 
 
 def main():
-    server_prueba = server_hilo.Server("localhost",12000,"/Users/abrildiazmiguez/Desktop/Intro_a_Distr/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Servidor","SAW")
+    server_prueba = server_hilo.Server("localhost",9000,"/home/fede/Desktop/distribuidos/alternativa_2/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Servidor","GN")
     server_prueba.start()
     while True:
         print ("Para detener el servidor ingrese la palabra FIN")

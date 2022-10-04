@@ -15,7 +15,7 @@ class StopWait(sender.Sender):
         self.receiver_ip = server_ip
         self.receiver_port = server_port
         self.filePath = filepath
-        self.filename = filename
+        self.fileName = filename
         self.gestorPaquetes = gestorPaquetes.Gestor_Paquete()
 
 
