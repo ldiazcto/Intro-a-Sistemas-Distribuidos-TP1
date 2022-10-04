@@ -7,6 +7,8 @@ import gestorPaquetes
 import sender_stop_wait
 import sender_gobackn
 import receiver
+import cliente
+
 
 SERVER_ADDR = ""
 SERVER_PORT = 120
@@ -105,8 +107,9 @@ def main():
     logger.info("Se inicio el logger")
     """
 
-    receiver_aux = receiver.Receiver("localhost", 8080,"localhost", 12000, "/Users/abrildiazmiguez/Desktop/Intro_a_Distr/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Cliente")
-    receiver_aux.recibir_archivo("lp_desde_servidor.pdf")
+    receiver_aux = receiver.Receiver("localhost", 12000, "/Users/abrildiazmiguez/Desktop/Intro_a_Distr/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Cliente", "lp_desde_servidor.pdf")
+    client = cliente.Cliente("localhost", 12000, None) #faltan parámetros
+    rta = client.recibir_archivo(receiver_aux)
     """
     cliente_prueba = cliente.Cliente("localhost", 8090, 12000, logger) #los dos puertos del cliente son 8080 y el server escucha del 12000
     stopWait = stopAndWait.StopAndWait()

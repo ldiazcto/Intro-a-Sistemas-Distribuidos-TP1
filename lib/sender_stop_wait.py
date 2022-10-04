@@ -3,6 +3,7 @@ from socket import *
 import time
 import enviador
 import gestorPaquetes
+import sender
 
 MSJ_SIZE = 2000
 UPLOAD = 2
@@ -13,7 +14,7 @@ BLOCKING = 1
 MAX_WAIT_RESPONSE = 10
 import select
 
-class StopWait():
+class StopWait(sender.Sender):
     def __init__(self,server_ip,server_port,filename,filepath):
         self.sender_socekt = socket(AF_INET,SOCK_DGRAM)
         self.sender_socekt.setblocking(False)
@@ -22,20 +23,6 @@ class StopWait():
         self.filePath = filepath
         self.filename = filename
         self.gestorPaquetes = gestorPaquetes.Gestor_Paquete()
-
-    def enviar_archivo(self):
-        filepath= self.filePath + "/" + self.filename
-        file_stats = os.stat(filepath)
-        file_size = file_stats.st_size
-        handshake_establecido = self.entablarHandshake(self.filename,file_size)
-        if(handshake_establecido):
-            file = open(filepath,'rb')
-            self.enviarPaquetes(file)
-            file.close()
-        else:
-            print("FALLO EL HANDSHAKE")
-            return
-
 
 
     def enviar(self,mensaje):
@@ -67,34 +54,6 @@ class StopWait():
             return (False,None)
         return (True,paqueteRecibido)
     
-    def enviar_fin(self,):
-        pck = self.gestorPaquetes.crearPaqueteFin()
-        pckBytes = self.gestorPaquetes.pasarPaqueteABytes(pck)
-        self.sender_socekt.sendto(pckBytes,(self.receiver_ip,self.receiver_port))
-        #entidad.enviarPaquete(pckBytes)
-        cantidad_intentos = 1
-        #print("\n--El mensaje a enviar es: ", "FIN")
-        #print("\n-cantidad intentos es ", cantidad_intentos)
-
-        paqueteRecibido = self.recibirPaquete()
-        
-        while(paqueteRecibido == None and cantidad_intentos <= 3):
-            
-            #entidad.enviarPaquete(pckBytes)
-            self.sender_socekt.sendto(pckBytes,(self.receiver_ip,self.receiver_port))
-            paqueteRecibido = self.recibirPaquete()
-            #print("\n\n El paquete recibido es de tipo ", paqueteRecibido)
-            if(paqueteRecibido != None): #agrego caso borde
-                break
-            cantidad_intentos += 1
-            #print("\n--El mensaje a enviar es: ", "FIN")
-            #print("\n-cantidad intentos es ", cantidad_intentos)
-        if(cantidad_intentos > 3):
-            return (False,None)
-        return (True,paqueteRecibido)
-
-
-
 #STOP AND WAIT
     def enviarPaquetes(self, file):
 
@@ -127,52 +86,6 @@ class StopWait():
         if(conexion_cerrada == True):
             print("CONEXION CERRADO CON EXITO")
         return
-    
-
-    def recibirPaquete(self):
-        timeout_start = time.time()
-        while True:
-                lista_sockets_listos = select.select([self.sender_socekt], [], [], 0)
-                var = time.time()
-                if ((var - timeout_start) >= (MAX_WAIT)):
-                        return None
-                if not lista_sockets_listos[0]:
-                        continue
-                paqueteString, sourceAddress = self.sender_socekt.recvfrom(2048)
-                #print("recibirPaquete: el string del paquete es: ", paqueteString)
-                return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
-
-
-    def crearPaqueteHandshake_upload(self, fileName, fileSize):
-        caracterSeparador = "-"
-        mensaje = fileName
-        mensaje = mensaje + caracterSeparador + str(fileSize)
-        return self.gestorPaquetes.crearPaqueteHandshake(UPLOAD, mensaje)
-
-
-
-    def entablarHandshake(self, fileName, fileSize):
-                paquete = self.crearPaqueteHandshake_upload(fileName, fileSize)
-                paqueteBytes = self.gestorPaquetes.pasarPaqueteABytes(paquete)
-                i = 0
-                while i <= MAX_TRIES:
-                        self.sender_socekt.sendto(paqueteBytes,(self.receiver_ip,self.receiver_port))
-                        paqueteRecibido = self.recibirPaquete()
-                        #TIMEOUTEA VUELVO A ENVIAR EL HANDSHAKE
-                        if (paqueteRecibido == None):
-                                #print(i)
-                                i += 1
-                                continue
-                        esPaqueteOrdenado = self.gestorPaquetes.verificarACK(paqueteRecibido)
-                        if (esPaqueteOrdenado) :
-                                return True
-                        esPaqueteRefused = self.gestorPaquetes.verificarRefused(paqueteRecibido)
-                        if (esPaqueteRefused) :
-                                return False
-                        i +=1
-
-                return False
-    
 
 
     

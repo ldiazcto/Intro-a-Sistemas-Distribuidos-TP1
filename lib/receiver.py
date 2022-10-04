@@ -24,36 +24,34 @@ MAX_WAIT_SERVIDOR = 50 #PELIGRO! TIMEOUT DEL SERVER!!
 
 class Receiver():  
     
-    def __init__(self,receiver_ip,receiver_port,sender_ip,sender_port,bdd_to_save):
+    def __init__(self, sender_ip, sender_port, file_path, file_name):
         self.receiver_socekt = socket(AF_INET,SOCK_DGRAM)
         self.receiver_socekt.setblocking(False)
         self.sender_ip = sender_ip
         self.sender_port = sender_port
-        self.receiver_ip = receiver_ip
-        self.receiver_port = receiver_port
         self.gestor_paquete = gestorPaquetes.Gestor_Paquete()
         self.older_seq_number = 1
         self.new_seq_number = 0
         self.paquetesEnVuelo = []
         self.Termino = False
-        self.bdd_to_save = bdd_to_save
+        self.file_path = file_path
+        self.file_name = file_name
 
 
-    def recibir_archivo(self,filename):
-        new_path = self.bdd_to_save + "/" + filename
-        #print("Path de archivos",new_path)
-        filepath= new_path 
-        #file_stats = os.stat(filepath)
-        #file_size = file_stats.st_size
-        handshake_establecido = self.entablarHandshake(filename)
+    # Dados el path y el file name enviados al constructor, se entabla el handshake y se recibe el archivo
+    # Se devuelve True en caso de éxito y False en caso de error
+    def recibir_archivo(self):
+        new_path = self.file_path + "/" + self.file_name
+        filepath= new_path
+        handshake_establecido = self.entablarHandshake(self.file_name)
         if(handshake_establecido):
             file = open(filepath,'wb')
             self.recibir_Paquetes(file)
             file.close()
+            return True
         else:
             print("FALLO EL HANDSHAKE")
-            return
-        return
+            return False
 
 
     def recibir_Paquetes(self,file):
@@ -108,12 +106,9 @@ class Receiver():
             #time.sleep(2)
             self.receiver_socekt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.sender_ip,self.sender_port))
             print("Envié el paquete ACK Negativo a esta ip y puerto ", (self.sender_ip,self.sender_port))
-                
-
 
     def crearPaqueteHandshake_download(self, fileName):
         return self.gestor_paquete.crearPaqueteHandshake(DOWNLOAD, fileName)
-
 
 
     def entablarHandshake(self, fileName):
