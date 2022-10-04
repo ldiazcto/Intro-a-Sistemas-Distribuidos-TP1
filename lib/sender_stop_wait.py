@@ -1,18 +1,12 @@
-import os
 from socket import *
-import time
-import enviador
 import gestorPaquetes
 import sender
 
 MSJ_SIZE = 2000
-UPLOAD = 2
+
 MAX_TRIES = 2
-MAX_WAIT = 10
-NOT_BLOCKING= 0 
 BLOCKING = 1
-MAX_WAIT_RESPONSE = 10
-import select
+
 
 class StopWait(sender.Sender):
     def __init__(self,server_ip,server_port,filename,filepath):
@@ -60,14 +54,8 @@ class StopWait(sender.Sender):
         mensaje = file.read(MSJ_SIZE)
         
         while(len(mensaje) > 0):
-            #de mensaje a paquete
             intentar_mandar,paquete_recibido = self.enviar(mensaje)
-            #chequear si llego un ack
-            #si llego un ack, verificar que es el correcto
-            #si no llego un ack o no es el correcto, -> reenvío
-            #si salta el timer, -> reenvío
-            #estoy dispuesta a reenviar MAX_TRIES
-            
+             
             if (intentar_mandar == False):
                 #print(" \n intentar mandar es False, return ")
                 return
@@ -82,10 +70,7 @@ class StopWait(sender.Sender):
                 #print ("\n intentar mandar ack es False, return")
                 return
             mensaje = file.read(MSJ_SIZE)
-        conexion_cerrada,pck_recibido = self.enviar_fin()
+        conexion_cerrada, pck_recibido = self.enviar_fin()
         if(conexion_cerrada == True):
             print("CONEXION CERRADO CON EXITO")
-        return
-
-
-    
+        return    

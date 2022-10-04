@@ -1,21 +1,19 @@
 import os
 from socket import *
 import time
-import enviador
-import gestorPaquetes
 import abc
-
-MSJ_SIZE = 2000
-UPLOAD = 2
-MAX_TRIES = 2
-MAX_WAIT = 10
-NOT_BLOCKING= 0 
-BLOCKING = 1
-MAX_WAIT_RESPONSE = 10
 import select
 
-class Sender(metaclass=abc.ABCMeta):
+MSJ_SIZE = 2000
+MAX_WAIT = 10
 
+UPLOAD = 2
+MAX_TRIES = 2
+BLOCKING = 1
+
+CARACTER_SEPARADOR = "-"
+
+class Sender(metaclass=abc.ABCMeta):
         #Se establece el handshake y se envía el archivo con el filePath y el fileName pasados durante la creación
         #Se devuelve True si el enviar fue exitoso y False si no
         def enviar_archivo(self):
@@ -34,10 +32,11 @@ class Sender(metaclass=abc.ABCMeta):
 
 
         def crearPaqueteHandshake_upload(self, fileName, fileSize):
-                caracterSeparador = "-"
+                caracterSeparador = CARACTER_SEPARADOR
                 mensaje = fileName
                 mensaje = mensaje + caracterSeparador + str(fileSize)
                 return self.gestorPaquetes.crearPaqueteHandshake(UPLOAD, mensaje)
+
  
         def recibirPaquete(self):
                 timeout_start = time.time()
@@ -51,7 +50,6 @@ class Sender(metaclass=abc.ABCMeta):
                         paqueteString, sourceAddress = self.sender_socekt.recvfrom(2048)
                         #print("recibirPaquete: el string del paquete es: ", paqueteString)
                         return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
-
 
 
         def entablarHandshake(self, fileName, fileSize):
@@ -104,4 +102,3 @@ class Sender(metaclass=abc.ABCMeta):
                 if(cantidad_intentos > 3):
                         return (False,None)
                 return (True,paqueteRecibido)
-

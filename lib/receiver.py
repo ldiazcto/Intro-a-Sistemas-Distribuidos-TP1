@@ -4,9 +4,8 @@ import gestorPaquetes
 import os
 import select
 
-DATA = 0 #a veces llamado NOT_ACK
+
 ACK = 1
-UPLOAD = 2
 DOWNLOAD = 3
 REFUSED = 4
 FIN = 5
@@ -14,12 +13,8 @@ ACK_CORRECT = 1
 ACK_INCORRECT = 0
 
 MAX_TRIES = 3
-MAX_WAIT_ACKS = 5
-MAX_WAIT_FIN = 10
 MAX_WAIT = 10
 
-MAX_WAIT_HANDSHAKE = 30
-MAX_TAMANIO_PERMITIDO = 6000000 #en bytes
 MAX_WAIT_SERVIDOR = 50 #PELIGRO! TIMEOUT DEL SERVER!!
 
 class Receiver():  
@@ -30,9 +25,6 @@ class Receiver():
         self.sender_ip = sender_ip
         self.sender_port = sender_port
         self.gestor_paquete = gestorPaquetes.Gestor_Paquete()
-        self.older_seq_number = 1
-        self.new_seq_number = 0
-        self.paquetesEnVuelo = []
         self.Termino = False
         self.file_path = file_path
         self.file_name = file_name

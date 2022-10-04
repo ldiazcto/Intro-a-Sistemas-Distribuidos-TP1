@@ -1,20 +1,16 @@
-from ast import Break
-import os
 from socket import *
 import time
-import enviador
 import gestorPaquetes
 import select
 import sender
 
 MSJ_SIZE = 2000
-TAM_VENTANA = 150 #tamanio de la ventana
-MAX_WAIT_GOBACKN = 5
-MAX_TRIES = 3
-MAX_WAIT_ACKS = 5
-MAX_WAIT_FIN = 10
 MAX_WAIT = 10
-UPLOAD = 2
+
+BLOCKING = 1
+
+TAM_VENTANA = 150
+MAX_WAIT_GOBACKN = 5
 
 class GoBackN(sender.Sender):
     def __init__(self,server_ip,server_port,filename,filepath):
@@ -28,11 +24,6 @@ class GoBackN(sender.Sender):
         self.paquetesEnVuelo = []
         self.filePath = filepath
         self.fileName = filename
-
-
-
-
-
 
 
     def recibirPaqueteACK(self) :
@@ -72,14 +63,8 @@ class GoBackN(sender.Sender):
                         #self.new_seq_number += 1  
                         continue
                     
-                #if(len(self.paquetesEnVuelo) == 0):
-                    #break
-                #print("ME QUEDO DANDO VUELTAS")
                 #-- IMPLEMENTACION FEDE
                 pckRecibido, esACKEsperado = self.recibirPaqueteACK()
-                #print(esACKEsperado)
-                #if(len(self.paquetesEnVuelo) == TAM_VENTANA and esACKEsperado == False):
-                    #continu
 
                 # -- VERIFICACION DE ACK --
                 if (esACKEsperado) : #SI RECIBO UN ACK, SIGNIFICA QUE RECIBI EL ACK DEL ULTIMO PAQUETE QUE LLEGO BIEN
@@ -93,8 +78,6 @@ class GoBackN(sender.Sender):
                         pck = self.paquetesEnVuelo.pop(0) #borro el paquete que llego bien (voy borrando de a uno)
                         #print("SEQ NUMBER POPEADO ES: ",pck.obtenerSeqNumber())
                     if(self.older_seq_number == self.new_seq_number):
-                        #STOP_TIMER QUE SERA ???
-                        #print("STOP TIMER")
                         break
                     else: 
                         cantidad_intentos = 0   
@@ -115,7 +98,7 @@ class GoBackN(sender.Sender):
                     for pck in self.paquetesEnVuelo:
                         self.sender_socekt.sendto(self.gestorPaquetes.pasarPaqueteABytes(pck),(self.receiver_ip,self.receiver_port))
             #print("Cantidad paquetes en vuelo: ", len(self.paquetesEnVuelo))
-            conexion_cerrada,pck_recibido = self.enviar_fin()
+            conexion_cerrada, pck_recibido = self.enviar_fin()
             if(conexion_cerrada == True):
                 print("CONEXION CERRADO CON EXITO")
             return
