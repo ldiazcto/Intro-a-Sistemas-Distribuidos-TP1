@@ -24,7 +24,7 @@ ACK_CORRECT = 1
 ACK_INCORRECT = 0
 
 MAX_WAIT_HANDSHAKE = 30
-MAX_TAMANIO_PERMITIDO = 5000000 #en bytes
+MAX_TAMANIO_PERMITIDO = 6000000 #en bytes
 MAX_WAIT_SERVIDOR = 50 #PELIGRO! TIMEOUT DEL SERVER!!
 
 class Conexion(threading.Thread):
@@ -136,8 +136,7 @@ class Conexion(threading.Thread):
         else :
                 print("Es de tipo download")
                 filepath,filename = self.obtener_ruta_y_nombre(paquete)
-                file_name = self.obtenerNombreYTamanio(paquete)
-                self.enviar_archivo(file_name,filepath)
+                self.enviar_archivo(filename,filepath)
                 #lógica para el download        
                 #cargaPaquete = paquete.obtenerMensaje
                 #Aca llamo a las funciones del cliente para manejo de paquetes y le paso el paquete OJO QUE HAY QUE GUARDAR LA RUTA EN LA CONEXION"""
@@ -151,8 +150,7 @@ class Conexion(threading.Thread):
 
     def obtener_ruta_y_nombre(self,paquete):
         nombre_archivo , tam = self.obtenerNombreYTamanio(paquete)
-        filepath= self.ruta_archivo + "/" + nombre_archivo
-        return (filepath,nombre_archivo)
+        return (self.ruta_archivo,nombre_archivo)
 
     def obtener_ruta_archivo_upload(self,paquete,starterPath):
         nombre_archivo , tam = self.obtenerNombreYTamanio(paquete)
@@ -182,10 +180,8 @@ class Conexion(threading.Thread):
         nombre, tamanio = self.obtenerNombreYTamanio(paquete)
         i = 0
         
-        path = os.getcwd()
-        new_path = path + "/lib"
-        print("Path de archivos",new_path)
-        listOfFiles = os.listdir(new_path) 
+        print("Path de archivos", self.ruta_archivo )
+        listOfFiles = os.listdir(self.ruta_archivo ) 
         if nombre in listOfFiles :
             return True
         return False

@@ -6,8 +6,8 @@ import gestorPaquetes
 import select
 import threading
 
-MSJ_SIZE = 1500
-TAM_VENTANA = 50 #tamanio de la ventana
+MSJ_SIZE = 2000
+TAM_VENTANA = 150 #tamanio de la ventana
 MAX_WAIT_GOBACKN = 5
 MAX_TRIES = 3
 MAX_WAIT_ACKS = 5
@@ -40,11 +40,10 @@ class GoBackN(threading.Thread):
         self.hay_data = True
     
     def enviar_archivo(self):
-        #filepath= self.filePath + "/" + self.filename
-        print("Path de archivos",self.filePath)
-        file_stats = os.stat(self.filePath)
-        file_size = file_stats.st_size
-        file = open(self.filePath,'rb')
+        filepath= self.filePath + "/" + self.filename
+        #print("Path de archivos",self.filePath)
+        file_stats = os.stat(filepath)
+        file = open(filepath,'rb')
         self.enviarPaquetes(file)
         self.Termino = True
         file.close()
@@ -58,7 +57,7 @@ class GoBackN(threading.Thread):
                 paqueteRecibido = self.recibirPaquete()
                 #TIMEOUTEA VUELVO A ENVIAR EL HANDSHAKE
                 if (paqueteRecibido == None):
-                        print(i)
+                        #print(i)
                         i += 1
                         continue
                 esPaqueteOrdenado = self.gestorPaquetes.verificarACK(paqueteRecibido)
@@ -84,7 +83,7 @@ class GoBackN(threading.Thread):
         paqueteString = self.cola.pop(0)
         if(len(self.cola) == 0):
             self.hay_data = False
-        print("recibirPaquete: el string del paquete es: ", paqueteString)
+        #print("recibirPaquete: el string del paquete es: ", paqueteString)
         return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
 
 
@@ -122,16 +121,17 @@ class GoBackN(threading.Thread):
                 if (esACKEsperado) : #SI RECIBO UN ACK, SIGNIFICA QUE RECIBI EL ACK DEL ULTIMO PAQUETE QUE LLEGO BIEN
                                             # (ES DECIR QUE, TODOS LOS PAQUETES ANTERIORES TMB LLEGARON BIEN)
                     #muevo el older_seq_number a la posicion siguiente al new_seq_number
-                    print("ACK CORRECTO")
+                    #print("ACK CORRECTO")
                     cant_paquetes_a_popear =  pckRecibido.obtenerSeqNumber() - self.older_seq_number 
                     self.older_seq_number = pckRecibido.obtenerSeqNumber()+1
-                    print("DIFERENCIA ES: ",cant_paquetes_a_popear)
+                    #print("DIFERENCIA ES: ",cant_paquetes_a_popear)
                     for i in range(cant_paquetes_a_popear + 1 ): 
                         pck = self.paquetesEnVuelo.pop(0) #borro el paquete que llego bien (voy borrando de a uno)
-                        print("SEQ NUMBER POPEADO ES: ",pck.obtenerSeqNumber())
+                        #print("SEQ NUMBER POPEADO ES: ",pck.obtenerSeqNumber())
                     if(self.older_seq_number == self.new_seq_number):
                         #STOP_TIMER QUE SERA ???
-                        print("STOP TIMER")
+                        #print("STOP TIMER")
+                        break
                     else:    
                         timeout_start = time.time() #reinicio el timer porque los paquetes me llegaron bien, corro el older porque tengo que mandar paquetes nuevos 
                     
@@ -140,15 +140,15 @@ class GoBackN(threading.Thread):
                 # -- REENVIAR PCKS EN CASO DE ERROR --
                 var = time.time()
                 saltoTimerReenvio = (var - timeout_start)  >= MAX_WAIT_GOBACKN
-                #print("TIMEOUT START ES:",timeout_start)
-                #print(var - timeout_start)
+                ###print("TIMEOUT START ES:",timeout_start)
+                ##print(var - timeout_start)
                 if(saltoTimerReenvio and timeout_start != 0): #SI SALTO TIMEOUT, ENTONCES PERDI UN PAQUETE Y POR ENDE TENGO 
                                                                 #QUE VOLVER A INICIAR EL TIMER Y ENVIAR LOS PAQUETES QUE ME QUEDARON EN LA LISTA DE PAQUETES EN VUELO
-                    print("\n\n SALTO EL TIMER \n\n")
+                    #print("\n\n SALTO EL TIMER \n\n")
                     timeout_start = time.time()
                     for pck in self.paquetesEnVuelo:
                         self.sender_socekt.sendto(self.gestorPaquetes.pasarPaqueteABytes(pck),(self.receiver_ip,self.receiver_port))
-            print("Cantidad paquetes en vuelo: ", len(self.paquetesEnVuelo))
+            #print("Cantidad paquetes en vuelo: ", len(self.paquetesEnVuelo))
             conexion_cerrada,pck_recibido = self.enviar_fin()
             if(conexion_cerrada == True):
                 print("CONEXION CERRADO CON EXITO")
@@ -161,22 +161,22 @@ class GoBackN(threading.Thread):
     def enviar_fin(self):
         pck = self.gestorPaquetes.crearPaqueteFin()
         pckBytes = self.gestorPaquetes.pasarPaqueteABytes(pck)
-        print("Mensaje de fin es: ",pckBytes)
+        #print("Mensaje de fin es: ",pckBytes)
         #entidad.enviarPaquete(pckBytes)
         self.sender_socekt.sendto(pckBytes,(self.receiver_ip,self.receiver_port))
         cantidad_intentos = 1
-        print("\n--El mensaje a enviar es: ", "FIN")
-        print("\n-cantidad intentos es ", cantidad_intentos)
+        #print("\n--El mensaje a enviar es: ", "FIN")
+        #print("\n-cantidad intentos es ", cantidad_intentos)
 
         paqueteRecibido = self.recibirPaquete()
-        print("Recibi: ",paqueteRecibido)
+        #print("Recibi: ",paqueteRecibido)
         while(paqueteRecibido == None and cantidad_intentos <= 3):
-            print("\n\n El paquete recibido es de tipo ", paqueteRecibido)
+            #print("\n\n El paquete recibido es de tipo ", paqueteRecibido)
             #entidad.enviarPaquete(pckBytes)
             paqueteRecibido = self.recibirPaquete()
             cantidad_intentos += 1
-            print("\n--El mensaje a enviar es: ", "FIN")
-            print("\n-cantidad intentos es ", cantidad_intentos)
+            #print("\n--El mensaje a enviar es: ", "FIN")
+            #print("\n-cantidad intentos es ", cantidad_intentos)
         
         if(cantidad_intentos > 3):
             return (False,None)
@@ -203,7 +203,7 @@ class GoBackN(threading.Thread):
             paqueteString = self.cola.pop(0)
             if(len(self.cola) == 0):
                 self.hay_data = False
-            print("recibirPaquete: el string del paquete es: ", paqueteString)
+            #print("recibirPaquete: el string del paquete es: ", paqueteString)
             return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
 
 

@@ -40,17 +40,15 @@ class Receiver(threading.Thread):
         self.gestor_paquete = gestorPaquetes.Gestor_Paquete()
         self.filePath = filePath
         self.Termino = False
+        self.fileName = filename
 
     def pasar_data(self, paquete= b""):
         self.queue.append(paquete)
         self.hay_data = True
 
     def run(self):
-        print("Path de archivos",self.filePath)
-        print("Largo del path es:",len(self.filePath))
-        #file_stats = os.stat(self.filePath)
-        #file_size = file_stats.st_size
-        file = open(self.filePath,'wb')
+        fileCompleto = self.filePath + "/" + self.fileName
+        file = open(fileCompleto,'wb')
         self.recibir_archivo(file)
         self.Termino = True
         file.close()

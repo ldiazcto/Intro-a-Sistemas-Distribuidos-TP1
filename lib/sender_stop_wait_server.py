@@ -5,7 +5,7 @@ import enviador
 import gestorPaquetes
 import threading
 
-MSJ_SIZE = 10
+MSJ_SIZE = 2000
 UPLOAD = 2
 MAX_TRIES = 2
 MAX_WAIT = 10
@@ -36,11 +36,11 @@ class StopWait(threading.Thread):
         self.hay_data = True
 
     def enviar_archivo(self):
-        #filepath= self.filePath + self.filename
-        print("Path de archivos",self.filePath)
+        filepath= self.filePath + "/" + self.filename
+        print("Path de archivos", filepath)
         #file_stats = os.stat(self.filePath)
         #file_size = file_stats.st_size
-        file = open(self.filePath,'rb')
+        file = open(filepath,'rb')
         self.enviarPaquetes(file)
         self.Termino = True
         file.close()

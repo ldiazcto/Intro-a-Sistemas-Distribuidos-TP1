@@ -19,14 +19,13 @@ MAX_WAIT_FIN = 10
 MAX_WAIT = 10
 
 MAX_WAIT_HANDSHAKE = 30
-MAX_TAMANIO_PERMITIDO = 5000000 #en bytes
+MAX_TAMANIO_PERMITIDO = 6000000 #en bytes
 MAX_WAIT_SERVIDOR = 50 #PELIGRO! TIMEOUT DEL SERVER!!
 
 class Receiver():  
     
-    def __init__(self,receiver_ip,receiver_port,sender_ip,sender_port,):
+    def __init__(self,receiver_ip,receiver_port,sender_ip,sender_port,bdd_to_save):
         self.receiver_socekt = socket(AF_INET,SOCK_DGRAM)
-        self.receiver_socekt.bind((receiver_ip,receiver_port)) #''  es para que escuche a todos --- serverPort es por d'onde escucha el server
         self.receiver_socekt.setblocking(False)
         self.sender_ip = sender_ip
         self.sender_port = sender_port
@@ -37,16 +36,16 @@ class Receiver():
         self.new_seq_number = 0
         self.paquetesEnVuelo = []
         self.Termino = False
+        self.bdd_to_save = bdd_to_save
 
 
     def recibir_archivo(self,filename):
-        path = os.getcwd()
-        new_path = path + "/lib/" + "hola13.txt"
+        new_path = self.bdd_to_save + "/" + filename
         #print("Path de archivos",new_path)
         filepath= new_path 
         #file_stats = os.stat(filepath)
         #file_size = file_stats.st_size
-        handshake_establecido = self.entablarHandshake("hola.txt")
+        handshake_establecido = self.entablarHandshake(filename)
         if(handshake_establecido):
             file = open(filepath,'wb')
             self.recibir_Paquetes(file)
