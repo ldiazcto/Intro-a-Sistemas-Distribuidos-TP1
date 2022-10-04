@@ -5,7 +5,6 @@ import time
 import abc
 import select
 
-MAX_TRIES = 3
 
 
 class Sender(metaclass=abc.ABCMeta):
@@ -13,15 +12,14 @@ class Sender(metaclass=abc.ABCMeta):
                 filepath= self.filePath + "/" + self.fileName
                 file_stats = os.stat(filepath)
                 file_size = file_stats.st_size
-                logger.debug("Se está por entablar el handshake...")
+                try:
+                        file = open(filepath,'rb')
+                except SendfileNotAvailableError:
+                        logger.error("-- El archivo no esta disponible --")
+                        file.close()
                 handshake_establecido = self.entablarHandshake(self.fileName,file_size)
                 if(handshake_establecido):
-                        try:
-                                file = open(filepath,'rb')
-                        except SendfileNotAvailableError:
-                                print("✗ El archivo no está disponible")
-                        self.enviarPaquetes(file)
-                        file.close()
+                        self.enviarPaquetes(file)                
                 else:
                         logger.error("✗ Fallo el handshake")
 
@@ -54,16 +52,13 @@ class Sender(metaclass=abc.ABCMeta):
                         self.sender_socekt.sendto(paqueteBytes,(self.receiver_ip,self.receiver_port))
                         paqueteRecibido = self.recibirPaquete()                  
                         if (paqueteRecibido == None):
-                                self.logger.debug(f"✗ Vez {i} de máxima {MAX_TRIES} en que no se recibió el handshake")
                                 i += 1
                                 continue
                         esPaqueteOrdenado = self.gestorPaquetes.verificarACK(paqueteRecibido)
                         if (esPaqueteOrdenado) :
-                                self.logger.debug("✓ Se recibió el ACK esperado")
                                 return True
                         esPaqueteRefused = self.gestorPaquetes.verificarRefused(paqueteRecibido)
                         if (esPaqueteRefused) :
-                                self.logger.debug("✗ No se recibió el ACK esperado")
                                 return False
                         i +=1
 
@@ -80,10 +75,9 @@ class Sender(metaclass=abc.ABCMeta):
                 self.sender_socekt.sendto(pckBytes,(self.receiver_ip,self.receiver_port))
                 cantidad_intentos = 1
                 paqueteRecibido = self.recibirPaquete()
-                while(paqueteRecibido == None and cantidad_intentos <= MAX_TRIES):
+                while(paqueteRecibido == None and cantidad_intentos <= 3):
                         paqueteRecibido = self.recibirPaquete()
                         cantidad_intentos += 1
-                if(cantidad_intentos > MAX_TRIES):
-                        self.logger.error(f"Se intentó enviar el mismo paquete más de {MAX_TRIES} veces")
+                if(cantidad_intentos > 3):
                         return (False,None)
                 return (True,paqueteRecibido)

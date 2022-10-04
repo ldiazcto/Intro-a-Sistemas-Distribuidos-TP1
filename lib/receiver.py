@@ -87,7 +87,7 @@ class Receiver():
             try:
                 self.receiver_socekt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.sender_ip,self.sender_port))
             except SendfileNotAvailableError:
-                print("-- El archivo que se desea enviar no esta disponible --")
+                self.logger.error("✗ El archivo no esta disponible ")
 
 
     def crearPaqueteHandshake_download(self, fileName):

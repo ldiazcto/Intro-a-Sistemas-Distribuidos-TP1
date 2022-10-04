@@ -28,17 +28,6 @@ class MenuServer:
         self.transferencia = ""
         self.protocolo = "sw"
 
-    def abrirArchivo(self, ruta):
-        try:
-            file = open(ruta,'rb')
-            return file
-        except FileNotFoundError: #o IOERROR o FileExistsError
-            print("FILE NO ENCONTRADO")
-            sys.exit(2)
-
-    def cerrarArchivo(self, file):
-        file.close()
-
     def main(self):
 
         file_handler = logging.FileHandler(filename='server.log')

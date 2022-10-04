@@ -15,16 +15,6 @@ CRITICAL = 50
 QUIET = 51
 
 class Parser:
-    def abrirArchivo(self,ruta):
-        try:
-            file = open(ruta,'rb')
-            return file
-        except FileNotFoundError: #o IOERROR o FileExistsError
-            print("FILE NO ENCONTRADO")
-            sys.exit(2)
-
-    def cerrarArchivo(self,file):
-        file.close()
 
     def obtenerArgumentos(self):
         opcionesCortas = "uhvqH:p:s:d:n:o:" 

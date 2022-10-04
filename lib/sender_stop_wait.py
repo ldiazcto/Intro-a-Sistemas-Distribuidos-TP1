@@ -41,7 +41,7 @@ class StopWait(sender.Sender):
             try:
                 self.sender_socekt.sendto(pckBytes ,(self.receiver_ip,self.receiver_port))
             except SendfileNotAvailableError:
-                print("✗ El archivo no esta disponible")
+                self.logger.error("-- El archivo no esta disponible --")
             paqueteRecibido = self.recibirPaquete()
             cantidad_intentos += 1
             if(paqueteRecibido != None):
@@ -70,5 +70,5 @@ class StopWait(sender.Sender):
             mensaje = file.read(self.MSJ_SIZE)
         conexion_cerrada, pck_recibido = self.enviar_fin()
         if(conexion_cerrada == True):
-            self.logger.info("✓ Se ha cerrado la conexion con el protocolo StopAndWait con exito")
+            self.logger.info("Se ha cerrado la conexion con el protocolo StopAndWait con exito")
         return    
