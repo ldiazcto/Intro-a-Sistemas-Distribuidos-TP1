@@ -16,7 +16,7 @@ CARACTER_SEPARADOR = "-"
 class Sender(metaclass=abc.ABCMeta):
         #Se establece el handshake y se envía el archivo con el filePath y el fileName pasados durante la creación
         #Se devuelve True si el enviar fue exitoso y False si no
-        def enviar_archivo(self):
+        def enviar_archivo(self,logger):
                 filepath= self.filePath + "/" + self.fileName
                 file_stats = os.stat(filepath)
                 file_size = file_stats.st_size
@@ -25,10 +25,8 @@ class Sender(metaclass=abc.ABCMeta):
                         file = open(filepath,'rb')
                         self.enviarPaquetes(file)
                         file.close()
-                        return True
                 else:
-                        print("FALLO EL HANDSHAKE")
-                        return False
+                        logger.debug("Fallo el handshake")
 
 
         def crearPaqueteHandshake_upload(self, fileName, fileSize):

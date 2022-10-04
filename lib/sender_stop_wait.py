@@ -9,7 +9,7 @@ BLOCKING = 1
 
 
 class StopWait(sender.Sender):
-    def __init__(self,server_ip,server_port,filename,filepath):
+    def __init__(self,server_ip,server_port,filename,filepath,logger):
         self.sender_socekt = socket(AF_INET,SOCK_DGRAM)
         self.sender_socekt.setblocking(False)
         self.receiver_ip = server_ip
@@ -17,6 +17,7 @@ class StopWait(sender.Sender):
         self.filePath = filepath
         self.fileName = filename
         self.gestorPaquetes = gestorPaquetes.Gestor_Paquete()
+        self.logger = logger
 
 
     def enviar(self,mensaje):

@@ -4,6 +4,7 @@ import getopt
 import sys
 import logging
 import parser
+import sender_stop_wait
 
 SERVER_ADDR = ""
 SERVER_PORT = 12000
@@ -11,7 +12,6 @@ FILEPATH = ""
 FILENAME = ""
 UPLOAD = 2
 DOWNLOAD = 3
-PROTOCOLO = stopAndWait.StopAndWait() #Si no me ingresa un protocolo por default elijo este
 
 #NIVELES DE LOGS
 NOTSET = 0
@@ -30,7 +30,7 @@ class MenuCliente:
         self.port = 8080
         self.serverAdress = "" # --host/ -H
         self.transferencia = ""
-        self.protocolo = stopAndWait.StopAndWait()
+        self.cambiar_protocolo = False
 
     def abrirArchivo(self, ruta):
         try:
@@ -71,7 +71,7 @@ class MenuCliente:
                                         + "-p,                --port server port\n "
                                         + "-s,                --src source file path\n "
                                         + "-n,                --name file name\n"
-                                        + "-o                 --option protocol")
+                                        + "-o                 --option protocol in upload")
                                 sys.exit(0)
             if sys.argv[1] == "--upload" or sys.argv[1] == "--download":
                 print("Entro a elegir mis opciones: ", opt)
@@ -83,8 +83,8 @@ class MenuCliente:
                     self.filename = arg
                 
                 if(opt in ('-o','--option')):
-                    self.protocolo = self.parser.cambiarProtocolo()
-                    
+                    self.cambiar_protocolo = self.parser.cambiarProtocolo()
+
                 # ---------------------------------UPLOAD
                 if(sys.argv[1] == "--upload"):
                     if(opt in ('-s','--src')):
@@ -108,38 +108,20 @@ class MenuCliente:
             logger.error("Debe ingresar el nombre del archivo [-n/--name]")
             sys.exit(2)
 
-
-        #Ya parsie, setie, se la transferencia, ahora procedo a intentar hacerla, handhshake
-        sender = sender
-        cliente = cliente.Cliente("localhost", self.port, 12000) #server adress Ip adress,  puertoEntradaContrario
+        cliente = cliente.Cliente(self.serverAdress, self.port, logger) #server adress Ip adress,  puertoEntradaContrario
         if(sys.argv[1] == "--upload"):
             ruta = self.filepath + "/" + self.filename
             print("Mi file es: ", ruta)
-            file = self.abrirArchivo(ruta)
-            filesize = os.path.getsize(ruta)
-            #handshakeExitoso = cliente.entablarHandshake(self.filename, filesize, UPLOAD)
-            handshakeExitoso = sender.entablarHandshake(self.filename, filesize, UPLOAD)
-            if handshakeExitoso == True:
-                logger.info("El handshake resulto exitoso")
-                logger.info("Se envia el archivo...")
-                cliente.enviarArchivo(file,self.protocolo)
-            else:
-                logger.debug("El handshake fallo")
-            self.cerrarArchivo(file)
+            if self.cambiar_protocolo == True : sender = sender.GoBackN(self.serverAdress, self.port, self.filename, self.filepath)
+            sender = sender.StopWait(self.serverAdress, self.port, self.filename, self.filepath, logger)
+            cliente.enviar_archivo(sender)
         else:
             #Para el download
-            handshakeExitoso = cliente.entablarHandshake(ruta, tamanio_archivo, DOWNLOAD)
-            if handshakeExitoso == True : 
-                logger.info("El handshake resulto exitoso")
-                logger.info("Se envia el archivo...")
-                cliente.recibirArchivo(self.filepath,self.filename, self.protocolo)
-            else:
-                logger.debug("El handshake fallo")
+            receiver = receiver.Receiver(self.serverAdress, self.port, self.filename, self.filepath, logger)
+            cliente.recibir_archivo(receiver)
 
         return 0
 
 if __name__ == "__main__":
     menuCliente = MenuCliente()
-    menuCliente.main()
-
-    
+    menuCliente.main()    

@@ -5,6 +5,7 @@ import sys
 import getopt
 import logging
 import menuCliente
+import sender_gobackn
 
 # SERVER_ADDR = ""
 # SERVER_PORT = 12000
@@ -66,4 +67,4 @@ class Parser:
         return port, host
 
     def cambiarProtocolo(self):
-           return goBackN.GoBackN()            
+           return True           
