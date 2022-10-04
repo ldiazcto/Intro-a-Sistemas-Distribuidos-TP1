@@ -1,3 +1,4 @@
+from asyncio import SendfileNotAvailableError
 import time
 from socket import *
 import gestorPaquetes
@@ -83,8 +84,11 @@ class Receiver():
             self.logger.debug("✓ Se envió un ACK positivo al servidor")
         else:
             paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_INCORRECT)
-            self.receiver_socekt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.sender_ip,self.sender_port))
-            self.logger.debug(":( Se envió un ACK negativo al servidor")
+            try:
+                self.receiver_socekt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.sender_ip,self.sender_port))
+            except SendfileNotAvailableError:
+                print("-- El archivo que se desea enviar no esta disponible --")
+
 
     def crearPaqueteHandshake_download(self, fileName):
         return self.gestor_paquete.crearPaqueteHandshake(DOWNLOAD, fileName)

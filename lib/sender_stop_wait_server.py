@@ -1,3 +1,4 @@
+from asyncio import SendfileNotAvailableError
 from socket import *
 import time
 import gestorPaquetes
@@ -33,12 +34,18 @@ class StopWait(threading.Thread,sender_server.Sender_Server):
     def enviar(self,mensaje):
         pck = self.gestorPaquetes.crearPaquete(mensaje)
         pckBytes = self.gestorPaquetes.pasarPaqueteABytes(pck)
-        self.sender_socekt.sendto(pckBytes ,(self.receiver_ip,self.receiver_port))
+        try:
+            self.sender_socekt.sendto(pckBytes ,(self.receiver_ip,self.receiver_port))
+        except SendfileNotAvailableError:
+            print("-- El archivo no esta disponible --")
         cantidad_intentos = 1
         paqueteRecibido = self.recibirPaquete()
 
         while(paqueteRecibido == None and cantidad_intentos <= self.MAX_TRIES):
-            self.sender_socekt.sendto(pckBytes ,(self.receiver_ip,self.receiver_port))
+            try:
+                self.sender_socekt.sendto(pckBytes ,(self.receiver_ip,self.receiver_port))
+            except SendfileNotAvailableError:
+                print("-- El archivo no esta disponible --")
             paqueteRecibido = self.recibirPaquete()
             cantidad_intentos += 1
             if(paqueteRecibido != None): 
@@ -58,7 +65,10 @@ class StopWait(threading.Thread,sender_server.Sender_Server):
         paqueteRecibido = self.recibirPaquete()
         
         while(paqueteRecibido == None and cantidad_intentos <= self.MAX_TRIES):
-            self.sender_socekt.sendto(pckBytes,(self.receiver_ip,self.receiver_port))
+            try:
+                self.sender_socekt.sendto(pckBytes,(self.receiver_ip,self.receiver_port))
+            except SendfileNotAvailableError:
+                print("-- El archivo no esta disponible --")
             paqueteRecibido = self.recibirPaquete()
             if(paqueteRecibido != None): 
                 break

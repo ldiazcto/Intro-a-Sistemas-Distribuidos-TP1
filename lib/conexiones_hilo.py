@@ -1,3 +1,4 @@
+from asyncio import SendfileNotAvailableError
 from fileinput import filename
 import os
 import threading
@@ -112,7 +113,10 @@ class Conexion(threading.Thread):
         if (not handshakeApropiado) :
             self.logger.error("✗ Se envió un paquete que no es handshake, me voy")
             paqueteRefused = self.gestor_paquete.crearPaqueteRefused()
-            self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paqueteRefused),(self.ip_cliente,self.puerto_cliente))
+            try:
+                self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paqueteRefused),(self.ip_cliente,self.puerto_cliente))
+            except SendfileNotAvailableError:
+                print("-- El archivo no esta disponible --")
             return False
         
         tamanioApropiado = self.chequearTamanio(paquete)
@@ -126,7 +130,10 @@ class Conexion(threading.Thread):
         if (not archivoExiste and paquete.esDownload()) :
                 self.logger.error("✗ El archivo pedido no existe")
                 paqueteRefused = self.gestor_paquete.crearPaqueteRefused()
-                self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paqueteRefused),(self.ip_cliente,self.puerto_cliente))
+                try:
+                    self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paqueteRefused),(self.ip_cliente,self.puerto_cliente))
+                except SendfileNotAvailableError:
+                    print("-- El archivo no esta disponible --")
                 return False
 
         self.enviarACKHandshake(ACK_CORRECT)

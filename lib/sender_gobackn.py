@@ -36,6 +36,7 @@ class GoBackN(sender.Sender):
                 if not lista_sockets_listos[0]:
                         return None
                 paqueteString, sourceAddress = self.sender_socekt.recvfrom(2048)
+                
                 return self.gestorPaquetes.pasarBytesAPaquete(paqueteString)
 
 
