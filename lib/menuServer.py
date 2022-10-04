@@ -53,7 +53,6 @@ class MenuServer:
             handlers=handlers
         )
         logger = logging.getLogger()
-        logger.info("Se inicio el logger")
         
         opciones, argumentos = self.parser.obtenerArgumentos()
         print("OPCIONES: ",opciones , argumentos)
@@ -72,7 +71,6 @@ class MenuServer:
                                         + "-o  --option               protocol")
                                 sys.exit(0)
             if sys.argv[1] == "--start-server":
-                print("Entro a elegir mis opciones: ", opt)
 
                 self.parser.definirVerbosidad(opt, logger)
                 self.port, self.host = self.parser.definirPuertoYHost(opt, arg, self.port, self.host)
@@ -97,7 +95,7 @@ class MenuServer:
         #
         # Le tengo que pasar por parametro la info que me pasaron por comando
         # el host (Service IP adress), Service port, filepath, y protocolo
-        server_main.main(self.host,int(self.port),self.filepath,self.protocolo)
+        server_main.main(self.host,int(self.port),self.filepath,self.protocolo,logger)
         return 0
 
 if __name__ == "__main__":

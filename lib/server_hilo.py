@@ -8,7 +8,7 @@ import conexiones_hilo
 BUFFER_RECVFROM = 2048
 
 class Server(threading.Thread):
-    def __init__(self,serverIP,serverPort,pathSave,protocolo):
+    def __init__(self,serverIP,serverPort,pathSave,protocolo,logger):
         threading.Thread.__init__(self)
         self.conexiones = {}
         self.serverSocket = socket(AF_INET, SOCK_DGRAM)
@@ -18,7 +18,7 @@ class Server(threading.Thread):
         self.numero_hilos = 0
         self.protocolo = protocolo
         self.pathSave = pathSave
-        
+        self.logger = logger
         
 
     def run(self):
@@ -41,7 +41,7 @@ class Server(threading.Thread):
     def limpiar_conexiones_sin_usar(self):
         for conexion in self.conexiones.copy():
                 if self.conexiones[conexion].esta_activa() == False:
-                    print("MATO LA CONEXION")
+                    self.logger.info("MATO LA CONEXION")
                     self.conexiones[conexion].join() 
                     self.conexiones.pop(conexion) 
 

@@ -73,5 +73,5 @@ class StopWait(sender.Sender):
             mensaje = file.read(MSJ_SIZE)
         conexion_cerrada, pck_recibido = self.enviar_fin()
         if(conexion_cerrada == True):
-            print("CONEXION CERRADO CON EXITO")
+            self.logger.info("Conexion cerrada con exito")
         return    

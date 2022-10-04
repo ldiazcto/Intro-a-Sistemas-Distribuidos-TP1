@@ -6,6 +6,7 @@ import logging
 import parser
 import sender_stop_wait
 import sender
+import sender_gobackn
 SERVER_ADDR = ""
 SERVER_PORT = 12000
 FILEPATH = ""
@@ -54,7 +55,6 @@ class MenuCliente:
             handlers=handlers
         )
         logger = logging.getLogger()
-        logger.info("Se inicio el logger")
         
         opciones, argumentos = self.parser.obtenerArgumentos()
         print("OPCIONES: ",opciones , argumentos)
@@ -74,7 +74,6 @@ class MenuCliente:
                                         + "-o                 --option protocol in upload")
                                 sys.exit(0)
             if sys.argv[1] == "--upload" or sys.argv[1] == "--download":
-                print("Entro a elegir mis opciones: ", opt)
 
                 self.parser.definirVerbosidad(opt, logger)
                 self.port, self.serverAdress = self.parser.definirPuertoYHost(opt, arg, self.port, self.serverAdress)
@@ -111,9 +110,8 @@ class MenuCliente:
         client = cliente.Cliente(self.serverAdress, self.port, logger) #server adress Ip adress,  puertoEntradaContrario
         if(sys.argv[1] == "--upload"):
             ruta = self.filepath + "/" + self.filename
-            print("Mi file es: ", ruta)
-            if self.cambiar_protocolo == True : protocolo = sender_stop_wait.GoBackN(self.serverAdress, int(self.port), self.filename, self.filepath)
             protocolo = sender_stop_wait.StopWait(self.serverAdress, int(self.port), self.filename, self.filepath, logger)
+            if self.cambiar_protocolo == True : protocolo = sender_gobackn.GoBackN(self.serverAdress, int(self.port), self.filename, self.filepath,logger)
             client.enviar_archivo(protocolo)
         else:
             #Para el download

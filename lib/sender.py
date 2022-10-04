@@ -18,7 +18,6 @@ class Sender(metaclass=abc.ABCMeta):
         #Se devuelve True si el enviar fue exitoso y False si no
         def enviar_archivo(self,logger):
                 filepath= self.filePath + "/" + self.fileName
-                print("------------Mi filepath" , filepath)
                 file_stats = os.stat(filepath)
                 file_size = file_stats.st_size
                 handshake_establecido = self.entablarHandshake(self.fileName,file_size)
@@ -56,8 +55,6 @@ class Sender(metaclass=abc.ABCMeta):
                 paqueteBytes = self.gestorPaquetes.pasarPaqueteABytes(paquete)
                 i = 0
                 while i <= MAX_TRIES:
-                        print("le paso el receiver_ip", self.receiver_ip)
-                        print("LE PASO el Receiver PORT", self.receiver_port)
                         self.sender_socekt.sendto(paqueteBytes,(self.receiver_ip,self.receiver_port))
                         paqueteRecibido = self.recibirPaquete()
                         #TIMEOUTEA VUELVO A ENVIAR EL HANDSHAKE

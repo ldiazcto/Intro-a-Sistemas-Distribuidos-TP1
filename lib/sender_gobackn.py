@@ -13,7 +13,7 @@ TAM_VENTANA = 150
 MAX_WAIT_GOBACKN = 5
 
 class GoBackN(sender.Sender):
-    def __init__(self,server_ip,server_port,filename,filepath):
+    def __init__(self,server_ip,server_port,filename,filepath,logger):
         self.sender_socekt = socket(AF_INET,SOCK_DGRAM)
         self.sender_socekt.setblocking(False)
         self.receiver_ip = server_ip
@@ -24,6 +24,7 @@ class GoBackN(sender.Sender):
         self.paquetesEnVuelo = []
         self.filePath = filepath
         self.fileName = filename
+        self.logger = logger
 
 
     def recibirPaqueteACK(self) :
@@ -100,7 +101,7 @@ class GoBackN(sender.Sender):
             #print("Cantidad paquetes en vuelo: ", len(self.paquetesEnVuelo))
             conexion_cerrada, pck_recibido = self.enviar_fin()
             if(conexion_cerrada == True):
-                print("CONEXION CERRADO CON EXITO")
+                self.logger.info("Conexion cerrada con exito")
             return
 
 
