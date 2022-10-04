@@ -1,3 +1,4 @@
+from asyncio import SendfileNotAvailableError
 import os
 from socket import *
 import time
@@ -13,7 +14,10 @@ class Sender(metaclass=abc.ABCMeta):
                 file_size = file_stats.st_size
                 handshake_establecido = self.entablarHandshake(self.fileName,file_size)
                 if(handshake_establecido):
-                        file = open(filepath,'rb')
+                        try:
+                                file = open(filepath,'rb')
+                        except SendfileNotAvailableError:
+                                print("-- El archivo no esta disponible --")
                         self.enviarPaquetes(file)
                         file.close()
                 else:

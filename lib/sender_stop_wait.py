@@ -1,3 +1,4 @@
+from asyncio import SendfileNotAvailableError
 from socket import *
 import gestorPaquetes
 import sender
@@ -36,7 +37,10 @@ class StopWait(sender.Sender):
         cantidad_intentos = 1
         paqueteRecibido = self.recibirPaquete()
         while(paqueteRecibido == None and cantidad_intentos <= 3):
-            self.sender_socekt.sendto(pckBytes ,(self.receiver_ip,self.receiver_port))
+            try:
+                self.sender_socekt.sendto(pckBytes ,(self.receiver_ip,self.receiver_port))
+            except SendfileNotAvailableError:
+                print("-- El archivo no esta disponible --")
             paqueteRecibido = self.recibirPaquete()
             cantidad_intentos += 1
             if(paqueteRecibido != None):

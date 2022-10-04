@@ -1,3 +1,4 @@
+from asyncio import SendfileNotAvailableError
 import os
 from socket import *
 import time
@@ -49,8 +50,10 @@ class GoBackN(threading.Thread,sender_server.Sender_Server):
                 if(len(mensaje) != 0):
                     pck = self.gestorPaquetes.crearPaquete(mensaje)
                     self.paquetesEnVuelo.append(pck)
-                    
-                    self.sender_socekt.sendto(self.gestorPaquetes.pasarPaqueteABytes(pck),(self.receiver_ip,self.receiver_port))
+                    try:
+                        self.sender_socekt.sendto(self.gestorPaquetes.pasarPaqueteABytes(pck),(self.receiver_ip,self.receiver_port))
+                    except SendfileNotAvailableError:
+                        print("-- El archivo que se desea enviar no esta disponible --")
                     self.new_seq_number = pck.obtenerSeqNumber()
                     if(self.older_seq_number == self.new_seq_number):
                         timeout_start = time.time()    
@@ -74,7 +77,10 @@ class GoBackN(threading.Thread,sender_server.Sender_Server):
                 self.logger.error("\n\n Timeout... \n\n")
                 timeout_start = time.time()
                 for pck in self.paquetesEnVuelo:
-                    self.sender_socekt.sendto(self.gestorPaquetes.pasarPaqueteABytes(pck),(self.receiver_ip,self.receiver_port))
+                    try:
+                        self.sender_socekt.sendto(self.gestorPaquetes.pasarPaqueteABytes(pck),(self.receiver_ip,self.receiver_port))
+                    except SendfileNotAvailableError:
+                        print("-- El archivo que se desea enviar no esta disponible --")
         conexion_cerrada,pck_recibido = self.enviar_fin()
         if(conexion_cerrada == True):
             self.logger.info("Se ha cerrado la conexion con el protocolo GoBackN con exito")

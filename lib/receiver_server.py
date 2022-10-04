@@ -1,3 +1,4 @@
+from asyncio import SendfileNotAvailableError
 import os
 from pickle import FALSE
 import threading
@@ -58,19 +59,28 @@ class Receiver(threading.Thread):
         if (self.gestor_paquete.verificarPaqueteOrdenado(paquete) == True):
             if(paquete.esFin()):         
                 paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_CORRECT)
-                self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
+                try:
+                    self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
+                except SendfileNotAvailableError:
+                    print("-- El archivo no esta disponible --")
                 self.logger.info(f"Envié el paquete ACK positivo a esta ip y puerto:{self.ip_cliente} {self.puerto_cliente}")
                 self.Termino = True
                 self.conexion_activa = False
                 return
             paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_CORRECT)
             file.write(paquete.obtenerMensaje())
-            self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
+            try:
+                self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
+            except SendfileNotAvailableError:
+                print("-- El archivo no esta disponible --")
             self.logger.info(f"Envié el paquete ACK positivo a esta ip {self.ip_cliente} y puerto: {self.puerto_cliente}")
         else:
             paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_INCORRECT)
-            self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
-        
+            try:
+                self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
+            except SendfileNotAvailableError:
+                print("-- El archivo no esta disponible --")
+                
     def esta_activa(self):
         return self.conexion_activa
 
