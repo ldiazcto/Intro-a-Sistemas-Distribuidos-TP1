@@ -13,12 +13,12 @@ python3 -u menuServer.py --start-server  -s <path de la ruta /lib/BDD_Servidor> 
 
 ### Download 
 ```
-python3 -u menuCliente.py --download -d <path de la ruta /lib/BDD_Cliente> -n <nombre del archivo a descargar> -H localhost -p 9000
+python3 -u menuCliente.py --download -d <path de /lib/BDD_Cliente> -n <nombre del archivo a descargar> -H localhost -p 9000
 ```
 
 ### Upload 
 ```
-python3 -u menuCliente.py --upload -s  <path de la ruta /lib/BDD_Cliente> -n <nombre del archivo a subir> -H localhost -p 9000 -o gbn
+python3 -u menuCliente.py --upload -s  <path de /lib/BDD_Cliente> -n <nombre del archivo a subir> -H localhost -p 9000 -o gbn
 ```
 
 ## Lineas de comando
