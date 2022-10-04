@@ -116,7 +116,7 @@ class Conexion(threading.Thread):
             try:
                 self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paqueteRefused),(self.ip_cliente,self.puerto_cliente))
             except SendfileNotAvailableError:
-                print("-- El archivo no esta disponible --")
+                print("✗ El archivo no esta disponible ")
             return False
         
         tamanioApropiado = self.chequearTamanio(paquete)
@@ -133,7 +133,7 @@ class Conexion(threading.Thread):
                 try:
                     self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paqueteRefused),(self.ip_cliente,self.puerto_cliente))
                 except SendfileNotAvailableError:
-                    print("-- El archivo no esta disponible --")
+                    print("✗ El archivo no esta disponible ")
                 return False
 
         self.enviarACKHandshake(ACK_CORRECT)

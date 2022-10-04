@@ -62,7 +62,7 @@ class Receiver(threading.Thread):
                 try:
                     self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
                 except SendfileNotAvailableError:
-                    self.logger.error("-- El archivo no esta disponible --")
+                    self.logger.error("✗ El archivo no esta disponible")
                 self.logger.info(f"Envié el paquete ACK positivo a esta ip y puerto:{self.ip_cliente} {self.puerto_cliente}")
                 self.Termino = True
                 self.conexion_activa = False
@@ -72,7 +72,7 @@ class Receiver(threading.Thread):
             try:
                 self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
             except SendfileNotAvailableError:
-                self.logger.error("-- El archivo no esta disponible --")
+                self.logger.error("✗ El archivo no esta disponible")
             self.logger.info(f"Envié el paquete ACK positivo a esta ip {self.ip_cliente} y puerto: {self.puerto_cliente}")
         else:
             self.looger.debug(":( El paquete ACK a enviar es negativo")
@@ -80,7 +80,7 @@ class Receiver(threading.Thread):
             try:
                 self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
             except SendfileNotAvailableError:
-                self.logger.error("-- El archivo no esta disponible --")
+                self.logger.error("✗ El archivo no esta disponible")
                 
     def esta_activa(self):
         return self.conexion_activa

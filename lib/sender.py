@@ -19,7 +19,7 @@ class Sender(metaclass=abc.ABCMeta):
                         try:
                                 file = open(filepath,'rb')
                         except SendfileNotAvailableError:
-                                print("-- El archivo no esta disponible --")
+                                print("✗ El archivo no está disponible")
                         self.enviarPaquetes(file)
                         file.close()
                 else:
