@@ -1,6 +1,3 @@
-import os
-import cliente, stopAndWait, goBackN #nombre del archivo
-import getopt
 import sys
 import logging
 import parser
@@ -8,6 +5,8 @@ import sender_stop_wait
 import sender
 import sender_gobackn
 import receiver
+import cliente
+
 SERVER_ADDR = ""
 SERVER_PORT = 12000
 FILEPATH = ""

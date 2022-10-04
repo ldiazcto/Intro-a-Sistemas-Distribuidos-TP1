@@ -6,8 +6,6 @@ import gestorPaquetes
 import receiver
 from socket import *
 import paquete
-import stopAndWait
-import goBackN
 from pathlib import Path
 import sender_stop_wait_server
 import sender_gobackn_server

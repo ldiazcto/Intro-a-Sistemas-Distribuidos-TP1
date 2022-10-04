@@ -1,6 +1,3 @@
-import os
-import cliente, stopAndWait, goBackN
-import getopt
 import sys
 import logging
 import parser

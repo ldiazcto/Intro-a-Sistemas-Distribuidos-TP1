@@ -1,19 +1,10 @@
 from fileinput import filename
-import goBackN
-import stopAndWait
 import sys
 import getopt
 import logging
 import menuCliente
 import sender_gobackn
 
-# SERVER_ADDR = ""
-# SERVER_PORT = 12000
-# FILEPATH = ""
-# FILENAME = ""
-# UPLOAD = 2
-# DOWNLOAD = 3
-# PROTOCOLO = stopAndWait.StopAndWait() #Si no me ingresa un protocolo por default elijo este
 
 #NIVELES DE LOGS
 NOTSET = 0
