@@ -3,7 +3,9 @@ Trabajo Práctico N°1 de la materia Introducción a los Sistemas Distribuidos
 
 ## Ejecutar
 
-Por default el protocolo seteado es StopAndWait para Cliente y servidor 
+Por default el protocolo seteado es StopAndWait para Cliente y Servidor.
+
+Si se agrega la option -o se cambia al protocolo Go Back N
 
 ### Start-Server
 
