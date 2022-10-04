@@ -1,9 +1,10 @@
 import server_hilo
 
 
-def main():
+def main(host, port, filepath, protocolo):
     # server_prueba = server_hilo.Server("localhost",9000,"/home/fede/Desktop/distribuidos/alternativa_2/Intro-a-Sistemas-Distribuidos-TP1/lib/BDD_Servidor","GN")
-    server_prueba = server_hilo.Server("localhost",9000,"/Users/luzmi/OneDrive/2FIUBA/75.43-INTRO-A-DISTRIBUIDOS/¨TP1-Intro/lib/BDD_Servidor","GN")
+    # server_prueba = server_hilo.Server("localhost",9000,"/Users/luzmi/OneDrive/2FIUBA/75.43-INTRO-A-DISTRIBUIDOS/¨TP1-Intro/lib/BDD_Servidor","GN")
+    server_prueba = server_hilo.Server(host,port,filepath,protocolo)
 
     server_prueba.start()
     while True:
@@ -16,5 +17,5 @@ def main():
             print ("LLEGO HASTA ACA")
             return
 
-main()
+# main(host, port, filepath, protocolo)
 print ("LLEGO HASTA ACA")

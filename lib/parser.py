@@ -37,7 +37,7 @@ class Parser:
 
     def obtenerArgumentos(self):
         opcionesCortas = "uhvqH:p:s:d:n:o:" #se utilizan con -. los : esperan su sgte entrada
-        opcionesLargas = [ "download","upload", "help","verbose","quiet","host=","port=","src=","name=","dst=", "option="] #se utilizan con --
+        opcionesLargas = [ "download","upload", "start-server", "help","verbose","quiet","host=","port=","src=","name=","dst=", "option="] #se utilizan con --
         listaArgumentos = sys.argv[1:]
         try:
             return getopt.getopt(listaArgumentos,opcionesCortas,opcionesLargas) #par tuplas

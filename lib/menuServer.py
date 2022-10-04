@@ -12,7 +12,6 @@ FILEPATH = ""
 FILENAME = ""
 UPLOAD = 2
 DOWNLOAD = 3
-PROTOCOLO = stopAndWait.StopAndWait() #Si no me ingresa un protocolo por default elijo este
 
 #NIVELES DE LOGS
 NOTSET = 0
@@ -76,7 +75,7 @@ class MenuServer:
                 print("Entro a elegir mis opciones: ", opt)
 
                 self.parser.definirVerbosidad(opt, logger)
-                self.port, self.serverAdress = self.parser.definirPuertoYHost(opt, arg, self.port, self.serverAdress)
+                self.port, self.host = self.parser.definirPuertoYHost(opt, arg, self.port, self.host)
 
                 if(opt in ('-o','--option')):
                     self.protocolo = "GN" #GN PARA GO BACK N SI NO VALE SW
@@ -98,7 +97,7 @@ class MenuServer:
         #
         # Le tengo que pasar por parametro la info que me pasaron por comando
         # el host (Service IP adress), Service port, filepath, y protocolo
-        server_main.main(self.host,self.port,self.filepath,self.protocolo)
+        server_main.main(self.host,int(self.port),self.filepath,self.protocolo)
         return 0
 
 if __name__ == "__main__":

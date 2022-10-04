@@ -18,6 +18,7 @@ class Sender(metaclass=abc.ABCMeta):
         #Se devuelve True si el enviar fue exitoso y False si no
         def enviar_archivo(self,logger):
                 filepath= self.filePath + "/" + self.fileName
+                print("------------Mi filepath" , filepath)
                 file_stats = os.stat(filepath)
                 file_size = file_stats.st_size
                 handshake_establecido = self.entablarHandshake(self.fileName,file_size)
