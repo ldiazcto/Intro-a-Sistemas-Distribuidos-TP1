@@ -59,15 +59,16 @@ class Receiver(threading.Thread):
             if(paquete.esFin()):         
                 paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_CORRECT)
                 self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
-                self.logger.info(f"Envié el paquete ACK positivo a esta ip {self.ip_cliente}  y puerto:{self.puerto_cliente}")
+                self.logger.info(f"✓ Se envió el paquete ACK positivo a esta IP: {self.ip_cliente} y al puerto: {self.puerto_cliente}")
                 self.Termino = True
                 self.conexion_activa = False
                 return
             paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_CORRECT)
             file.write(paquete.obtenerMensaje())
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
-            self.logger.info(f"Envié el paquete ACK positivo a esta ip {self.ip_cliente} y puerto: {self.puerto_cliente}")
+            self.logger.info(f"✓ Se envió el paquete ACK positivo a esta IP: {self.ip_cliente} y al puerto: {self.puerto_cliente} con el ACK {paquete_ack.obtenerSeqNumber()}")
         else:
+            self.looger.debug(":( El paquete ACK a enviar es negativo")
             paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_INCORRECT)
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
         
@@ -77,7 +78,7 @@ class Receiver(threading.Thread):
 
     def recibir_archivo(self,file):
         time_start = time.time()
-        while time.time() - time_start <=   MAX_WAIT_SERVIDOR:
+        while time.time() - time_start <=  MAX_WAIT_SERVIDOR:
             if self.conexion_activa == False:
                 return
             if self.hay_data:
@@ -88,7 +89,7 @@ class Receiver(threading.Thread):
                 if paqueteBytes is None:   
                     return
                 self.procesar_mensaje(paqueteBytes,file)
-        self.logger.error("Timeout...")
+        self.logger.error("✗ Timeout al recibir el archivo...")
         self.conexion_activa = False
         self.Termino = True
         return

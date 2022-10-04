@@ -12,13 +12,15 @@ class Sender(metaclass=abc.ABCMeta):
                 filepath= self.filePath + "/" + self.fileName
                 file_stats = os.stat(filepath)
                 file_size = file_stats.st_size
+                logger.debug("Se está por entablar el handshake...")
                 handshake_establecido = self.entablarHandshake(self.fileName,file_size)
                 if(handshake_establecido):
+                        logger.info("✓ Se estableció el hanshake con éxito")
                         file = open(filepath,'rb')
                         self.enviarPaquetes(file)
                         file.close()
                 else:
-                        logger.error("Fallo el handshake")
+                        logger.error("✗ Fallo el handshake")
 
 
         def crearPaqueteHandshake_upload(self, fileName, fileSize):

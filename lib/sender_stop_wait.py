@@ -20,7 +20,7 @@ class StopWait(sender.Sender):
         self.gestorPaquetes = gestorPaquetes.Gestor_Paquete()
         self.logger = logger
         self.MSJ_SIZE = 2000
-        self.MAX_TRIES = 2
+        self.MAX_TRIES = 3
         self.MAX_WAIT = 10
         self.MAX_WAIT_GOBACKN = 5
         self.TAM_VENTANA = 150
@@ -30,18 +30,21 @@ class StopWait(sender.Sender):
 
 
     def enviar(self,mensaje):
+        self.logger.debug("A punto de crear y enviar por primera vez el paquete...")
         pck = self.gestorPaquetes.crearPaquete(mensaje)
         pckBytes = self.gestorPaquetes.pasarPaqueteABytes(pck)
         self.sender_socekt.sendto(pckBytes ,(self.receiver_ip,self.receiver_port))
         cantidad_intentos = 1
         paqueteRecibido = self.recibirPaquete()
-        while(paqueteRecibido == None and cantidad_intentos <= 3):
+        while(paqueteRecibido == None and cantidad_intentos <= self.MAX_TRIES):
+            self.logger.debugf(f"✗ No se recibió un paquete, lo reenvío. Intento {cantidad_intentos} de {self.MAX_TRIES}")
             self.sender_socekt.sendto(pckBytes ,(self.receiver_ip,self.receiver_port))
             paqueteRecibido = self.recibirPaquete()
             cantidad_intentos += 1
             if(paqueteRecibido != None):
                 return (True,paqueteRecibido)
-        if(cantidad_intentos > 3):
+        if(cantidad_intentos > self.MAX_TRIES):
+            self.debugger.error("✗ Se intentó recibir {MAX_TRIES} veces el mismo paquete y ninguna funcionó, me voy con error")
             return (False,None)
         return (True,paqueteRecibido)
     
@@ -56,7 +59,7 @@ class StopWait(sender.Sender):
             intentar_mandar_ack = True
             if(verificar_ack == False): #EXTREMA SEGURIDAD --> ACK CORRUPTO
                 cant_max_envios = 0
-                while (cant_max_envios <= 3):
+                while (cant_max_envios <= self.MAX_TRIES):
                     intentar_mandar_ack,paquete_recibido = self.enviar(mensaje)
                     cant_max_envios += 1
             if (intentar_mandar_ack == False):

@@ -43,7 +43,10 @@ class GoBackN(sender.Sender):
             mensaje = "entrar en ciclo"
             timeout_start = 0
             cantidad_intentos = 0
+            self.logger.debug("A punto de comenzar el loop par enviar paquetes en Go Back N...")
+        
             while (True):
+                self.logger.debug(f"La ventana va de {self.older_seq_number} a {self.older_seq_number + self.TAM_VENTANA} y el sequence number actual es {self.new_seq_number}")
                 if(self.new_seq_number < self.older_seq_number + self.TAM_VENTANA):
                     mensaje = file.read(self.MSJ_SIZE)
                     if(len(mensaje) != 0):
@@ -53,10 +56,12 @@ class GoBackN(sender.Sender):
                         self.sender_socekt.sendto(self.gestorPaquetes.pasarPaqueteABytes(pck),(self.receiver_ip,self.receiver_port))
                         self.new_seq_number = pck.obtenerSeqNumber()
                         if(self.older_seq_number == self.new_seq_number):
+                            self.logger.debug("✓ Se reinicia el timer")
                             timeout_start = time.time()     
                         continue
                 pckRecibido, esACKEsperado = self.recibirPaqueteACK()
                 if (esACKEsperado) :
+                    self.logger.debug("✓ Se recibió ACK esperado")
                     cant_paquetes_a_popear =  pckRecibido.obtenerSeqNumber() - self.older_seq_number 
                     self.older_seq_number = pckRecibido.obtenerSeqNumber()+1
                     for i in range(cant_paquetes_a_popear + 1 ): 
@@ -77,7 +82,7 @@ class GoBackN(sender.Sender):
                         self.sender_socekt.sendto(self.gestorPaquetes.pasarPaqueteABytes(pck),(self.receiver_ip,self.receiver_port))
             conexion_cerrada, pck_recibido = self.enviar_fin()
             if(conexion_cerrada == True):
-                self.logger.info("✓ Se ha cerrado la conexion con el protocolo GoBackN con exito")
+                self.logger.info("✓ Se han enviado todos los paquetes con Go Back N y se ha cerrado la conexion con exito")
             return
 
 
