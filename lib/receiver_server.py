@@ -75,7 +75,7 @@ class Receiver(threading.Thread):
                 print("El paquete ACK que voy a mandar por haber entrado a True es: ", self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
                 #time.sleep(10)
                 self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.ip_cliente,self.puerto_cliente))
-                print("Envié el paquete ACK positivo a esta ip y puerto ", (self.ip_cliente,self.puerto_cliente))
+                print(f"Envié el paquete ACK positivo a esta ip{self.ip_cliente} y puerto {self.puerto_cliente}")
                 self.Termino = True
                 self.conexion_activa = False
                 return

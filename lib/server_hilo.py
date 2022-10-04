@@ -31,7 +31,7 @@ class Server(threading.Thread):
                 continue
             message, clientAdress = self.serverSocket.recvfrom(BUFFER_RECVFROM) #tamanio buffer para 1 paquete
             if(clientAdress not in self.conexiones): #verifico si ya existe la direccion de donde recibi el paquete
-                self.conexiones[clientAdress] = conexiones_hilo.Conexion(self.numero_hilos,clientAdress,self.protocolo,self.pathSave) #guardo el hilo que se encarga de esa direccion
+                self.conexiones[clientAdress] = conexiones_hilo.Conexion(self.numero_hilos,clientAdress,self.protocolo,self.pathSave,self.logger) #guardo el hilo que se encarga de esa direccion
                 self.conexiones[clientAdress].start() #inicio el hilo
                 self.numero_hilos += 1
             self.conexiones[clientAdress].pasar_data(message) #le paso la data al hilo

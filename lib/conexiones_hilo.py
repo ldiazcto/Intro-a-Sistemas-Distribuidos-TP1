@@ -23,7 +23,7 @@ MAX_TAMANIO_PERMITIDO = 6000000 #en bytes
 MAX_WAIT_SERVIDOR = 50 #PELIGRO! TIMEOUT DEL SERVER!!
 
 class Conexion(threading.Thread):
-    def __init__(self,numero_hilo, conexion_cliente,protocolo,filePath):
+    def __init__(self,numero_hilo, conexion_cliente,protocolo,filePath,logger):
         threading.Thread.__init__(self)
         self.nombre = numero_hilo
         self.conexion_cliente = conexion_cliente
@@ -36,6 +36,7 @@ class Conexion(threading.Thread):
         self.gestor_paquete = gestorPaquetes.Gestor_Paquete()
         self.protocolo = protocolo
         self.ruta_archivo = filePath
+        self.logger = logger
 
     def pasar_data(self, paquete= b""):
         self.queue.append(paquete)
@@ -75,7 +76,7 @@ class Conexion(threading.Thread):
                 if paqueteBytes is None:   # If you send `None`, the thread will exit.
                     return
             if(sender.Termino == True):
-                print("TERMINO EL SENDER")
+                self.logger.info("Se ha terminado el envio")
                 sender.join()
                 self.conexion_activa = False
                 return
@@ -99,7 +100,7 @@ class Conexion(threading.Thread):
                 if paqueteBytes is None:   # If you send `None`, the thread will exit.
                     return
             if(receiver.Termino == True):
-                print("TERMINO EL SENDER")
+                self.logger.info("Se termino el envio")
                 receiver.join()
                 self.conexion_activa = False
                 return
@@ -114,7 +115,7 @@ class Conexion(threading.Thread):
 #-------------PROCESAR HANDSHAKE-----------
 
     def procesarHandshake(self, paquete):
-        print("Entre a procesar Handshake")
+        self.logger.info("Se entro a procesar Handshake")
         handshakeApropiado = self.chequearHandshakeApropiado(paquete)
         if (not handshakeApropiado) :
             print("Se envió un paquete que no es handshake, me voy")
@@ -125,7 +126,7 @@ class Conexion(threading.Thread):
         
         tamanioApropiado = self.chequearTamanio(paquete)
         if (not tamanioApropiado) :
-            print("El tamaño pasado no es apropiado, mando ack de refused y me voy")
+            self.logger.debug("El tamaño pasado no es apropiado, mando ack de refused y me voy")
             paqueteRefused = self.gestor_paquete.crearPaqueteRefused()
             self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paqueteRefused),(self.ip_cliente,self.puerto_cliente))
             return False
@@ -133,7 +134,7 @@ class Conexion(threading.Thread):
         archivoExiste = self.chequearExistenciaArchivo(paquete)
         print("archivoExiste vale ", archivoExiste)
         if (not archivoExiste and paquete.esDownload()) :
-                print("El archivo pedido no existe, me voy")
+                self.logger.error("El archivo pedido no existe, me voy")
                 #hay que establecer este protocolo
                 paqueteRefused = self.gestor_paquete.crearPaqueteRefused()
                 self.skt.sendto(self.gestor_paquete.pasarPaqueteABytes(paqueteRefused),(self.ip_cliente,self.puerto_cliente))

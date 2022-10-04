@@ -15,7 +15,7 @@ class Cliente():
 
 
         def recibir_archivo(self, receiver):
-                receiver.recibir_archivo(self.logger)
+                receiver.recibir_archivo()
 
 
  

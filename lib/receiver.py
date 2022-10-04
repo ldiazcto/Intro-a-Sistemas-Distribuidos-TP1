@@ -19,7 +19,7 @@ MAX_WAIT_SERVIDOR = 50 #PELIGRO! TIMEOUT DEL SERVER!!
 
 class Receiver():  
     
-    def __init__(self, sender_ip, sender_port, file_path, file_name):
+    def __init__(self, sender_ip, sender_port, file_path, file_name, logger):
         self.receiver_socekt = socket(AF_INET,SOCK_DGRAM)
         self.receiver_socekt.setblocking(False)
         self.sender_ip = sender_ip
@@ -28,7 +28,7 @@ class Receiver():
         self.Termino = False
         self.file_path = file_path
         self.file_name = file_name
-
+        self.logger = logger
 
     # Dados el path y el file name enviados al constructor, se entabla el handshake y se recibe el archivo
     # Se devuelve True en caso de éxito y False en caso de error
@@ -38,12 +38,12 @@ class Receiver():
         handshake_establecido = self.entablarHandshake(self.file_name)
         if(handshake_establecido):
             file = open(filepath,'wb')
-            print("ABRI EL ARCHIVO")
+            self.logger.info("Abri el archivo")
             self.recibir_Paquetes(file)
             file.close()
             return True
         else:
-            print("FALLO EL HANDSHAKE")
+            self.logger.error("Fallo el handshake")
             return False
 
 
@@ -68,37 +68,37 @@ class Receiver():
     def procesar_mensaje(self,paqueteBytes,file):
         paquete = self.gestor_paquete.pasarBytesAPaquete(paqueteBytes)
 
-        print("El paqueteBytes recibido en procesar_mensaje es = ", paqueteBytes)
-        print("El mensaje es recibido en procesar_mensaje es = ", paquete.obtenerMensaje())
+        self.logger.info("El paqueteBytes recibido en procesar_mensaje es = ", paqueteBytes)
+        self.logger.info("El mensaje es recibido en procesar_mensaje es = ", paquete.obtenerMensaje())
 
         if (self.gestor_paquete.verificarPaqueteOrdenado(paquete) == True):
             if(paquete.esFin()):
                 
-                print("ES PAQUETE FIN")
+                self.logger.info("Es paquete de tipo FIN")
                 self.Termino = True
                 paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_CORRECT)
-                print("El paquete ACK que voy a mandar por haber entrado a True es: ", self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
+                self.logger.info("El paquete ACK que voy a mandar por haber entrado a True es: ", self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
                 #time.sleep(10)
                 self.receiver_socekt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.sender_ip,self.sender_port))
-                print("Envié el paquete ACK positivo a esta ip y puerto ", (self.sender_ip,self.sender_port))
+                self.logger.info("Envié el paquete ACK positivo a esta ip y puerto ", (self.sender_ip,self.sender_port))
                 file.close()
                 self.conexion_activa = False
                 return
 
-            print("Al verificar el paquete, resulta que es True")
+            self.logger.info("Al verificar el paquete, resulta que es True")
             paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_CORRECT)
             file.write(paquete.obtenerMensaje())
-            print("El paquete ACK que voy a mandar por haber entrado a True es: ", self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
+            self.logger.info("El paquete ACK que voy a mandar por haber entrado a True es: ", self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
             #time.sleep(10)
             self.receiver_socekt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.sender_ip,self.sender_port))
-            print("Envié el paquete ACK positivo a esta ip y puerto ", (self.sender_ip,self.sender_port))    
+            self.logger.info("Envié el paquete ACK positivo a esta ip y puerto ", (self.sender_ip,self.sender_port))    
         else:
-            print("Al verificar el paquete, resulta que es False")
+            self.logger.info("Al verificar el paquete, resulta que es False")
             paquete_ack = self.gestor_paquete.crearPaqueteACK(ACK_INCORRECT)
             print(self.gestor_paquete.pasarPaqueteABytes(paquete_ack))
             #time.sleep(2)
             self.receiver_socekt.sendto(self.gestor_paquete.pasarPaqueteABytes(paquete_ack),(self.sender_ip,self.sender_port))
-            print("Envié el paquete ACK Negativo a esta ip y puerto ", (self.sender_ip,self.sender_port))
+            self.logger.info("Envié el paquete ACK Negativo a esta ip y puerto ", (self.sender_ip,self.sender_port))
 
     def crearPaqueteHandshake_download(self, fileName):
         return self.gestor_paquete.crearPaqueteHandshake(DOWNLOAD, fileName)
